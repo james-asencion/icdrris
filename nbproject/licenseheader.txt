@@ -1,0 +1,10 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}This project is licensed to team-dasig 2013
+${licensePrefix}James R. Asencion ${licensePrefix}
+${licensePrefix}Czareannah Leigh S. Villanca ${licensePrefix}
+${licensePrefix}Femarie C. Manga ${licensePrefix}
+<#if licenseLast??>
+${licenseLast}
+</#if>
