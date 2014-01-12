@@ -2,29 +2,34 @@
 
 class Membership_model extends CI_Model
 {
-	function validate()
+	function validate($username, $password)
 	{
-		$username=$this->input->post('username');
-		$password=$this->input->post('password');
+       //       $username=$this->input->post('username');
+       //	$password=$this->input->post('password');
 
-		$q=$this->db->query("SELECT * FROM user_profile WHERE user_name='$username' AND pass='$password'");
-		$res=$q->result();
+                $this->db->select('adminId', 'password', 'fname', 'lname');
+		$this->db->from('users');
+		$this->db->where('adminId', $username);
+		$this->db->where('password', $password);
+	
+		$query = $this->db->get();
 
-		if($q->num_rows()==1)
+		if($query-> num_rows() == 1)
 		{
 			return true;
 		}
 	}
-	function create_account()
+	function create_account($username, $password, $fname, $lname)
 	{
-		$fName=$this->input->post('first_name');
-		$lName=$this->input->post('last_name');
-		$user_name=$this->input->post('user_name');
-		$email=$this->input->post('email');
-		$password=md5($this->input->post('password'));
 
-		$q=$this->db->query("INSERT INTO user_profile (first_name,last_name,user_name,pass) VALUES('$fName','$lName','$user_name','$password')");
-		return $q;
+		$data= array(
+					'adminId' => $username, 
+					'password' => $password,
+					'fname' => $fname,
+					'lname' => $lname);
+		
+		$query= $this->db->insert('users', $data);
+                return true;
 	}
 }
 ?>

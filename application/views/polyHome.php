@@ -1,97 +1,91 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Iligan City Disaster Response and Recovery Information System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	<script src="application/views/js/map.js"></script>
-
-		<style type = "text/css">
-			#googlemap img,object,embed{max-width:none}
-			#map_canvas embed{max-width:none}
-			#map_canvas img{max-width:none}
-			#map_canvas object{max-width:none}
-		</style>
-  </head>
-  <body onload="initialize()">
-    <div class = "navbar navbar-inverse">
-		<div class = "navbar-inner">
-			<a class = "brand" href = "#">ICDRRIS</a>
-			<ul class = "nav">
-				<li class = "active"><a href = "#">Home</a></li>	
-			</ul>
-			
-			
-			<ul class="nav">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Actions
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href = "#"><i class = "icon-plus"></i> Add</a></li>
-						<li><a href = "#"><i class = "icon-edit"></i> Edit</a></li>
-						<li><a href = "#"><i class = "icon-trash"></i> Delete</a></li>
-					</ul>
-				</li>
-			</ul>
-			<ul class="nav">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Change Map View
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href = "MapController"> Polygons</a></li>
-						<li><a href = "MapController2">Markers</a></li>
-					</ul>
-				</li>
-			</ul>
-			
-			<ul class="nav pull-right">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<i class = "icon-user icon-white"></i> [Name of User]
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href = "#"><i class = "icon-pencil"></i> Edit User Info</a></li>
-						<li><a href = "D:/bootstrap/reg1.html"><i class = "icon-off"></i> Log-out</a></li>			
-					</ul>
-				</li>
-			</ul>
-			
-			<form class = "navbar-form pull-left" name="filterForm">
-				<div class="center" align="center">Filter Incidents:   
-        		<select class="input-large custom span5" name="filterMenu" onChange="filterPolygon()">
-                    <option value=""></option>
-                    <option value='FlashFlood'>Flashflood</option>
-                    <option value='LandSlide'>Landslide</option>
-                    <option value='MudSlide'>Mudslide</option>
-            	</select>
-    		</div>
-			</form>
-			
-			
-			
+<?php $this->load->view('includes/header'); ?>
+<?php $this->load->view('login_form'); ?>
+		
 		</div>
 	</div>
-	<div class = "span4" id="incidentList">
-			<button class="btn btn-mini" id="field" type="button" onclick="displayList()"/>Show All Incidents</button><br><br><br>
-	</div>
-	<div class = "container-fluid">
-	<div class = "row-fluid">
+        
 	
-	<div class = "span8">
+	<div class = "container-fluid">
+		<div class = "row-fluid">
+			<div class = "span12">
+				<div class="panel">
+		<!--			<h3>INCIDENTS</h3>
+					<p>Here's our sliding panel/drawer made using jQuery with the toggle function and some CSS3 for the rounded corners</p>
+
+					<p>This panel could also be placed on the right. This could be particularly useful if, <a href="http://spyrestudios.com" title="SpyreStudios">like me</a>, you have a left-aligned website layout.</p>
+
+					<h3>A Little Something About Me</h3>
+						<img class="right" src="images/jon_image.jpg" alt="Jon Phillips" />
+					<p>My name's Jon, I'm a freelance designer, blogger, musician. I run SpyreStudios and I specialize in WordPress blogs, CSS, XHTML and PHP</p>
+					<div style="clear:both;"></div>
+
+				<div class="columns">
+					<div class="colleft">
+					<h3>Navigation</h3>
+						<ul>
+							<li><a href="http://spyrestudios.com/" title="home">Home</a></li>
+							<li><a href="http://spyrestudios.com/about/" title="about">About</a></li>
+							<li><a href="http://spyrestudios.com/portfolio/" title="portfolio">Portfolio</a></li>
+							<li><a href="http://spyrestudios.com/contact/" title="contact">Contact</a></li>
+							<li><a href="http://spyrestudios.com" title="blog">Blog</a></li>
+						</ul>
+					</div>
+			
+					<div class="colright">
+						<h3>Social Stuff</h3>
+						<ul>
+							<li><a href="http://twitter.com/jophillips" title="Twitter">Twitter</a></li>
+							<li><a href="http://designbump.com/user/147" title="DesignBump">DesignBump</a></li>
+							<li><a href="http://digg.com/users/jophillips" title="Digg">Digg</a></li>
+							<li><a href="http://delicious.com/jon.phillips" title="Del.Icio.Us">Del.Icio.Us</a></li>
+							<li><a href="http://designmoo.com/users/jonphillips" title="DesignMoo">DesignMoo</a></li>
+						</ul>
+					</div>
+					
+				</div>
+			
+			<!--
+						<div class= "row">
+				<div class= "four columns">
+				<h4> List of Items </h4>
+				</div>
+			</div>
+			<div class = "row">
+				<div class = "six columns" >
+					<form id= "searchitem" action = "#simple1">
+						<input type= "text" id="searchinci" placeholder="Type keyword..."/>		
+				</div >
+						<label class = "left inline">	
+						<i class= "icon-white icon-search" type = "submit" />
+						</label>
+					</form>
+			</div>
+				<br/>
+				<table class="gridtable">
+					<tr>
+						<th>Item Category</th><th>Item Description</th><th>Quantity</th>
+					</tr>
+					<tr>
+						<td>Text 1A</td><td>Text 1B</td><td>Text 1C</td>
+					</tr>
+					<tr>
+						<td>Text 2A</td><td>Text 2B</td><td>Text 2C</td>
+					</tr>
+				</table>
+		-->
+			<div class = "span12" id="incidentList">
+			</div>
+			<div style="clear:both;"></div>
+
+		</div>
+			<a class="trigger" href="#">
+					<button class="btn btn-mini" id="field" type="button" onclick="displayList()"/>Show All Incidents</button>
+				
+			</a>
+	
 	<div id="map_canvas" style="width:100%; height:600px;"></div>   
 			<div id="directionsPanel"></div>
 	</div>
 	</div>
 	</div>
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-  </body>
-</html>
+<?php $this->load->view('includes/footer'); ?>

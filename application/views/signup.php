@@ -1,81 +1,42 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Iligan City Disaster Response and Recovery Information System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="<?php echo base_url();?>css/bootstrap.css" rel="stylesheet" media="screen">
-  </head>
-  <body> 
+<?php $this->load->view('includes/header');?>
+<?php $this->load->view('login_form'); ?>
+</div>
+</div>
 
-    <div class = "navbar navbar-inverse">
-		<div class = "navbar-inner">
-			<a class = "brand" href = "D:/bootstrap/reg1.html">ICDRRIS</a>
-			<ul class = "nav">
-				<li class = "active"><a href = "D:/bootstrap/reg1.html">Home</a></li>
-			</ul>
-		
-			<ul class="nav pull-right">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Log-in
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<form method = "post" action = "Login/validate_credentials" style = "margin:10px">
-						<?php 
-						$username_property = array( 'type' => 'text', 'name' => 'username', 'placeholder' => 'Username');
-						echo form_input($username_property); 
-						$password_property = array( 'type' => 'password', 'name' => 'password', 'placeholder' => 'Password');
-						echo form_input($password_property); 
-						$submit_property = array( 'type' => 'submit', 'class' => 'btn btn-primary', 'style' => 'width:100%', 'name' => 'login', 'value' =>'Log-in');
-						echo form_submit($submit_property);
-						?>
-										
-						</form>
-						<li class = "divider"></li>
-						<p style = "margin:10px">Not a member? <a href = "/icdrris/Login/signup">Signup now!</a></p>
-					</ul>
-				</li>
-			</ul>
-			
-			<form class = "navbar-search pull-right">
-				<input type = "text" class = "search-query" placeholder = "Search">
-			</form>
-			
-			
-			
-		</div>
-	</div>
-
-	
-	<div class = "row-fluid">
+<div class = "row-fluid">
 	<div class = "span3"></div>
 	<div class = "span6">
 	
 	<h1>Sign up.</h1>
 	<br>
 	  
-	
+		<div class="alert alert-error" >  
+		<a class="close" data-dismiss="alert">x</a>  
+		<strong>Error!</strong>	<br />
+			<?php // found in system/libraries/Form_validation.php
+				echo validation_errors();
+			?>
+                </div> 
 	<fieldset>
 		<?php echo form_open('Login/create_account');?>
 		<div class = "row-fluid">
 		<strong>First Name</strong><br>
 		<?php 
-			$fNameProperties=array('type'=>'text','class'=>'span8','name'=>'first_name');
+			$fNameProperties=array('type'=>'text','class'=>'span8','name'=>'first_name', 'value'=>set_value('first_name'));
 			echo form_input($fNameProperties);?>
 		</div>
 
 		<div class = "row-fluid">
 		<strong>Last Name</strong><br>
 		<?php 
-			$lNameProperties=array('type'=>'text','class'=>'span8','name'=>'last_name');
+			$lNameProperties=array('type'=>'text','class'=>'span8','name'=>'last_name','value'=>set_value('last_name'));
 			echo form_input($lNameProperties);?>
 		</div>
+
 		<div class = "row-fluid">
 		<strong>Username</strong><br>
 		<?php 
-			$uNameProperties=array('type'=>'text','class'=>'span8','name'=>'user_name');
+			$uNameProperties=array('type'=>'text','class'=>'span8','name'=>'user_name','value'=>set_value('user_name'));
 			echo form_input($uNameProperties);?>
 		</div>
 		<div class = "row-fluid">
@@ -96,13 +57,12 @@
 			echo form_submit($buttonProperties);
 		?>
 		</div>
-		<?php echo validation_errors('<p class="error">'); ?>
+		
 		</fieldset>
 		
 	</div>
-	<div class = "span3"></div>
+        
+        <div class = "span3"></div>
 	</div>
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-</body>
-</html>
+
+<?php $this->load->view('includes/footer');?>
