@@ -38,11 +38,14 @@ class MapController extends  CI_Controller
 
 			$data['map']=$this->googlemaps->create_map();
 			*/
-			$this->load->view('polygonView');
+			$this->load->view('polyHome');
 		
 
 
 		//$this->load->view('');
+	}
+	public function viewPolygonReports(){
+		$this->load->view('polyHome');
 	}
 }
 

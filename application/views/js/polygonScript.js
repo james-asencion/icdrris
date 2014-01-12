@@ -86,24 +86,29 @@ function addPoint(e) {
 }
 function showInfo(event) {
     opened_info.close();
-    if (opened_info.name !== this.infowindow.name) {
+    //if (opened_info.name !== this.infowindow.name) {
         this.infowindow.setPosition(event.latLng);
         this.infowindow.open(map);
         opened_info = this.infowindow;
-    }
+    //}
 }
 function saveData() {
    
       var polyString = "";
+      var start = "";
       console.log(vertices.length);
-      var start = vertices.pop();
+      start = vertices.pop().toString();
+      start = start.replace(/[()]/g,'');
+      start = start.replace(/[,]/g,' ');
       while(vertices.length>0){
           polyString = polyString+vertices.pop().toString();
       }
-    polyString = ("POLYGON(("+start+polyString+start+"))");
+    polyString = polyString.replace(/[(]/g,'');
+    polyString = polyString.replace(/[,]/g,'');
+    polyString = polyString.replace(/[)]/g,',');
+    polyString = ("POLYGON(("+start+","+polyString+start+"))");
     console.log(polyString);
-    polyString = polyString.replace(/[()]/g,'');
-    console.log(polyString);
+    //console.log(polyString);
     var description = escape(document.getElementById("description").value);
     var  disasterType= escape(document.getElementById("disasterType").value);
     var  date= escape(document.getElementById("date").value);

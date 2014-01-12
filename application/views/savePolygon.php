@@ -43,15 +43,10 @@ $query2 = "SELECT MAX(reportNo) as rNum FROM incident;";
 $result2 = $mysqli->query($query2);
 $row = $result2->fetch_array(MYSQLI_NUM);
 
-$query3 = sprintf("INSERT INTO incident_location ".
+$query3 = "INSERT INTO incident_location ".
                 " (reportNo, locationId, intensity, lat, lng, polygon)".
-                "VALUES ('%s','%s','%s','%s','%s',
-                 PolygonFromText('$polygon'));",
-                 $row[0],
-                 2,
-                 3,
-                 8.228021, 
-                 124.245242);
+                "VALUES ('$row[0]',2,3,8.228021,124.245242,
+                 PolygonFromText('$polygon'));";
 
 $result3 = $mysqli->query($query3);
 

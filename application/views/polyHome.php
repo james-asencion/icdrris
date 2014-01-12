@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	<script src="application/views/js/map.js"></script>
 
@@ -22,6 +23,7 @@
 			<ul class = "nav">
 				<li class = "active"><a href = "#">Home</a></li>	
 			</ul>
+			
 			
 			<ul class="nav">
 				<li class="dropdown">

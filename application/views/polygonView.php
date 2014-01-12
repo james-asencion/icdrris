@@ -12,8 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	<script src="application/views/js/polygonScript.js"></script>
+	<script src="application/views/js/modalScript.js"></script>
 
 		<style type = "text/css">
 			#googlemap img,object,embed{max-width:none}
@@ -23,7 +25,18 @@
 		</style>
   </head>
   <body onload="initialize()">
-    
+  <div class = "modal hide fade" id="instructionModal">
+  	<div class = "modal-header">
+  		<a class="close" data-dismiss="modal">x</a>
+  		<h3>Click points on the map to form a polygon</h3>
+  	</div>
+  	<div class="modal-body">
+  		<p>This is an instruction...</p>
+  	</div>
+  	<div class="modal-footer">
+  		<a data-dismiss="modal" class="btn btn-primary">Okay Got it</a>
+  	</div>
+  </div>
     <div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
 			<a class = "brand" href = "#">ICDRRIS</a>

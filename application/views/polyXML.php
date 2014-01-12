@@ -1,38 +1,96 @@
 <?php  
 
-
+require("dbinfo.php");
 // Start XML file, create parent node
 
 $dom = new DOMDocument("1.0");
 $polygons = $dom->createElement("polygons");
 $markersNode = $dom->appendChild($polygons); 
+
+
 // Opens a connection to a MySQL server
-$conn_string = "host=localhost port=5432 dbname=map user=postgres password=postgres";
-$connection = pg_connect($conn_string);
-
-if (!$connection) {  die('Not connected : ');} 
-
-
+$mysqli = new mysqli("localhost",$username, $password, $database);
+if(mysqli_connect_error()){
+  die('Not Connected : '.mysqli_connect_error());
+}
 // Select all the rows in the markers table
 
-$query = "SELECT * FROM barangays";
-$result = pg_query($connection, $query);
+$query = "SELECT i.description, i.disasterType, i.dateHappened, i.deaths, i.injured, i.missing, i.affectedFamilies, i.homesDestroyed, i.damageCost, i.infoSource, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
+          FROM incident i
+          LEFT OUTER JOIN incident_location l ON i.reportNo = l.reportNo
+          UNION 
+          SELECT i.description, i.disasterType, i.dateHappened, i.deaths, i.injured, i.missing, i.affectedFamilies, i.homesDestroyed, i.damageCost, i.infoSource, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
+          FROM incident i
+          RIGHT OUTER JOIN incident_location l ON i.reportNo = l.reportNo
+          LIMIT 0 , 30";
+$result = $mysqli->query($query);
 if (!$result) {
   echo "An error occurred.\n";
   exit;
 }
-
 header("Content-type: text/xml"); 
 
-// Iterate through the rows, adding XML nodes for each
+while ($row = $result->fetch_assoc()) {
+    
+  //Retrieve all details of an incident
+    $polygon = $dom->createElement("polygon");
+    $polygon->setAttribute("disasterType",$row['disasterType']);
+    $polygon->setAttribute("description",$row['description']);
+    $polygon->setAttribute("date",$row['dateHappened']);
+    $polygon->setAttribute("deaths",$row['deaths']);
+    $polygon->setAttribute("injured",$row['injured']);
+    $polygon->setAttribute("missing",$row['missing']);
+    $polygon->setAttribute("affectedFamilies",$row['affectedFamilies']);
+    $polygon->setAttribute("homesDestroyed",$row['homesDestroyed']);
+    $polygon->setAttribute("damageCost",$row['damageCost']);
+    $polygon->setAttribute("infoSource",$row['infoSource']);
+    $polygon->setAttribute("markerLat",$row['lat']); 
+    $polygon->setAttribute("markerLng",$row['lng']); 
+    $newPolygon = $polygons->appendChild($polygon);
+    
 
+  //Retrieve all the coordinates of a Marker and a Polygon corresponding to an incident
+    $patterns = array();
+    $patterns[0] = '/\s/';
+    $patterns[1] = '/\)\)/';
+    $patterns[2] = '/POLYGON\(\(/';
+    $replacements = array();
+    $replacements[2] = ',';
+    $replacements[1] = '';
+    $replacements[0] = '';
+    $coordinates = preg_replace($patterns,$replacements,$row['reportPolygon']);
+    //echo $coordinates;
+    //echo "<br>";
+
+    $points = explode(",",$coordinates);
+    for($i=0; $i < count($points);)
+    {   
+      $point = $dom->createElement("point");  
+      $newPoint = $polygon->appendChild($point);
+      $newPoint->setAttribute("lat",$points[$i++]);
+      $newPoint->setAttribute("lng",$points[$i++]);
+    }
+}
+
+echo $dom->saveXML();
+
+
+
+// Iterate through the rows, adding XML nodes for each
+/**
 while ($row = pg_fetch_assoc($result)){ 
 
   $polygon = $dom->createElement("polygon");
-  $polygon->setAttribute("address",$row['address']);
-  $polygon->setAttribute("type",$row['disaster_type']);
-  $polygon->setAttribute("description",$row['disaster_description']);
-  $polygon->setAttribute("affected",$row['families_affected']);  
+  $polygon->setAttribute("disasterType",$row['disasterType']);
+  $polygon->setAttribute("desciption",$row['desciption']);
+  $polygon->setAttribute("date",$row['dateHappened']);
+  $polygon->setAttribute("deaths",$row['deaths']);
+  $polygon->setAttribute("injured",$row['injured']);
+  $polygon->setAttribute("missing",$row['missing']);
+  $polygon->setAttribute("affectedFamilies",$row['affectedFamilies']);
+  $polygon->setAttribute("homesDestroyed",$row['homesDestroyed']);
+  $polygon->setAttribute("damageCost",$row['damageCost']);
+  $polygon->setAttribute("infoSource",$row['infoSource']);  
   $newPolygon = $polygons->appendChild($polygon);
 
   $coordinates = explode(";",$row['poly_points']);
@@ -89,7 +147,7 @@ while ($row = pg_fetch_assoc($result)){
   $newMarker->setAttribute("casualties",$row['casualties']);
   $newMarker->setAttribute("families_affected",$row['families_affected']);
   $newMarker->setAttribute("estimated_cost",$row['estimated_cost']);
-  */
+  
   
   
   //------------process 2:points ---------------------
@@ -117,7 +175,6 @@ while ($row = pg_fetch_assoc($result)){
   
   
 } 
-
-echo $dom->saveXML();
+*/
 
 ?>
