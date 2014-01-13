@@ -5,8 +5,11 @@ class Incident extends  CI_Controller
 
 		$this->load->view('polygonView');
 	}
-	public function reportIncident(){
+	public function reportIncidentPolygon(){
 		$this->load->view('polygonView');
+	}
+	public function reportIncidentMarker(){
+		$this->load->view('markerView');
 	}
 }
 

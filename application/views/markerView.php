@@ -14,7 +14,7 @@
     <link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-	<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
+	<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
 	<script src="<?php echo base_url();?>application/views/js/modalScript.js"></script>
 
 		<style type = "text/css">
@@ -28,10 +28,10 @@
   <div class = "modal hide fade" id="instructionModal">
   	<div class = "modal-header">
   		<a class="close" data-dismiss="modal">x</a>
-  		<h3>Click points on the map to form a polygon</h3>
+  		<h3>Click on a point in the map to create a marker</h3>
   	</div>
   	<div class="modal-body">
-  		<p>This is an instruction...</p>
+  		<p>Drag the marker to the desired location and click on the marker to view the form for incident reporting</p>
   	</div>
   	<div class="modal-footer">
   		<a data-dismiss="modal" class="btn btn-primary">Okay Got it</a>
