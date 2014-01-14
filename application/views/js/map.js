@@ -109,11 +109,23 @@ function downloadUrl(url, callback) {
 function doNothing() {
 }
 
-function filterPolygon() {
 
-    if (document.filterForm.filterMenu.value != null)
-    {
-        var filterValue = document.filterForm.filterMenu.value;
+function filterReports()    {
+
+        var filterValue = document.filterForm1.filterMenu1.value;
+        console.log(filterValue);
+        if(filterValue === 'Polygon')
+        {
+            filterPolygon();
+        }else{
+            filterMarker();
+        }
+    
+}
+function filterPolygon(){
+
+        var filterValue = document.filterForm2.filterMenu2.value;
+        console.log(filterValue);
 
         var latlng = new google.maps.LatLng(8.228021, 124.245242);
         directionsDisplay = new google.maps.DirectionsRenderer();
@@ -139,6 +151,7 @@ function filterPolygon() {
             var polygons = xml.documentElement.getElementsByTagName("polygon");
 
 
+
             for (var i = 0; i < polygons.length; i++) {
                 //var name = points[i].getAttribute("name");
                 //var address = markers[i].getAttribute("address");
@@ -154,34 +167,66 @@ function filterPolygon() {
                 //var icon = customIcons[type] || {};
                 //============DECLARE VARIABLES=============
                 var type = polygons[i].getAttribute("disasterType");
-                if (filterValue === type)
-                {
-                    var coordinates = [];
-                    var myPolygon;
-                    var points = polygons[i].getElementsByTagName("point");
-
-
-                    //======EXTRACT MULTIPLE POINTS======
-                    for (var j = 0; j < points.length; j++)
+                if (document.filterForm2.filterMenu2.value != 'null')
+                {    
+                    console.log("inside if statement");
+                    if (filterValue === type)
                     {
-                        var point = new google.maps.LatLng(
-                                parseFloat(points[j].getAttribute("lat")),
-                                parseFloat(points[j].getAttribute("lng")));
-                        coordinates[j] = point;
+                        var coordinates = [];
+                        var myPolygon;
+                        var points = polygons[i].getElementsByTagName("point");
+
+
+                        //======EXTRACT MULTIPLE POINTS======
+                        for (var j = 0; j < points.length; j++)
+                        {
+                            var point = new google.maps.LatLng(
+                                    parseFloat(points[j].getAttribute("lat")),
+                                    parseFloat(points[j].getAttribute("lng")));
+                            coordinates[j] = point;
+                        }
+
+                        var polyOptions = {
+                            paths: coordinates,
+                            strokeColor: "#FF0000",
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            fillColor: "#FF0000",
+                            fillOpacity: 0.35
+                        }
+
+                        myPolygon = new google.maps.Polygon(polyOptions);
+
+                        myPolygon.setMap(map);
+
                     }
+                }else{
+                        var coordinates = [];
+                        var myPolygon;
+                        var points = polygons[i].getElementsByTagName("point");
 
-                    var polyOptions = {
-                        paths: coordinates,
-                        strokeColor: "#FF0000",
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                        fillColor: "#FF0000",
-                        fillOpacity: 0.35
-                    }
 
-                    myPolygon = new google.maps.Polygon(polyOptions);
+                        //======EXTRACT MULTIPLE POINTS======
+                        for (var j = 0; j < points.length; j++)
+                        {
+                            var point = new google.maps.LatLng(
+                                    parseFloat(points[j].getAttribute("lat")),
+                                    parseFloat(points[j].getAttribute("lng")));
+                            coordinates[j] = point;
+                        }
 
-                    myPolygon.setMap(map);
+                        var polyOptions = {
+                            paths: coordinates,
+                            strokeColor: "#FF0000",
+                            strokeOpacity: 0.8,
+                            strokeWeight: 2,
+                            fillColor: "#FF0000",
+                            fillOpacity: 0.35
+                        }
+
+                        myPolygon = new google.maps.Polygon(polyOptions);
+
+                        myPolygon.setMap(map);
 
                 }
 
@@ -189,8 +234,8 @@ function filterPolygon() {
 
         });
 
-    }
 }
+
 
 var directionDisplay;
 var directionsService = new google.maps.DirectionsService();
@@ -209,10 +254,9 @@ var customIcons = {
 
 function filterMarker() {
 
-    if (document.filterForm.filterMenu.value != null)
-    {
-        var filterValue = document.filterForm.filterMenu.value;
 
+        var filterValue = document.filterForm2.filterMenu2.value;
+        console.log(filterValue);
         var latlng = new google.maps.LatLng(8.228021, 124.245242);
         directionsDisplay = new google.maps.DirectionsRenderer();
 
@@ -247,42 +291,77 @@ function filterMarker() {
         var infoWindow = new google.maps.InfoWindow;
 
         // Change this depending on the name of your PHP file
-        downloadUrl("genXML.php", function(data) {
+        downloadUrl("http://localhost/icdrris/application/views/polyXML.php", function(data) {
             var xml = data.responseXML;
-            var markers = xml.documentElement.getElementsByTagName("marker");
+            var markers = xml.documentElement.getElementsByTagName("polygon");
+            var loopCount=0;
             for (var i = 0; i < markers.length; i++) {
 
-                if (filterValue === markers[i].getAttribute("type"))
+                if (document.filterForm2.filterMenu2.value != 'null')
                 {
+                    console.log("inside if statement");
+                    if (filterValue === markers[i].getAttribute("disasterType") && (markers[i].getAttribute("markerLat")!=null) && (markers[i].getAttribute("markerLng")!=null))
+                    {
 
-                    var name = markers[i].getAttribute("name");
-                    var address = markers[i].getAttribute("address");
-                    var type = markers[i].getAttribute("type");
-                    //var disaster_intensity = markers[i].getAttribute("disaster_intensity");
-                    var disaster_description = markers[i].getAttribute("disaster_description");
-                    var casualties = markers[i].getAttribute("casualties");
-                    //var families_affected = markers[i].getAttribute("families_affected");
-                    //var estimated_cost = markers[i].getAttribute("estimated_cost");
-                    //var type = markers[i].getAttribute("type");
-                    //var html = "<b>" + barangay + "</b> : " + address + "<br/>" + "<b> disaster_type:" + disaster_type + "</b>   disaster_description" + disaster_description+ "<br/><b> casualties:"+casualties+"</b>"+"  families_affected:"+families_affected+"<br/>"+"estimated_cost: "+estimated_cost;
-                    var html = "<b>" + name + "</b> <br/>" + disaster_description + "<br>" + "casualties: " + casualties;
-                    var icon = customIcons[type] || {};
-                    var point = new google.maps.LatLng(
-                            parseFloat(markers[i].getAttribute("lat")),
-                            parseFloat(markers[i].getAttribute("lng")));
+                        var name = markers[i].getAttribute("name");
+                        var address = markers[i].getAttribute("address");
+                        var type = markers[i].getAttribute("disasterType");
+                        //var disaster_intensity = markers[i].getAttribute("disaster_intensity");
+                        var disaster_description = markers[i].getAttribute("disaster_description");
+                        var casualties = markers[i].getAttribute("casualties");
+                        //var families_affected = markers[i].getAttribute("families_affected");
+                        //var estimated_cost = markers[i].getAttribute("estimated_cost");
+                        //var type = markers[i].getAttribute("type");
+                        //var html = "<b>" + barangay + "</b> : " + address + "<br/>" + "<b> disaster_type:" + disaster_type + "</b>   disaster_description" + disaster_description+ "<br/><b> casualties:"+casualties+"</b>"+"  families_affected:"+families_affected+"<br/>"+"estimated_cost: "+estimated_cost;
+                        var html = "<b>" + name + "</b> <br/>" + disaster_description + "<br>" + "casualties: " + casualties;
+                        var icon = customIcons[type] || {};
+                        var point = new google.maps.LatLng(
+                                parseFloat(markers[i].getAttribute("markerLat")),
+                                parseFloat(markers[i].getAttribute("markerLng")));
 
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: point,
-                        icon: icon.icon,
-                        shadow: icon.shadow
-                    });
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: point,
+                            icon: icon.icon,
+                            shadow: icon.shadow
+                        });
 
-                    bindInfoWindow(marker, map, infoWindow, html);
+                        bindInfoWindow(marker, map, infoWindow, html);
 
+                    }
+                }else{
+
+                    if ((markers[i].getAttribute("markerLat")!=null) && (markers[i].getAttribute("markerLng")!=null))
+                    {
+                        var name = markers[i].getAttribute("name");
+                        var address = markers[i].getAttribute("address");
+                        var type = markers[i].getAttribute("disasterType");
+                        //var disaster_intensity = markers[i].getAttribute("disaster_intensity");
+                        var disaster_description = markers[i].getAttribute("disaster_description");
+                        var casualties = markers[i].getAttribute("casualties");
+                        //var families_affected = markers[i].getAttribute("families_affected");
+                        //var estimated_cost = markers[i].getAttribute("estimated_cost");
+                        //var type = markers[i].getAttribute("type");
+                        //var html = "<b>" + barangay + "</b> : " + address + "<br/>" + "<b> disaster_type:" + disaster_type + "</b>   disaster_description" + disaster_description+ "<br/><b> casualties:"+casualties+"</b>"+"  families_affected:"+families_affected+"<br/>"+"estimated_cost: "+estimated_cost;
+                        var html = "<b>" + name + "</b> <br/>" + disaster_description + "<br>" + "casualties: " + casualties;
+                        var icon = customIcons[type] || {};
+                        var point = new google.maps.LatLng(
+                                parseFloat(markers[i].getAttribute("markerLat")),
+                                parseFloat(markers[i].getAttribute("markerLng")));
+
+                        var marker = new google.maps.Marker({
+                            map: map,
+                            position: point,
+                            icon: icon.icon,
+                            shadow: icon.shadow
+                        });
+
+                        bindInfoWindow(marker, map, infoWindow, html);
+
+                    }
                 }
-
+                loopCount = i;
             }
+            console.log(loopCount);
         });
-    }
 }

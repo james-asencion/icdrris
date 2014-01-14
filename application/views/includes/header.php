@@ -13,8 +13,8 @@
 	   
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery-1.3.2.js"></script>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
-                <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-		<script src="application/views/js/map.js"></script>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
                
 		<style type = "text/css">
 			#googlemap img,object,embed{max-width:none}
@@ -44,7 +44,7 @@
 			</ul>
                    
 	<!-- HEADER-->
-		<?php if($this->session->userdata('is_logged_in')){ ?>	
+		<?php if(!$this->session->userdata('is_logged_in')){ ?>	
 			<ul class="nav">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -59,18 +59,15 @@
 				</li>
 			</ul>
 
-			<ul class="nav">
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Change Map View
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href = "MapController"> Polygons</a></li>
-						<li><a href = "MapController2">Markers</a></li>
-					</ul>
-				</li>
-			</ul>
+			<form class = "navbar-form pull-left" name="filterForm1">
+				<div class="center" align="center">View Incidents by:   
+					<select class="input-large custom span5" name="filterMenu1" onChange="filterReports()">
+						<option value=""></option>
+						<option value='Marker'>Marker</option>
+						<option value='Polygon'>Polygon</option>
+					</select>
+				</div>
+			</form>
 			
 	<!-- userLogout (condition: LOGGED IN)-->		
 			<ul class="nav pull-right">
@@ -91,10 +88,10 @@
 				</li>
 			</ul>
 	<!-- FILTER FORM -->				
-			<form class = "navbar-form pull-left" name="filterForm">
+			<form class = "navbar-form pull-left" name="filterForm2">
 				<div class="center" align="center">Filter Incidents:   
-					<select class="input-large custom span5" name="filterMenu" onChange="filterPolygon()">
-						<option value=""></option>
+					<select class="input-large custom span5" name="filterMenu2" onChange="filterReports()">
+						<option value='null'></option>
 						<option value='FlashFlood'>Flashflood</option>
 						<option value='LandSlide'>Landslide</option>
 						<option value='MudSlide'>Mudslide</option>
