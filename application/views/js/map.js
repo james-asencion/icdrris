@@ -33,13 +33,13 @@ function displayList() {
     downloadUrl("http://localhost/icdrris/application/views/polyXML.php", function(data) {
 
         var xml = data.responseXML;
-        console.log(xml);
+        //console.log(xml);
         var polygon = xml.documentElement.getElementsByTagName("polygon");
 
         var output = "<ul class=\"list-group\">";
 
         for (var i = 0; i < polygon.length; i++) {
-            var desc = polygon[i].getAttribute("description");
+            var description = polygon[i].getAttribute("description");
             var disasterType = polygon[i].getAttribute("disasterType");
             var date = polygon[i].getAttribute("date");
             var deaths = polygon[i].getAttribute("deaths");
@@ -54,16 +54,16 @@ function displayList() {
             output += "<div class=\"accordion\" id=\"accordion" + i + "\">";
             output += "<div class=\"accordion-group\">";
             output += "<div class=\"accordion-heading\">";
-            output += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + i + "\" href=\"#collapse" + i + "\">" + type + "</a>";
+            output += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + i + "\" href=\"#collapse" + i + "\">" + disasterType + "</a>";
             output += "</div>";
             output += "<div id=\"collapse" + i + "\" class=\"accordion-body collapse in\">";
             output += "<div class=\"accordion-inner\">";
-            output += "<p class=\"list-group-item-text\">Disaster Type :" + disasterType + "/n Description:" + description+"/nDate :" + date +"/nDeaths :" + deaths+"/nInjured :" + injured+"/Missing :" + missing+ "/nfamilies affected : " + affectedFamilies+ "/nHouses Destroyed : " + homesDestroyed + + "/nSource : " +infoSource+ "</p>";
+            output += "<p class=\"list-group-item-text\">Disaster Type :" + disasterType + "<br> Description:" + description+"<br>Date :" + date +"<br>Deaths :" + deaths+"<br>Injured :" + injured+"<br>Missing :" + missing+ "<br>families affected : " + affectedFamilies+ "<br>Houses Destroyed : " + homesDestroyed + + "<br>Source : " +infoSource+ "</p>";
             output += "</div></div></div>";
 
         }
         output += "</ul>";
-
+        console.log(output);
         insertToDocument(output);
 
     });
