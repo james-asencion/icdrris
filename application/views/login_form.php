@@ -7,13 +7,34 @@
 				<b class="caret"></b>
 			</a>
 			<ul class="dropdown-menu">
-									
-				<div class="error alert-error" style= "margin: .5em .5em .5em .5em">
-					<a class="close" data-dismiss="alert">×</a> 
-					<div style= "padding:.5em"><strong>Error!</strong>	<br />
-						<font size= "2"><?php print validation_errors(); ?></font>
-					</div>
-				</div>
+				
+
+    <?php  if((function_exists('validation_errors') && validation_errors() != '') && isset($err_login)){?>
+             <div class="error alert-error" style= "margin: .5em .5em .5em .5em">
+                    <a class="close" data-dismiss="alert">&times;</a>  
+                    <div style= "padding:.5em"><strong>Error!</strong>	<br />
+                    <font size= "2">
+                        <?php // found in system/libraries/Form_validation.php
+                            echo validation_errors();
+                        ?>
+                    </font>
+                    </div>
+                </div> 
+    <?php } ?>
+
+    <?php  if(isset($succ_login)){ ?>
+                <div class="alert alert-success" style= "margin: .5em .5em .5em .5em" >  
+                    <a class="close" data-dismiss="alert">&times;</a>  
+                   <div style= "padding:.5em"> <strong>Success!</strong>	<br />
+                     <font size= "2">  
+                         <?php 
+                            echo $succ_message;  
+                        ?>
+                    </font>
+                   </div>
+                </div> 
+    <?php } ?>
+				
 									
 				<form method = "post" action = "<?php echo base_url();?>Login/validate_credentials" style = "margin:10px">
 					<?php 

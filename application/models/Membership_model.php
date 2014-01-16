@@ -19,17 +19,23 @@ class Membership_model extends CI_Model
 			return true;
 		}
 	}
-	function create_account($username, $password, $fname, $lname)
+	function create_account($username, $password, $fname, $lname, $utype)
 	{
 
 		$data= array(
-					'adminId' => $username, 
-					'password' => $password,
-					'fname' => $fname,
-					'lname' => $lname);
+                            'adminId' => $username, 
+                            'password' => $password,
+                            'fname' => $fname,
+                            'lname' => $lname,
+                            'utype' => $utype);
 		
 		$query= $this->db->insert('users', $data);
-                return true;
+                if($query){
+                    return true;
+                }
+                else{
+                    return false;
+                }
 	}
 }
 ?>

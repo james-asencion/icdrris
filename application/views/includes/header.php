@@ -38,9 +38,9 @@
       
 	<div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
-			<a class = "brand" href = "<?php echo base_url();?>reg1.html">ICDRRIS</a>
+			<a class = "brand" href = "<?php echo base_url();?>">ICDRRIS</a>
 			<ul class = "nav">
-				<li class = "active"><a href = "<?php echo base_url();?>reg1.html">Home</a></li>
+				<li class = "active"><a href = "<?php echo base_url();?>">Home</a></li>
 			</ul>
                    
 	<!-- HEADER-->
@@ -69,7 +69,22 @@
 				</div>
 			</form>
 			
-	<!-- userLogout (condition: LOGGED IN)-->		
+	
+	<!-- FILTER FORM -->				
+			<form class = "navbar-form pull-left" name="filterForm2">
+				<div class="center" align="center">Filter Incidents:   
+					<select class="input-large custom span5" name="filterMenu2" onChange="filterReports()">
+						<option value='null'></option>
+						<option value='FlashFlood'>Flashflood</option>
+						<option value='LandSlide'>Landslide</option>
+						<option value='MudSlide'>Mudslide</option>
+					</select>
+				</div>
+			</form>
+<?php } ?>	
+        
+        <!-- userLogout (condition: LOGGED IN)-->	
+        <?php if($this->session->userdata('is_logged_in')){ ?>	
 			<ul class="nav pull-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -87,15 +102,4 @@
 					</ul>
 				</li>
 			</ul>
-	<!-- FILTER FORM -->				
-			<form class = "navbar-form pull-left" name="filterForm2">
-				<div class="center" align="center">Filter Incidents:   
-					<select class="input-large custom span5" name="filterMenu2" onChange="filterReports()">
-						<option value='null'></option>
-						<option value='FlashFlood'>Flashflood</option>
-						<option value='LandSlide'>Landslide</option>
-						<option value='MudSlide'>Mudslide</option>
-					</select>
-				</div>
-			</form>
-<?php } ?>			
+        <?php } ?>
