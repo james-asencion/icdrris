@@ -2,12 +2,24 @@
 
 class Membership_model extends CI_Model
 {
+        function getUserDetails($adminId){
+                
+		$query = $this->db->query('SELECT u.adminId, u.fname, u.lname, u.utype FROM icdrris.users u WHERE u.adminId= "'.$adminId.'"');
+                
+                if($query){
+                   return $query; 
+                }
+                else{
+                    echo 'Problem with the query.';
+                }
+                
+        }
 	function validate($username, $password)
 	{
        //       $username=$this->input->post('username');
        //	$password=$this->input->post('password');
 
-                $this->db->select('adminId', 'password', 'fname', 'lname');
+                $this->db->select('adminId', 'password', 'fname', 'lname', 'utype');
 		$this->db->from('users');
 		$this->db->where('adminId', $username);
 		$this->db->where('password', $password);

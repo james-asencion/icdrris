@@ -6,7 +6,14 @@ class Login extends CI_Controller{
 	{   //first initialization of login form
             $this->load->view('includes/template');
 	}   
-     
+        
+        public function home(){
+		if($this->session->userdata('is_logged_in')){
+			$this->load->view('polyHome');
+		} else{
+			redirect('Login');
+		}
+	}
         
 	function validate_credentials()
 	{   //validate login form data
@@ -18,12 +25,23 @@ class Login extends CI_Controller{
 			$this->load->view('login', $data);
 			//redirect('Main/login');
 		}else{
+                        $username = $this->input->post("username");
+                        $this->load->model('membership_model');
+                        $query=$this->membership_model->getUserDetails($username);
+                        foreach($query->result() as $row_user){
+                             $fname= $row_user->fname;
+                             $lname= $row_user->lname;
+                             $utype= $row_user->utype;
+                        }
 			$data= array(
-                                    'username' => $this->username,
-                                    'is_logged_in' => 1
+                                    'username' => $username,
+                                    'is_logged_in' => 1,
+                                    'firstname' => $fname,
+                                    'lastname' => $lname,
+                                    'utype' => $utype
                                 );
 			$this->session->set_userdata($data);
-			redirect('MapController');
+			redirect('Login/home');
 		}
            }
            

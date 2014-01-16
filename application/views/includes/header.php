@@ -92,7 +92,7 @@
 						<?php 
 							// Capital the first letter
 							// Username OR Name of the User??
-							print_r($this->session->userdata('username')); 
+							print_r($this->session->userdata('utype').'.'.$this->session->userdata('firstname')); 
 						 ?>
 						<b class="caret"></b>
 					</a>
