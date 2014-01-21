@@ -9,8 +9,9 @@
 		<!-- Bootstrap -->
 		<link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
-	   <!--    <link href="<?php //echo base_url();?>css/bootstrap-glyphicons.css" rel="stylesheet">-->
-	   
+                
+        <!--    <link href="<?php //echo base_url();?>css/bootstrap-glyphicons.css" rel="stylesheet">-->
+                    
 		<script type="text/javascript" src="<?php echo base_url();?>js/jquery-1.3.2.js"></script>
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -40,38 +41,43 @@
 		<div class = "navbar-inner">
 			<a class = "brand" href = "<?php echo base_url();?>">ICDRRIS</a>
 			<ul class = "nav">
-				<li class = "active"><a href = "<?php echo base_url();?>">Home</a></li>
+				<li class = "active"><a href = "<?php echo base_url();?>"><i class = "icon-home"></i> Home</a></li>
 			</ul>
                    
 	<!-- HEADER-->
 		<?php if(!$this->session->userdata('is_logged_in')){ ?>	
 			<ul class="nav">
 				<li class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						Actions
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href = "#"><i class = "icon-plus"></i> Add</a></li>
-						<li><a href = "#"><i class = "icon-edit"></i> Edit</a></li>
-						<li><a href = "#"><i class = "icon-trash"></i> Delete</a></li>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class = "icon-tint icon-white"></i> Incidents
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1" href = "#"><i class = "icon-bullhorn"></i> Report an Incident </a>
+                                                <ul class="dropdown-menu">
+                                                    <li> <a href="#"><i class = "icon-pencil"></i> Report Victim </a></li>
+                                                </ul>
+						<li><a href = "#"><i class = "icon-briefcase"></i> List of Incidents</a></li>
+						
 					</ul>
 				</li>
 			</ul>
-
+<!--
 			<form class = "navbar-form pull-left" name="filterForm1">
 				<div class="center" align="center">View Incidents by:   
 					<select class="input-large custom span5" name="filterMenu1" onChange="filterReports()">
 						<option value=""></option>
-						<option value='Marker'>Marker</option>
+						<option value='Marker'> <i class = "icon-map-marker"></i>  Marker</option>
 						<option value='Polygon'>Polygon</option>
 					</select>
 				</div>
 			</form>
 			
-	
+-->	
+
 	<!-- FILTER FORM -->				
-			<form class = "navbar-form pull-left" name="filterForm2">
+<!--			<form class = "navbar-form pull-left" name="filterForm2">
 				<div class="center" align="center">Filter Incidents:   
 					<select class="input-large custom span5" name="filterMenu2" onChange="filterReports()">
 						<option value='null'></option>
@@ -81,6 +87,7 @@
 					</select>
 				</div>
 			</form>
+-->
 <?php } ?>	
         
         <!-- userLogout (condition: LOGGED IN)-->	
