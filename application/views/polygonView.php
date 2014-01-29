@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
 	<script src="<?php echo base_url();?>application/views/js/modalScript.js"></script>
-	<script src="<?php echo base_url();?>application/views/js/map.js"></script>
+	
 
 		<style type = "text/css">
 			#googlemap img,object,embed{max-width:none}

@@ -12,7 +12,10 @@ class Home extends  CI_Controller
 	function index()
 	{   //first initialization of login form
             //$data= $this->countIncidents();
+            $this->load->view('includes/header');
+            $this->load->view('login_form'); 
             $this->load->view('polyHome');
+            $this->load->view('includes/footer'); 
 	}   
        
         function countIncidents(){

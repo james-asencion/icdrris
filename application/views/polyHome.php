@@ -1,6 +1,3 @@
-<?php $this->load->view('includes/header'); ?>
-<?php $this->load->view('login_form'); ?>
- 
     </div>
         
         <div id="controls" style="display:block">
@@ -78,4 +75,4 @@
 	    </div>
 	  </div>
 	</div>
-<?php $this->load->view('includes/footer'); ?>
+

@@ -47,6 +47,9 @@ class MapController extends  CI_Controller
 	public function viewPolygonReports(){
 		$this->load->view('polyHome');
 	}
+	public function viewMarkerReports(){
+		$this->load->view('markerHome');
+	}
 }
 
 ?>

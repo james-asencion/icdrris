@@ -62,7 +62,9 @@ function initialize() {
     shape.setMap(map);
 
     google.maps.event.addListener(shape, 'click', showInfo);
+    console.log("here");
     google.maps.event.addListener(map, 'click', addPoint);
+    console.log("here");
 
 
 //    infowindow = new google.maps.InfoWindow({
@@ -82,6 +84,7 @@ function initialize() {
 }
 function addPoint(e) {
     vertices = shape.getPath();
+    console.log("here");
     vertices.push(e.latLng);
 }
 function showInfo(event) {

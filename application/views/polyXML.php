@@ -15,19 +15,20 @@ if(mysqli_connect_error()){
 }
 // Select all the rows in the markers table
 
-$query = "SELECT i.description, i.disasterType, i.dateHappened, i.deaths, i.injured, i.missing, i.affectedFamilies, i.homesDestroyed, i.damageCost, i.infoSource, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
-          FROM incident i
-          LEFT OUTER JOIN incident_location l ON i.reportNo = l.reportNo
+$query = "SELECT i.incident_description, i.disaster_type, i.incident_description, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
+          FROM incidents i
+          LEFT OUTER JOIN incident_location l ON i.incident_report_id = l.incident_report_id
           UNION 
-          SELECT i.description, i.disasterType, i.dateHappened, i.deaths, i.injured, i.missing, i.affectedFamilies, i.homesDestroyed, i.damageCost, i.infoSource, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
-          FROM incident i
-          RIGHT OUTER JOIN incident_location l ON i.reportNo = l.reportNo
+          SELECT i.incident_description, i.disaster_type, i.incident_description, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
+          FROM incidents i
+          RIGHT OUTER JOIN incident_location l ON i.incident_report_id = l.incident_report_id
           LIMIT 0 , 30";
 $result = $mysqli->query($query);
 if (!$result) {
   echo "An error occurred.\n";
   exit;
 }
+
 header("Content-type: text/xml"); 
 
 while ($row = $result->fetch_assoc()) {
@@ -50,6 +51,8 @@ while ($row = $result->fetch_assoc()) {
     
 
   //Retrieve all the coordinates of a Marker and a Polygon corresponding to an incident
+  if($row['reportPolygon'] != null)
+  {
     $patterns = array();
     $patterns[0] = '/\s/';
     $patterns[1] = '/\)\)/';
@@ -70,6 +73,7 @@ while ($row = $result->fetch_assoc()) {
       $newPoint->setAttribute("lat",$points[$i++]);
       $newPoint->setAttribute("lng",$points[$i++]);
     }
+  }
 }
 
 echo $dom->saveXML();

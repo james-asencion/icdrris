@@ -16,6 +16,11 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/dropdown.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/verify.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
                
 		<style type = "text/css">
 			#googlemap img,object,embed{max-width:none}
@@ -56,10 +61,33 @@
                                         <li class="dropdown-submenu">
                                             <a tabindex="-1" href = "#"><i class = "icon-bullhorn"></i> Report an Incident </a>
                                                 <ul class="dropdown-menu">
-                                                    <li> <a href="#"><i class = "icon-pencil"></i> Report Victim </a></li>
+                                                    <li> <a href="http://localhost/icdrris/Livelihood/registerLivelihoodOrg"><i class = "icon-pencil"></i> Report Victim </a></li>
                                                 </ul>
 						<li><a href = "#"><i class = "icon-briefcase"></i> List of Incidents</a></li>
 						
+					</ul>
+				</li>
+			</ul>
+			<ul class="nav">
+				<li class="dropdown" name="livelihoodDropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class = "icon-flag icon-white"></i> Livelihood Matching
+                                        <b class="caret"></b>
+                                    </a>
+                                <ul class="dropdown-menu" role="menu">
+                         			<li> 
+                         				<a onClick="registerLivelihoodOrg()" ><i class = "icon-edit"></i> Register Livelihood Org </a>
+                         			</li>
+                                    <li>
+                                    	<a href = "#" onClick="registerExternalOrg()"><i class = "icon-briefcase"></i> Register External Org</a>
+                                    </li>
+                                    <li>
+                                    	<a href = "#" onClick="deployLivelihoodOrg()"><i class = "icon-share"></i> Deploy Livelihood Org</a>
+                                    </li>
+                                    <li>
+                                    	<a href = "#" onClick="searchLivelihoodOrg()"><i class = "icon-search"></i> Search Livelihood Org</a>
+                                    </li>
+								</ul>
 					</ul>
 				</li>
 			</ul>

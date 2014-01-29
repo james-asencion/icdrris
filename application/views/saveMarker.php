@@ -25,8 +25,8 @@ if(mysqli_connect_errno()){
 //    die('Can\'t use db : '.mysql_error());
 //}
 
-$query1 = sprintf("INSERT INTO incident ".
-                " (description, disasterType, dateHappened, deaths, injured, missing, affectedFamilies, homesDestroyed, damageCost, infoSource)".
+$query1 = sprintf("INSERT INTO incidents ".
+                " (incident_description, disaster_type, incident_date, death_toll, no_of_injuries, no_of_people_missing, no_of_families_affected, no_of_houses_destroyed, estimated_damage_cost, incident_info_source)".
                 "VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');",
                  $mysqli->real_escape_string($description),
                  $mysqli->real_escape_string($disasterType),
@@ -40,13 +40,10 @@ $query1 = sprintf("INSERT INTO incident ".
                  $mysqli->real_escape_string($source));
 
 $result1 = $mysqli->query($query1);
-$query2 = "SELECT MAX(reportNo) as rNum FROM incident;";
-$result2 = $mysqli->query($query2);
-$row = $result2->fetch_array(MYSQLI_NUM);
-
+$reportNum = $mysqli->insert_id;
 $query3 = "INSERT INTO incident_location ".
                 " (reportNo, locationId, intensity, lat, lng, polygon)".
-                "VALUES ('$row[0]',2,3,'$lat','$lng',
+                "VALUES ('$reportNum',1,3,'$lat','$lng',
                  null);";
 
 $result3 = $mysqli->query($query3);

@@ -30,6 +30,8 @@ function initialize() {
 
 function displayList() {
 
+    //downloadUrl("http://localhost/icdrris/application/views/polyXML.php", populate());
+
     downloadUrl("http://localhost/icdrris/application/views/polyXML.php", function(data) {
 
         var xml = data.responseXML;
@@ -63,7 +65,7 @@ function displayList() {
 
         }
         output += "</ul>";
-        console.log(output);
+        //console.log(output);
         insertToDocument(output);
 
     });
@@ -91,18 +93,17 @@ function bindInfoWindowToSidePanel(map, element, marker, content)
 }
 
 function downloadUrl(url, callback) {
-    var request = window.ActiveXObject ?
-            new ActiveXObject('Microsoft.XMLHTTP') :
-            new XMLHttpRequest;
+    var request = window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest;
 
     request.onreadystatechange = function() {
-        if (request.readyState == 4) {
-            request.onreadystatechange = doNothing;
-            callback(request, request.status);
-        }
-    };
+                                            if (request.readyState == 4) {
+                                                request.onreadystatechange = doNothing;
+                                                callback(request, request.status);
+                                            }
+                                        };
 
     request.open('GET', url, true);
+    //this is to reminate the request
     request.send(null);
 }
 
@@ -165,6 +166,9 @@ function filterPolygon(){
                 //var html = "<b>" + barangay + "</b> : " + address + "<br/>" + "<b> disaster_type:" + disaster_type + "</b>   disaster_description" + disaster_description+ "<br/><b> casualties:"+casualties+"</b>"+"  families_affected:"+families_affected+"<br/>"+"estimated_cost: "+estimated_cost;
                 //var html = "<b>" + name + "</b> <br/>" + disaster_description+"<br>"+"casualties: "+casualties;
                 //var icon = customIcons[type] || {};
+
+
+
                 //============DECLARE VARIABLES=============
                 var type = polygons[i].getAttribute("disasterType");
                 if (document.filterForm2.filterMenu2.value != 'null')
