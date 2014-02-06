@@ -45,16 +45,23 @@ class LivelihoodModel extends CI_Model{
                     );
 
 
-		$organization_id = $data['org_id'];
+		
 		$query1 = $this->db->insert('livelihood_organization_members',$val);
+		
+		//id to be used in the connecting table
 		$member_id = $this->db->insert_id();
+		$organization_id = $data['org_id'];
+
 		$query2 = $this->db->query("INSERT INTO recipient_org_org_members(livelihood_organization_id, member_id) VALUES ('$organization_id', '$member_id')");
+		
 		$query3 = $this->db->query("SELECT s1.member_id, s2.first_name, s2.last_name, s2.middle_name, s2.sex, s2.birthday,s2.age, s2.monthly_income, s2.source_of_income, s2.civil_status, s2.no_of_children
 									FROM    
-									(SELECT DISTINCT r.member_id
-									          FROM recipient_org_org_members r
-									          LEFT JOIN livelihood_organizations l ON r.livelihood_organization_id = r.livelihood_organization_id WHERE r.livelihood_organization_id='$organization_id') s1
+									(SELECT member_id
+									          FROM recipient_org_org_members 
+									          WHERE livelihood_organization_id='$organization_id') s1
+
 									LEFT JOIN 
+
 									(SELECT *
 									          FROM livelihood_organization_members) s2
 									ON s1.member_id = s2.member_id");
@@ -67,18 +74,32 @@ class LivelihoodModel extends CI_Model{
 		
 	}
 
-	function getAllOrgs(){
-		$query = $this->db->get('livelihood_org');
-		return $query;
+	function getAllLivelihoodOrgs(){
+		$query = $this->db->get('livelihood_organizations');
+		return $query->result();
 	} 
 
 	function getOrgByName($name){
 		$query = $this->db->get_where('livelihood_org',array('livelihoodOrgName'=>$name));
 		return $query;
 	}
+	function getLivelihoodOrg($id){
+		$query = $this->db->get_where('livelihood_organizations', array('livelihood_organization_id'=>$id));
+		return $query->result();
+	}
 
 	function getAllMembers($id){
-
+		$query = $this->db->query("	SELECT m.member_id, m.first_name, m.last_name, m.middle_name, m.sex, m.birthday, m.age, m.monthly_income, m.source_of_income, m.civil_status, m.no_of_children 
+									FROM livelihood_organization_members m 
+									LEFT JOIN recipient_org_org_members r
+									ON r.member_id = m.member_id 
+									WHERE r.livelihood_organization_id = '$id';");
+		return $query->result();
+	}
+	function updateMember(){
+		$data = array(
+				''
+			);
 	}
 
 	function checkOrgExist($orgName){
@@ -93,6 +114,14 @@ class LivelihoodModel extends CI_Model{
 		{
 			return false;
 		}
+	}
+
+	function deleteOrganization($id){
+		$this->db->where("livelihood_organization_id",$id);
+		$query = $this->db->delete("livelihood_organizations");
+
+		return $query->result();
+
 	}
 }
 ?>

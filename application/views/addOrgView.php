@@ -2,7 +2,9 @@
 </div>
 <div id="container">
 <?php $attributes = array('class' => 'form-horizontal well span9 offset3', 'method'=>'post');
+
       echo form_open("livelihood/addLivelihoodOrg",$attributes); ?>
+      
       <?php echo validation_errors('<p class="error">'); ?>
       <h1 class="text-center">Register Livelihood Organization</h1>
         <label for="name">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Livelihood Organization Name: </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="name" id="name" value="<?php echo set_value('name'); ?>"/><div id="name_verify" class="verify"></div>

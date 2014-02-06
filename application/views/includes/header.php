@@ -7,20 +7,29 @@
 		
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- Bootstrap -->
-		<link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
-		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
+
                 
         <!--    <link href="<?php //echo base_url();?>css/bootstrap-glyphicons.css" rel="stylesheet">-->
                     
-		<script type="text/javascript" src="<?php echo base_url();?>js/jquery-1.3.2.js"></script>
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
+		<!--
 		<script src="<?php echo base_url();?>application/views/js/dropdown.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/verify.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script> 
+        <script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>-->
+        <script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>
+		<link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
+
+
+    <!-- Bootstrap -->
+
+		<link href="">
                
 		<style type = "text/css">
 			#googlemap img,object,embed{max-width:none}
@@ -76,16 +85,19 @@
                                     </a>
                                 <ul class="dropdown-menu" role="menu">
                          			<li> 
-                         				<a onClick="registerLivelihoodOrg()" ><i class = "icon-edit"></i> Register Livelihood Org </a>
+                         				<a href = "http://localhost/icdrris/Livelihood/registerLivelihoodOrg" ><i class = "icon-edit"></i> Register Livelihood Org </a>
                          			</li>
                                     <li>
-                                    	<a href = "#" onClick="registerExternalOrg()"><i class = "icon-briefcase"></i> Register External Org</a>
+                                    	<a href = "#" ><i class = "icon-briefcase"></i> Register External Org</a>
                                     </li>
                                     <li>
-                                    	<a href = "#" onClick="deployLivelihoodOrg()"><i class = "icon-share"></i> Deploy Livelihood Org</a>
+                                    	<a href = "#"><i class = "icon-share"></i> Deploy Livelihood Org</a>
                                     </li>
                                     <li>
-                                    	<a href = "#" onClick="searchLivelihoodOrg()"><i class = "icon-search"></i> Search Livelihood Org</a>
+                                    	<a href = "#"><i class = "icon-search"></i> Search Livelihood Org</a>
+                                    </li>
+                                    <li>
+                                    	<a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodOrgs" ><i class = "icon-search"></i> View All Livelihood Orgs</a>
                                     </li>
 								</ul>
 					</ul>

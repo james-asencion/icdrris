@@ -75,12 +75,14 @@ function insertToDocument(content)
 {
     document.getElementById('incidentList').innerHTML = (content);
 }
+
 function bindInfoWindow(marker, map, infoWindow, html) {
     google.maps.event.addListener(marker, 'click', function() {
         infoWindow.setContent(html);
         infoWindow.open(map, marker);
     });
 }
+
 function bindInfoWindowToSidePanel(map, element, marker, content)
 {
     //-------------------------------------------------------------------------------------

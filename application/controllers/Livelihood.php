@@ -42,9 +42,9 @@ class Livelihood extends CI_Controller
             //$this->registerLivelihoodOrg();
     	}
         else{
-            $data = $this->LivelihoodModel->createLivelihoodOrg();
+            $orgID = $this->LivelihoodModel->createLivelihoodOrg();
             //echo $response['org_id'];
-            $this->addOrgMembers($data);
+            $this->addOrgMembers($orgID);
     	}
 
     }
@@ -105,18 +105,47 @@ class Livelihood extends CI_Controller
                     );
 
         $query = $this->LivelihoodModel->addMember($data);
+
         if($query){
             echo "<h4>Livelihood Organization Members</h4>";
             echo "<table class=\"table table-striped\">";
             echo "<tr><th>First Name</th><th>Middle Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Age</th><th>Monthly Income</th><th>Source of income</th><th>Civil Status</th><th>Number of Children</th></tr>";
+          
            foreach ($query->result() as $row) {
                 echo "<tr><td>".$row->first_name."</td><td>".$row->middle_name."</td><td>".$row->last_name."</td><td>".$row->sex."</td><td>".$row->birthday."</td><td>".$row->age."</td><td>".$row->monthly_income."</td><td>".$row->source_of_income."</td><td>".$row->civil_status."</td><td>".$row->no_of_children."</td></tr>";
            }  
            echo "</table>";
         }
+        
         else{
            echo "Fail: ".$query;
         }
+    }
+    function viewLivelihoodOrg($id){
+        //query for the data
+        $data['livelihood_org'] = $this->LivelihoodModel->getLivelihoodOrg($id);
+        $data['members'] = $this->LivelihoodModel->getAllMembers($id);
+            
+        //pass the query results to the view
+        $this->load->view('includes/header');
+        $this->load->view('login_form');
+        $this->load->view('livelihoodOrganizationsView',$data);
+        $this->load->view('includes/footer');        
+    }
+    function viewAllLivelihoodOrgs(){
+        $data['organizations'] = $this->LivelihoodModel->getAllLivelihoodOrgs();
+        $this->load->view('includes/header');
+        $this->load->view('login_form');
+        $this->load->view('livelihoodOrganizationsView',$data);
+        $this->load->view('includes/footer');
+
+    }
+    function updateMember(){
+        $this->LivelihoodModel->updateMember();
+    }
+    function deleteOrganization(){
+        $result = $this->LivelihoodModel->deleteOrganization($this->input->post('org_id'));
+        echo $result;
     }
 
 
