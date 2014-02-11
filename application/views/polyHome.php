@@ -17,9 +17,9 @@
                     <div class="center" align="center"><p>Filter Incidents:</p>   
                         <select class="span2" name="filterMenu2" onChange="filterReports()">
                                 <option value='null'></option>
-                                <option value='FlashFlood'>Flashflood</option>
-                                <option value='LandSlide'>Landslide</option>
-                                <option value='MudSlide'>Mudslide</option>
+                                <option value="Flashflood">Flashflood</option>
+                                <option value="Landslide">Landslide</option>
+                                <option value="Mudslide">Mudslide</option>
                         </select>
                     </div>
                 </form>
@@ -66,7 +66,7 @@
             </div>
                    
               <a class="trigger" href="#">
-                 <i class="icon-chevron-right-white" id="field" type="button" onclick="displayList()">   </i>
+                 <i class="icon-chevron-right-white" id="field" type="button">   </i>
                  <!--<i onclick="displayList()"></i>-->
               </a>
 	
