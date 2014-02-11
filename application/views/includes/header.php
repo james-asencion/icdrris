@@ -10,46 +10,42 @@
 
                 
         <!--    <link href="<?php //echo base_url();?>css/bootstrap-glyphicons.css" rel="stylesheet">-->
-                    
+		<!-- imports for jQuery  -->                 
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+
+        <!--imports for custom scripts -->
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
-		<!--
 		<script src="<?php echo base_url();?>application/views/js/dropdown.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
+		<!--<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script> -->
 		<script src="<?php echo base_url();?>application/views/js/verify.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script> 
-        <script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>-->
+		<script src="<?php echo base_url();?>application/views/js/sidebar.js"></script> 
+		<!--imports for Bootstrap  -->
         <script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>
 		<link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="<?php echo base_url();?>application/views/temp/style1.css" type="text/css" media="screen">
 
+		<!--imports for x-editable -->
+		<link href="<?php echo base_url();?>/application/views/x-editable/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+		<script src="<?php echo base_url();?>/application/views/x-editable/bootstrap-editable/js/bootstrap-editable.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/xEditableSettings.js"></script>
 
-    <!-- Bootstrap -->
-
-		<link href="">
-               
 		<style type = "text/css">
 			#googlemap img,object,embed{max-width:none}
 			#map_canvas embed{max-width:none}
 			#map_canvas img{max-width:none}
 			#map_canvas object{max-width:none}
 		</style>
-		<script type="text/javascript">
-			$(document).ready(function(){
-				$(".trigger").click(function(){
-					$(".panel").toggle("fast");
-					$(this).toggleClass("active");
-					return false;
-				});
-			});
-		</script>
+
 	
   </head>
   
-  <body onload="initialize()">
+  <body onload="initializeMap()">
       
 	<div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
