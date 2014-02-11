@@ -84,14 +84,12 @@ background: #222222;
 border: 1px solid #333333;
 }
 */
-/**
-p {
+.panel p {
 color:#cccccc;
-line-height:22px;
+/**line-height:22px;
 padding: 0 0 10px;
-margin: 20px 0 20px 0;
+margin: 20px 0 20px 0;*/
 }
-*/
 img {
 border:none;
 }
@@ -118,7 +116,7 @@ color:#fff;
 padding: 20px;
 font-weight: 700;
 }
-
+*/
 #container a:hover{
 float: right;
 background: #a0a0a0;
@@ -135,7 +133,7 @@ color:#fff;
 padding: 20px;
 font-weight: 700;
 }
-
+/**
 
 .content {
 font-style:normal;
@@ -158,8 +156,8 @@ padding: 15px 20px;
 */
 
 .panel {
-position: fixed;
-top: 50px;
+position: absolute;
+top: 103px;
 left: 0;
 display: none;
 background: #000000;
@@ -168,12 +166,12 @@ border:1px solid #111111;
 /** -webkit-border-top-right-radius: 20px;*/
 -moz-border-radius-bottomright: 20px;
 -webkit-border-bottom-right-radius: 20px;
-width: 50%;
+width: 47%;
 height: auto;
 padding: 2% 2% 2% 2%;
 filter: alpha(opacity=85);
 opacity: .85;
-z-index: 100;
+z-index: 30;
 overflow: scroll;
 }
 
@@ -184,8 +182,8 @@ padding: 0;
 color: #cccccc;
 }
 
-
-/**.panel a, .panel a:visited{
+/**
+.panel a, .panel a:visited{
 margin: 0;
 padding: 0;
 color: #9FC54E;
@@ -204,7 +202,7 @@ border-bottom: 1px solid #ffffff;
 a.trigger{
 position: fixed;
 text-decoration: none;
-top: 50px; left: 0;
+top: 103px; left: 0;
 font-size: 16px;
 letter-spacing:-1px;
 font-family: verdana, helvetica, arial, sans-serif;
@@ -226,7 +224,7 @@ z-index: 1000;
 a.trigger:hover{
 position: fixed;
 text-decoration: none;
-top: 50px; left: 0;
+top: 103px; left: 0;
 font-size: 16px;
 letter-spacing:-1px;
 font-family: verdana, helvetica, arial, sans-serif;
@@ -248,8 +246,8 @@ display: block;
 a.active.trigger {
 background:#333333 url(http://localhost/icdrris/img/glyphicons-halflings-white.png) 85% 55% no-repeat;
 background-position: -423px -64px;
-left: 54%;
-top: 50px;
+left: 51.1%;
+top: 103px;
 }
 
 

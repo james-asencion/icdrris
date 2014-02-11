@@ -9,11 +9,15 @@
 
 class Home extends  CI_Controller
 {
+    public function __construct(){
+        parent :: __construct();
+        $this->load->model('IncidentModel');
+    }
+    
 	function index()
 	{   //first initialization of login form
             //$data= $this->countIncidents();
             $this->load->view('includes/header');
-            $this->load->view('login_form'); 
             $this->load->view('polyHome');
             $this->load->view('includes/footer'); 
 	}   
@@ -26,21 +30,25 @@ class Home extends  CI_Controller
             $total_rows = $this->IncidentModel->totalIncidents();
             $config["total_rows"] = $total_rows;
             $config["per_page"] = 5;
-           // $config["uri_segment"] = 3;
+          //$config["uri_segment"] = 3;
         
             $this->pagination->initialize($config);
-          //  $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-          //  $data["results"] = $this->IncidentModel->
-           // fetch_countries($config["per_page"], $page);
+          //$page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+          //$data["results"] = $this->IncidentModel->
+          //fetch_countries($config["per_page"], $page);
             $data["links"] = $this->pagination->create_links();
             $data['total_rows'] = $total_rows;
  
-          //  $this->load->view("example1", $data);
-         //   $this->load->model('IncidentModel');
-         //   $resuxlt=$this->IncidentModel->totalIncidents();
+          //$this->load->view("example1", $data);
+          //$this->load->model('IncidentModel');
+          //$resuxlt=$this->IncidentModel->totalIncidents();
                
             return $data;
         }
         
+        public function logout(){
+                $this->session->sess_destroy();
+                redirect('Login');
+	}
 }
 

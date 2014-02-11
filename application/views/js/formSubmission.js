@@ -43,3 +43,46 @@ $("#addMemberButton").click(function(event)	{
 
 	});
 });
+
+$(document).ready(function(){
+
+    $('#login-btn').on('click', function(e){
+            e.preventDefault();
+            console.log('clicked');
+
+            $('#modalLogin').modal('show');
+    });
+
+    $('#loginForm').submit(function(event){
+        // Stop form from submitting normally
+        event.preventDefault();
+        
+        // Get some values from elements on the modal login page:
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var dataStr = 'username='+username+'&password='+password;
+
+        /* Send the data using post and put results to the members table */
+		request = $.ajax({
+			url: "http://localhost/icdrris/Login/validate_credentials",
+			type: "POST",
+			data: dataStr,
+			success: function(msg){
+				console.log("success");
+				console.log(msg);
+				if(msg == 'success'){
+					var rurl = 'http://localhost/icdrris';    
+					$(location).attr('href',rurl);
+					
+				}else{
+					$("#login-msg").html(msg);
+				}
+			},
+			error: function(){
+				console.log("fail");
+				console.log(values);
+				$("#login-msg").html("Sorry, system error.");
+			}
+		});
+    });
+});

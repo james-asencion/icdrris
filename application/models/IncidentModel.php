@@ -2,30 +2,7 @@
 
 class IncidentModel extends CI_Model
 {
-	function validate()
-	{
-		$username=$this->input->post('username');
-		$password=$this->input->post('password');
-
-		$q=$this->db->query("SELECT * FROM user_profile WHERE user_name='$username' AND pass='$password'");
-		$res=$q->result();
-
-		if($q->num_rows()==1)
-		{
-			return true;
-		}
-	}
-	function create_account()
-	{
-		$fName=$this->input->post('first_name');
-		$lName=$this->input->post('last_name');
-		$user_name=$this->input->post('user_name');
-		$email=$this->input->post('email');
-		$password=md5($this->input->post('password'));
-
-		$q=$this->db->query("INSERT INTO user_profile (first_name,last_name,user_name,pass) VALUES('$fName','$lName','$user_name','$password')");
-		return $q;
-	}
+	
         function totalIncidents(){
             $query = "SELECT i.description, i.disasterType, i.dateHappened, i.deaths, i.injured, i.missing, i.affectedFamilies, i.homesDestroyed, i.damageCost, i.infoSource, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
                         FROM incident i
@@ -39,6 +16,24 @@ class IncidentModel extends CI_Model
             $results = $this->db->query($query);
             $totalIncidents= $results->num_rows();
             return $totalIncidents;
+        }
+        
+        
+        function getIncidentDetails($id){
+            $sql= 'SELECT i.incident_report_id, i.incident_description, i.disaster_type, i.incident_date, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
+                            FROM incidents i
+                    LEFT OUTER JOIN incident_location l ON i.incident_report_id = l.incident_report_id
+                    where i.incident_report_id= "'.$id.'"
+                    ';
+            
+            $query= $this->db->query($sql);
+            
+			if($query){
+				return $query;
+			}
+			else{
+				return false;
+			}
         }
 }
 ?>

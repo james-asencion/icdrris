@@ -4,7 +4,7 @@
     <title>Iligan City Disaster Response and Recovery Information System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/ICDRRIS/css/bootstrap.min.css" rel="stylesheet" media="screen">
 	
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
@@ -168,7 +168,7 @@
 	</div>
 	</div>
 	</div>
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/ICDRRIS/js/jquery.js"></script>
+    <script src="/ICDRRIS/js/bootstrap.min.js"></script>
   </body>
 </html>

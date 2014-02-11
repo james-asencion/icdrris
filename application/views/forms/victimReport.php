@@ -10,7 +10,6 @@
 //VICTIM REPORT FORM
 ?>
 <?php $this->load->view('includes/header');?>
-<?php $this->load->view('login_form'); ?>
 
 </div></div>
 
@@ -27,7 +26,7 @@
 </head>
 <body>
 -->
-<?php echo form_open('VictimController/validate');?>
+<?php echo form_open('Victim/validate');?>
 
     <?php  if((function_exists('validation_errors') && validation_errors() != '') || isset($err_message)){?>
                 <div class="alert alert-error" >  
@@ -104,10 +103,7 @@
 			echo form_submit($buttonProperties);
 		?>
 		</div>
-<!--
-</body>		
-</html>
--->
+
 
 
 <?php $this->load->view('includes/footer');?>

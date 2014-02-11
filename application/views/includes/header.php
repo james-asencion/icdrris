@@ -3,34 +3,30 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
  
   <head>
-		<title>Iligan City Disaster Response and Recovery Information System</title>
+	<title>Iligan City Disaster Response and Recovery Information System</title>
 		
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<!-- Bootstrap -->
-
-                
-        <!--    <link href="<?php //echo base_url();?>css/bootstrap-glyphicons.css" rel="stylesheet">-->
-                    
-		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+       <!-- Bootstrap -->
+ 
+		<!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
-		<!--
-		<script src="<?php echo base_url();?>application/views/js/dropdown.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/verify.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script> 
-        <script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>-->
-        <script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>
+		
+		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.js"></script>
+         <!--
+		<script src="<?php //echo base_url();?>application/views/js/dropdown.js"></script>
+		<script src="<?php //echo base_url();?>application/views/js/polygonScript.js"></script>
+		<script src="<?php //echo base_url();?>application/views/js/markerScript.js"></script>
+		<script src="<?php //echo base_url();?>application/views/js/verify.js"></script>-->
+		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>
+		
 		<link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
 
-
-    <!-- Bootstrap -->
-
-		<link href="">
-               
 		<style type = "text/css">
 			#googlemap img,object,embed{max-width:none}
 			#map_canvas embed{max-width:none}
@@ -40,94 +36,77 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$(".trigger").click(function(){
+					$("#map_canvass").addClass("span6"); //added
+					$("#map_canvass").css({"float":"right"}); //added
 					$(".panel").toggle("fast");
 					$(this).toggleClass("active");
 					return false;
 				});
+				$(".trigger").click(function(){
+					if (!$(this).hasClass("active")) {
+					 $("#map_canvass").removeClass("span6");
+					 $("#map_canvass").addClass("span12");
+					 }
+				});
 			});
 		</script>
-	
   </head>
   
   <body onload="initialize()">
       
 	<div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
+			<!-- SITE TITLE -->
 			<a class = "brand" href = "<?php echo base_url();?>">ICDRRIS</a>
 			<ul class = "nav">
 				<li class = "active"><a href = "<?php echo base_url();?>"><i class = "icon-home"></i> Home</a></li>
 			</ul>
                    
-	<!-- HEADER-->
-		<?php if(!$this->session->userdata('is_logged_in')){ ?>	
-			<ul class="nav">
-				<li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class = "icon-tint icon-white"></i> Incidents
-                                        <b class="caret"></b>
-                                    </a>
-                                    <ul class="dropdown-menu" role="menu">
-                                        <li class="dropdown-submenu">
-                                            <a tabindex="-1" href = "#"><i class = "icon-bullhorn"></i> Report an Incident </a>
-                                                <ul class="dropdown-menu">
-                                                    <li> <a href="http://localhost/icdrris/Livelihood/registerLivelihoodOrg"><i class = "icon-pencil"></i> Report Victim </a></li>
-                                                </ul>
-						<li><a href = "#"><i class = "icon-briefcase"></i> List of Incidents</a></li>
-						
-					</ul>
-				</li>
-			</ul>
-			<ul class="nav">
-				<li class="dropdown" name="livelihoodDropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class = "icon-flag icon-white"></i> Livelihood Matching
-                                        <b class="caret"></b>
-                                    </a>
-                                <ul class="dropdown-menu" role="menu">
-                         			<li> 
-                         				<a href = "http://localhost/icdrris/Livelihood/registerLivelihoodOrg" ><i class = "icon-edit"></i> Register Livelihood Org </a>
-                         			</li>
-                                    <li>
-                                    	<a href = "#" ><i class = "icon-briefcase"></i> Register External Org</a>
-                                    </li>
-                                    <li>
-                                    	<a href = "#"><i class = "icon-share"></i> Deploy Livelihood Org</a>
-                                    </li>
-                                    <li>
-                                    	<a href = "#"><i class = "icon-search"></i> Search Livelihood Org</a>
-                                    </li>
-                                    <li>
-                                    	<a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodOrgs" ><i class = "icon-search"></i> View All Livelihood Orgs</a>
-                                    </li>
-								</ul>
-					</ul>
-				</li>
-			</ul>
-<!--
-			<form class = "navbar-form pull-left" name="filterForm1">
-				<div class="center" align="center">View Incidents by:   
-					<select class="input-large custom span5" name="filterMenu1" onChange="filterReports()">
-						<option value=""></option>
-						<option value='Marker'> <i class = "icon-map-marker"></i>  Marker</option>
-						<option value='Polygon'>Polygon</option>
-					</select>
-				</div>
-			</form>
-			
--->	
+	<!-- HEADER MENUS-->
+<?php if(!$this->session->userdata('is_logged_in')){ ?>	
+    <ul class="nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class = "icon-tint icon-white"></i> Incidents
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href = "#"><i class = "icon-bullhorn"></i> Report New... </a>
+                            <ul class="dropdown-menu">
+                                <li> <a href="<?php echo base_url();?>Incident/reportIncident"><i class = "icon-bell"></i> Report New Incident </a></li>
+                                <li> <a href="<?php echo base_url();?>Victim/reportVictim"><i class = "icon-pencil"></i> Report New Victim </a></li>
+                            </ul>
+                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Incidents</a></li>
 
-	<!-- FILTER FORM -->				
-<!--			<form class = "navbar-form pull-left" name="filterForm2">
-				<div class="center" align="center">Filter Incidents:   
-					<select class="input-large custom span5" name="filterMenu2" onChange="filterReports()">
-						<option value='null'></option>
-						<option value='FlashFlood'>Flashflood</option>
-						<option value='LandSlide'>Landslide</option>
-						<option value='MudSlide'>Mudslide</option>
-					</select>
-				</div>
-			</form>
--->
+				</ul>
+					</li>
+    </ul>
+    <ul class="nav">
+            <li class="dropdown" name="livelihoodDropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class = "icon-flag icon-white"></i> Livelihood Matching
+                    <b class="caret"></b>
+                </a>
+            <ul class="dropdown-menu" role="menu">
+				<li> 
+						<a href = "http://localhost/icdrris/Livelihood/registerLivelihoodOrg" ><i class = "icon-edit"></i> Register Livelihood Org </a>
+				</li>
+                <li>
+                    <a href = "#" ><i class = "icon-briefcase"></i> Register External Org</a>
+                </li>
+                <li>
+                    <a href = "#"><i class = "icon-share"></i> Deploy Livelihood Org</a>
+                </li>
+                <li>
+                    <a href = "#"><i class = "icon-search"></i> Search Livelihood Org</a>
+                </li>
+                <li>
+                    <a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodOrgs" ><i class = "icon-search"></i> View All Livelihood Orgs</a>
+                </li>
+            </ul>
+    </ul>
+
 <?php } ?>	
         
         <!-- userLogout (condition: LOGGED IN)-->	
@@ -139,14 +118,28 @@
 						<?php 
 							// Capital the first letter
 							// Username OR Name of the User??
-							print_r($this->session->userdata('utype').'.'.$this->session->userdata('firstname')); 
+							print_r($this->session->userdata('user_id').'.'.$this->session->userdata('utype').'.'.$this->session->userdata('firstname')); 
 						 ?>
 						<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
 						<li><a href = "#"><i class = "icon-pencil"></i> Edit User Info</a></li>
-						<li><a href = "<?php echo base_url().'Login/logout' ?>"><i class = "icon-off"></i> Log-out</a></li>			
+						<li><a href = "<?php echo base_url().'Home/logout' ?>"><i class = "icon-off"></i> Log-out</a></li>			
 					</ul>
 				</li>
 			</ul>
         <?php } ?>
+		
+		<?php if(!$this->session->userdata('is_logged_in')){ ?>
+			<ul class="nav pull-right">
+				<li>
+                    <a href="#" id="login-btn">Log-in</a>
+				</li>
+			</ul>
+		<?php  
+		/** A LOGIN MODAL
+		 ** uses application/views/js/formSubmission.js 
+		 */
+				$this->load->view('forms/login_form');
+			}				
+		?>
