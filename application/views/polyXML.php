@@ -15,14 +15,14 @@ if(mysqli_connect_error()){
 }
 // Select all the rows in the markers table
 
-$query = "SELECT i.incident_description, i.disaster_type, i.incident_description, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
+$query = "SELECT i.incident_report_id, i.incident_description, i.incident_date, i.disaster_type, i.incident_description, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
           FROM incidents i
           LEFT OUTER JOIN incident_location l ON i.incident_report_id = l.incident_report_id
           UNION 
-          SELECT i.incident_description, i.disaster_type, i.incident_description, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
+          SELECT i.incident_report_id, i.incident_description, i.incident_date, i.disaster_type, i.incident_description, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon
           FROM incidents i
           RIGHT OUTER JOIN incident_location l ON i.incident_report_id = l.incident_report_id
-          LIMIT 0 , 30";
+         ";
 $result = $mysqli->query($query);
 if (!$result) {
   echo "An error occurred.\n";
@@ -35,16 +35,17 @@ while ($row = $result->fetch_assoc()) {
     
   //Retrieve all details of an incident
     $polygon = $dom->createElement("polygon");
-    $polygon->setAttribute("disasterType",$row['disasterType']);
-    $polygon->setAttribute("description",$row['description']);
-    $polygon->setAttribute("date",$row['dateHappened']);
-    $polygon->setAttribute("deaths",$row['deaths']);
-    $polygon->setAttribute("injured",$row['injured']);
-    $polygon->setAttribute("missing",$row['missing']);
-    $polygon->setAttribute("affectedFamilies",$row['affectedFamilies']);
-    $polygon->setAttribute("homesDestroyed",$row['homesDestroyed']);
-    $polygon->setAttribute("damageCost",$row['damageCost']);
-    $polygon->setAttribute("infoSource",$row['infoSource']);
+    $polygon->setAttribute("incident_report_id",$row['incident_report_id']);
+    $polygon->setAttribute("disasterType",$row['disaster_type']);
+    $polygon->setAttribute("description",$row['incident_description']);
+    $polygon->setAttribute("date",$row['incident_date']);
+    $polygon->setAttribute("deaths",$row['death_toll']);
+    $polygon->setAttribute("injured",$row['no_of_injuries']);
+    $polygon->setAttribute("missing",$row['no_of_people_missing']);
+    $polygon->setAttribute("affectedFamilies",$row['no_of_families_affected']);
+    $polygon->setAttribute("homesDestroyed",$row['no_of_houses_destroyed']);
+    $polygon->setAttribute("damageCost",$row['estimated_damage_cost']);
+    $polygon->setAttribute("infoSource",$row['incident_info_source']);
     $polygon->setAttribute("markerLat",$row['lat']); 
     $polygon->setAttribute("markerLng",$row['lng']); 
     $newPolygon = $polygons->appendChild($polygon);
