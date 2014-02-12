@@ -9,12 +9,12 @@
 		
        <!-- Bootstrap -->
  
-		<!--<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
 		
-		<script type="text/javascript" src="<?php echo base_url();?>js/jquery.js"></script>
+		<!--<script type="text/javascript" src="<?php echo base_url();?>js/jquery.js"></script>-->
          <!--
 		<script src="<?php //echo base_url();?>application/views/js/dropdown.js"></script>
 		<script src="<?php //echo base_url();?>application/views/js/polygonScript.js"></script>
@@ -52,7 +52,7 @@
 		</script>
   </head>
   
-  <body onload="initialize()">
+  <body onload="initializeMap()">
       
 	<div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
@@ -63,7 +63,6 @@
 			</ul>
                    
 	<!-- HEADER MENUS-->
-<?php if(!$this->session->userdata('is_logged_in')){ ?>	
     <ul class="nav">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -106,8 +105,7 @@
                 </li>
             </ul>
     </ul>
-
-<?php } ?>	
+	
         
         <!-- userLogout (condition: LOGGED IN)-->	
         <?php if($this->session->userdata('is_logged_in')){ ?>	
