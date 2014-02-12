@@ -121,15 +121,16 @@ class Livelihood extends CI_Controller
            echo "Fail: ".$query;
         }
     }
-    function viewLivelihoodOrg($id){
+    function viewLivelihoodOrganization(){
         //query for the data
+        $id = $this->input->get('id');
         $data['livelihood_org'] = $this->LivelihoodModel->getLivelihoodOrg($id);
         $data['members'] = $this->LivelihoodModel->getAllMembers($id);
             
         //pass the query results to the view
         $this->load->view('includes/header');
         $this->load->view('login_form');
-        $this->load->view('livelihoodOrganizationsView',$data);
+        $this->load->view('livelihoodOrganizationView',$data);
         $this->load->view('includes/footer');        
     }
     function viewAllLivelihoodOrgs(){

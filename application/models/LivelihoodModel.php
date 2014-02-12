@@ -93,7 +93,7 @@ class LivelihoodModel extends CI_Model{
 									FROM livelihood_organization_members m 
 									LEFT JOIN recipient_org_org_members r
 									ON r.member_id = m.member_id 
-									WHERE r.livelihood_organization_id = '$id';");
+									WHERE r.livelihood_organization_id = '$id'");
 		return $query->result();
 	}
 	function updateMember(){

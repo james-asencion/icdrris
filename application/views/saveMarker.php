@@ -42,14 +42,13 @@ $query1 = sprintf("INSERT INTO incidents ".
 $result1 = $mysqli->query($query1);
 $reportNum = $mysqli->insert_id;
 $query3 = "INSERT INTO incident_location ".
-                " (reportNo, locationId, intensity, lat, lng, polygon)".
-                "VALUES ('$reportNum',1,3,'$lat','$lng',
-                 null);";
-
+                " (incident_report_id, location_id, incident_intensity, lat, lng, flag_confirmed, flag_true_rating, flag_false_rating)".
+                "VALUES ('$reportNum',1,3,'$lat','$lng',false,0,0);";
+                
 $result3 = $mysqli->query($query3);
 
 
 
-if((!$result3)){
-    die('Invalid query: '.mysql_error());
+if((!$result3)||(!$result1)){
+    die('Invalid query: '.$mysqli->error);
 }
