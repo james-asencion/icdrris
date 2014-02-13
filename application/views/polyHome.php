@@ -5,7 +5,7 @@
                 <form class = "navbar-form pull-left" name="filterForm1">
                     <div class="center" align="center"><p>View Incidents by:</p>   
                             <select class="span2" name="filterMenu1" onChange="filterReports()">
-                                    <option value=""></option>
+                                    <option value='null'></option>
                                     <option value='Marker'> <i class = "icon-map-marker"></i>  Marker</option>
                                     <option value='Polygon'>Polygon</option>
                             </select>
@@ -17,9 +17,9 @@
                     <div class="center" align="center"><p>Filter Incidents:</p>   
                         <select class="span2" name="filterMenu2" onChange="filterReports()">
                                 <option value='null'></option>
-                                <option value='FlashFlood'>Flashflood</option>
-                                <option value='LandSlide'>Landslide</option>
-                                <option value='MudSlide'>Mudslide</option>
+                                <option value='Flashflood'>Flashflood</option>
+                                <option value='Landslide'>Landslide</option>
+                                <option value='Mudslide'>Mudslide</option>
                         </select>
                     </div>
                 </form>
@@ -50,8 +50,7 @@
 				<div id= "panel" class="panel" style="height: 95%;">
 					<!-- BREADCRUMBS -->
 						<ul class="breadcrumb" style="padding: 2px 15px;">
-								
-						
+								<li id="li0" onclick = "backToList()" ><a id="a-ListofIncidents"> List of Incidents</a> <span class="divider">/</span></li>
 						</ul>
 					<!-- LIST OF INCIDENTS -->
 						<div class = "span12" id="incidentList"></div>
@@ -140,7 +139,8 @@
 				</div>	<!-- end #PANEL .PANEL 	-->
                    
               <a  id= "trigger" class="trigger" href="#">
-                 <i class="icon-chevron-right-white" id="field" type="button" onclick="displayList()">   </i>              
+                  <!-- onclick="displayList()-->
+                 <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
 			<div id= "map_canvass">
               <div id="map_canvas" style="width:100%; height:570px;"></div>   

@@ -20,7 +20,6 @@
 		<script src="<?php //echo base_url();?>application/views/js/polygonScript.js"></script>
 		<script src="<?php //echo base_url();?>application/views/js/markerScript.js"></script>
 		<script src="<?php //echo base_url();?>application/views/js/verify.js"></script>-->
-		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>
 		
@@ -52,7 +51,8 @@
 		</script>
   </head>
   
-  <body onload="initializeMap()">
+  <!--onload="initializeMap()"-->
+  <body >
       
 	<div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
