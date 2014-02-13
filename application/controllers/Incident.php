@@ -31,13 +31,7 @@ class Incident extends  CI_Controller
 					$incident_report_id = $row_incident->incident_report_id;
 					$incident_description = $row_incident->incident_description;
 				}
-				echo ' <ul class="nav nav-tabs" style="margin-bottom:10px;">
-							<li class="span8" style="color:darkorange">
-								<h4>'.$incident_description.'</h4>
-							</li>
-							<li class="active"><a href="#tab1" data-incidentid="'.$incident_report_id.'" data-toggle="tab"> Details </a></li>
-							<li onclick="victimsTab()"><a href="#tab2" id="victims-tab" class="victims-tab" data-incidentid="'.$incident_report_id.'" data-toggle="tab"> Victims </a></li>
-                      </ul>';
+				echo $incident_description;
 			}
         }
 		
@@ -77,14 +71,43 @@ class Incident extends  CI_Controller
 							 </div>
 						</div>
 
-						<div style="margin-left: 15px;">
-							 <p> Deaths: '.$death_toll.'</p>
-							 <p> People Missing: '.$no_of_people_missing.'</p>
-							 <p> Injured: '.$no_of_injuries.'</p>
-							 <p> Families Affected: '.$no_of_families_affected.'</p>
-							 <p> Houses Destroyed: '.$no_of_houses_destroyed.'</p>
-							 <p> Damage Cost: '.$estimated_damage_cost.'</p>
-							 <p> Information Source: '.$incident_info_source.'</p>
+						<div class="details">
+							<div class="row-fluid">
+								<div class="row-fluid">
+									<div class="span6">
+										<div class="span7">Deaths: </div>
+										<div class="span1">'.$death_toll.'</div>
+									</div>
+								
+									<div class="span6">
+										<div class="span7"> Families Affected: </div>
+										<div class="span1">'.$no_of_families_affected.'</div>
+									</div>
+								</div>
+								<div class="row-fluid">
+									<div class="span6">
+										<div class="span7">People Missing: </div>
+										<div class="span1">'.$no_of_people_missing.'</div>
+									</div>
+									<div class="span6">
+										<div class="span7"> Houses Destroyed: </div>
+										<div class="span1">'.$no_of_houses_destroyed.'</div>
+									</div>
+								</div>
+								<div class="row-fluid">
+									<div class="span6">
+										<div class="span7"> Injured: </div>
+										<div class="span1">'.$no_of_injuries.'</div>
+									</div>
+									<div class="span6">
+										<div class="span7"> Damage Cost: </div>
+										<div class="span5"> PHP '.$estimated_damage_cost.'</div>
+									</div>
+								</div>        
+								<div class="row-fluid">
+									<div class="span12">Information Source: <i> '.$incident_info_source.'</i></div>
+								</div>
+							</div>
 						</div>';
 			}
         }

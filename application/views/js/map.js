@@ -345,12 +345,36 @@ function displayList() {
 
         var output = "<ul class=\"list-group\">";
 
-        for (var i = 0; i < polygon.length; i++) {
+        for (var i = 0; i < polygons.length; i++) {
+                        
+                        var incident_description = polygons[i].getAttribute("incident_description");
+						var incident_report_id = markers[i].getAttribute("incident_report_id");
+                        var location_address = polygons[i].getAttribute("location_address");
+                        var incident_date = polygons[i].getAttribute("incident_date");
+                        var disaster_type = polygons[i].getAttribute("disaster_type");
+
+            output += "<div class=\"accordion\" id=\"accordion" + i + "\">";
+            output += "<div class=\"accordion-group\">";
+            output += "<div class=\"accordion-heading\">";
+            output += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + i + "\" href=\"#collapse" + i + "\" style= \"display: inline-block; width: 330px;\">" + incident_report_id + "</a>";
+            //place icon-links here [show details]
+			output += "<a class= \"show-details-btn\" href= \"#\" data-id=\""+incident_report_id+"\"><i class= \"icon-eye-open icon-white\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayDetails()\"> </i></a>"; // show details icon
+			//end div
+			output += "</div>";
+            output += "<div id=\"collapse" + i + "\" class=\"accordion-body collapse in\">";
+            output += "<div class=\"accordion-inner\">";
+            output += "<p class=\"list-group-item-text\">Description :" + incident_description + "<br> Date:" + incident_date+"<br> Location: "+location_address+"</p>";
+            output += "</div></div></div>";
+
+        }
+		
+		for (var i = 0; i < markers.length; i++) {
                         
                         var incident_description = markers[i].getAttribute("incident_description");
+						var incident_report_id = markers[i].getAttribute("incident_report_id");
                         var location_address = markers[i].getAttribute("location_address");
                         var incident_date = markers[i].getAttribute("incident_date");
-                        var disaster_type = markers[i].getAttribute("disasterType");
+                        var disaster_type = markers[i].getAttribute("disaster_type");
 
             output += "<div class=\"accordion\" id=\"accordion" + i + "\">";
             output += "<div class=\"accordion-group\">";
@@ -366,6 +390,7 @@ function displayList() {
             output += "</div></div></div>";
 
         }
+		
         output += "</ul>";
         insertToDocument(output);
 
@@ -373,7 +398,12 @@ function displayList() {
 }
 
 function insertToDocument(content){
-    document.getElementById('incidentList').innerHTML = (content);
+    $( "#tabbable" ).hide( "fast" );
+	$(".breadcrumb").html('<li id="li0"><a id="a-ListofIncidents" href="#"> List of Incidents</a> <span class="divider">/</span></li>');
+	$( "#li0" ).attr( "onclick", "displayList()");
+    $( "#incidentList" ).show( "fast" );
+	document.getElementById('incidentList').innerHTML = (content);
+	
 }
 
 function displayDetails(){
@@ -382,6 +412,7 @@ function displayDetails(){
 			event.preventDefault();		
 		  console.log('sdb-clicked');
 		  $( "#incidentList" ).hide( "fast" );
+		  $( "#table-rows-victims" ).removeData( "fast" );
 		  var incident_report_id = $(this).data('id');
 			console.log(incident_report_id);
 		  var dataStr = 'id='+incident_report_id;
@@ -402,12 +433,16 @@ function displayDetails(){
 					}else{
 						console.log("success pa jud title");
 						$("#incident-title").html(msg);
+						$("#li0").after('<li><a href="#">'+msg+'</a></li>');
+						$( "#victims-tab, #details-tab, #overview-li, #editinfo-li, #delete-li, #displaychart-li, #victimslist-li, #reportvictim-li" ).attr( "data-incidentid", incident_report_id );
+						$( "#tabbable" ).show( "slow" );
 					}
 				},
 				error: function(){
 					console.log("system error oy!");
 					console.log(values);
 					$("#incident-title").html("Sorry, system error.");
+					$( "#tabbable" ).show( "slow" );
 				}
 			});
 			
@@ -422,20 +457,48 @@ function displayDetails(){
 					if(msg == 'error'){  
 						console.log("naay mali sa query getIncidentDetails doy.\n ");
 						$("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
+						$( "#tabbable" ).show( "slow" );
 					}else{
 						console.log("success pa jud");
 						$("#incident-information").html(msg);
+						$( "#tabbable" ).show( "slow" );
 					}
 				},
 				error: function(){
 					console.log("system error oy!");
 					console.log(values);
-					$("#incident-information").html("Sorry, system error.");
+					$("#incident-information").html("Sorry, system error."); 
+					$( "#tabbable" ).show( "slow" );
+				}
+			});
+			
+						/* Send the data using post and put results to the members table */
+			request = $.ajax({
+				url: "http://localhost/icdrris/Victim/viewAllVictims",
+				type: "POST",
+				data: dataStr,
+				success: function(msg){
+					console.log("success");
+					//console.log(msg);
+					if(msg == 'error'){  
+						console.log("naay mali sa query getIncidentDetails doy.\n ");
+						$( "#tabbable" ).show( "slow" );
+						$("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
+					}else{
+						console.log("success pa jud");
+						$( "#tabbable" ).show( "slow" );
+						$("#table-rows-victims").html(msg);
+					}
+				},
+				error: function(){
+					console.log("system error oy!");
+					console.log(values);
+					$( "#tabbable" ).show( "slow" );
+					$("#table-rows-victims").html("Sorry, system error.");
 				}
 			});
 			
 		
-          $( "#tabbable" ).show( "fast" );
 		  
         });     
 }
@@ -445,7 +508,7 @@ function displayDetails(){
 function openSideBar(){
             $("#map_canvass").addClass("span6"); //added
             $("#map_canvass").css({"float":"right"}); //added
-            $(".panel").show("fast");
+            $(".panel").show("slow");
             $(".trigger").addClass("active");
 }
 
@@ -509,12 +572,13 @@ function displayDetailsFromMap(incident_report_id)
             });
             
         
-          $( "#tabbable" ).show( "fast" );
+          $( "#tabbable" ).show( "slow" );
           console.log("#tabbable invoked to show");
       
 }
 
 function victimsTab(){
+	
 	$( ".victims-tab, #victims-tab" ).click(function(event){   
 			event.preventDefault();		
 		  console.log('victims-tab-clicked');
@@ -533,15 +597,18 @@ function victimsTab(){
 					//console.log(msg);
 					if(msg == 'error'){  
 						console.log("naay mali sa query getIncidentDetails doy.\n ");
+						$( "#tabbable" ).show( "slow" );
 						$("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
 					}else{
 						console.log("success pa jud");
+						$( "#tabbable" ).show( "slow" );
 						$("#table-rows-victims").html(msg);
 					}
 				},
 				error: function(){
 					console.log("system error oy!");
 					console.log(values);
+					$( "#tabbable" ).show( "slow" );
 					$("#table-rows-victims").html("Sorry, system error.");
 				}
 			});

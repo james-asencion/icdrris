@@ -48,11 +48,14 @@
             <div class = "span12">
              
 				<div id= "panel" class="panel" style="height: 95%;">
-					
+					<!-- BREADCRUMBS -->
+						<ul class="breadcrumb" style="padding: 2px 15px;">
+								
+						
+						</ul>
 					<!-- LIST OF INCIDENTS -->
 						<div class = "span12" id="incidentList"></div>
 					<!-- end LIST OF INCIDENTS -->
-					
 					
 					<!-- PAGINATION --INSIDE INCIDENTLIST DIV
 						<div id= "pagination" class="pagination">
@@ -77,7 +80,14 @@
                    
                        <div id="tabbable" class="tabbable" style="display:none">
                            
-							<div id="incident-title"> <!-- INCIDENT LIST of TABS --></div>
+						   <ul class="nav nav-tabs" style="margin-bottom:10px;">
+								<li class="span8" style="color:darkorange">
+									<h4><div id="incident-title"> <!-- INCIDENT TITLE--></div></h4>
+								</li>
+								<li class="active"><a  id="details-tab" href="#tab1" data-incidentid="" data-toggle="tab"> Details </a></li>
+								<li onclick="victimsTab()"><a href="#tab2" id="victims-tab" class="victims-tab" data-incidentid="" data-toggle="tab"> Victims </a></li>
+							</ul> 
+							
 							
                            
                            <div id="tab-content" class="tab-content">
@@ -85,16 +95,16 @@
                                 <div class="tab-pane active" id="tab1">
                                     <ul class="nav nav-pills">
                                         <li class="active">
-                                          <a href="#" class="field" id="field" onclick="displayDetails()"><i class="icon-white icon-info-sign"></i> Overview</a>
+                                          <a href="#" id="overview-li" data-incidentid="" onclick="displayDetails()"><i class="icon-white icon-info-sign"></i> Overview</a>
+                                        </li>
+                                        <li data-id="">
+                                          <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
                                         </li>
                                         <li>
-                                          <a href="#" class="edit-btn" id="edit-btn" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
+                                          <a href="#myModal" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
                                         </li>
-                                        <li>
-                                          <a href="#myModal" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
-                                        </li>
-                                        <li>
-                                          <a href="#"><i class="icon-white icon-globe"></i> Stat Graphs</a>
+                                        <li >
+                                          <a href="#" id="displaychart-li" data-incidentid=""><i class="icon-white icon-globe"></i> Display Chart</a>
                                         </li>
                                     </ul> 
 								    <div id="incident-information" style="font-size: 12px; line-height:normal"></div>
@@ -102,11 +112,11 @@
                               </div>
                               <div class="tab-pane" id="tab2">
 								<ul class="nav nav-pills">
-								  <li class="active">
-									<a href="#"><i class="icon-white icon-list-alt"></i> List of Victims</a>
+								  <li class="active" onclick="victimsTab()">
+									<a href="#" id="victimslist-li" data-incidentid=""><i class="icon-white icon-list-alt"></i> List of Victims</a>
 								  </li>
-								  <li >
-									<a href="#"><i class="icon-white icon-pencil"></i> Report Victim</a>
+								  <li onclick="victimsTab()">
+									<a href="#" id="reportvictim-li" data-incidentid=""><i class="icon-white icon-pencil"></i> Report Victim</a>
 								  </li>
 								</ul>
                                   <div id="victimListID">
@@ -116,10 +126,9 @@
                                             <button type="submit" class="btn"><i class="icon-search"> </i></button>
                                         </form>
                                     </center>
-                       
-                                   
+										<!-- TABLE: LIST OF VICTIMS -->
                                           <div id="table-rows-victims"></div>
-                                      
+										<!-- end of the table-->
                                   </div>
                               </div>
                                 
@@ -131,8 +140,7 @@
 				</div>	<!-- end #PANEL .PANEL 	-->
                    
               <a  id= "trigger" class="trigger" href="#">
-                 <i class="icon-chevron-right-white" id="field" type="button" onclick="displayList()">   </i>
-                
+                 <i class="icon-chevron-right-white" id="field" type="button" onclick="displayList()">   </i>              
               </a>
 			<div id= "map_canvass">
               <div id="map_canvas" style="width:100%; height:570px;"></div>   

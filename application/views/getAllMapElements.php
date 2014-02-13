@@ -19,12 +19,12 @@ if(mysqli_connect_error()){
 }
 // Select all the rows in the markers table
 
-$query = "SELECT i.incident_report_id, i.incident_description,b.location_address, l.incident_intensity, i.incident_date, i.disaster_type, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.location_id, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon,l.flag_confirmed, l.flag_true_rating, l.flag_false_rating
+$query = "SELECT i.incident_report_id, i.incident_description,b.location_address, l.incident_intensity, DATE_FORMAT(i.incident_date,'%W, %M %e, %Y') as incident_date, i.disaster_type, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.location_id, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon,l.flag_confirmed, l.flag_true_rating, l.flag_false_rating
           FROM incidents i
           INNER JOIN incident_location l 
           ON i.incident_report_id = l.incident_report_id
           INNER JOIN locations b
-          ON b.location_id = l.location_id";
+          ON b.location_id = l.location_id ORDER BY i.incident_date desc";
 
 $result = $mysqli->query($query);
 if (!$result) {
@@ -88,7 +88,7 @@ while ($row = $result->fetch_assoc()) {
     $marker->setAttribute("disaster_type",$row['disaster_type']);
     $marker->setAttribute("incident_intensity",$row['incident_intensity']);
     $marker->setAttribute("incident_description",$row['incident_description']);
-    $polygon->setAttribute("location_address",$row['location_address']);
+    $marker->setAttribute("location_address",$row['location_address']);
     $marker->setAttribute("incident_date",$row['incident_date']);
     $marker->setAttribute("death_toll",$row['death_toll']);
     $marker->setAttribute("no_of_injuries",$row['no_of_injuries']);
@@ -99,9 +99,9 @@ while ($row = $result->fetch_assoc()) {
     $marker->setAttribute("incident_info_source",$row['incident_info_source']);
     $marker->setAttribute("lat",$row['lat']);
     $marker->setAttribute("lng",$row['lng']);
-    $polygon->setAttribute("flag_confirmed",$row['flag_confirmed']);
-    $polygon->setAttribute("flag_true_rating",$row['flag_true_rating']);
-    $polygon->setAttribute("flag_false_rating",$row['flag_false_rating']);
+    $marker->setAttribute("flag_confirmed",$row['flag_confirmed']);
+    $marker->setAttribute("flag_true_rating",$row['flag_true_rating']);
+    $marker->setAttribute("flag_false_rating",$row['flag_false_rating']);
 
     $newMarker = $markers->appendChild($marker);
     

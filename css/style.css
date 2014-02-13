@@ -32,6 +32,20 @@ opacity: 85%;
 }
 
 /**
+*	CSS FOR DISPLAYDETAILS LABEL, VALUES
+*/
+
+.panel .details{
+color: #cccccc;
+margin-left: 15px;
+}
+
+/**
+*	END FOR DISPLAYDETAILS LABEL, VALUES
+*/
+
+
+/**
 body {
 background:#1a1a1a;
 text-align:left;
