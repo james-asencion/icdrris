@@ -221,7 +221,7 @@ function getAllMarkersPolygons(){
 
                         //APPEND THE POLYGON DETAILS TO SIDEBAR HERE
                         bindPolygonToSidePanel(map, myPolygon, center, incident_report_id);
-                        appendToList(myPolygon, incident_report_id, polygons[polygonIndex]);
+                        appendToList(myPolygon, incident_report_id, center, polygons[polygonIndex]);
 
                         //myPolygon.setMap(map);
 
@@ -247,7 +247,7 @@ function getAllMarkersPolygons(){
 
                 console.log("marker loop reached here");                    
                 bindMarkerToSidePanel(map, marker, point, id);
-                appendToList(marker, id, markers[i]);
+                appendToList(marker, id, point, markers[i]);
                         //marker.setMap(map);
 
             }
@@ -357,7 +357,7 @@ function filterPolygon(){
                         
                         //BIND POLYGON DETAILS TO SIDEBAR HERE
                         bindPolygonToSidePanel(map, myPolygon, center, incident_report_id);
-                        appendToList(myPolygon, incident_report_id, polygons[polygonIndex]);
+                        appendToList(myPolygon, incident_report_id, center, polygons[polygonIndex]);
 
                         myPolygon.setMap(map);
 
@@ -403,7 +403,7 @@ function filterPolygon(){
 
                         //APPEND THE POLYGON DETAILS TO SIDEBAR HERE
                         bindPolygonToSidePanel(map, myPolygon, center, incident_report_id);
-                        appendToList(myPolygon, incident_report_id, polygons[polygonIndex]);
+                        appendToList(myPolygon, incident_report_id, center, polygons[polygonIndex]);
 
                         myPolygon.setMap(map);
 
@@ -468,7 +468,7 @@ function filterMarker() {
 
                         var marker = new google.maps.Marker(markerOptions);
                         bindMarkerToSidePanel(map, marker, point,  id);
-                        appendToList(marker, id, markers[i]);
+                        appendToList(marker, id, point, markers[i]);
 
                         marker.setMap(map);
 
@@ -489,7 +489,7 @@ function filterMarker() {
                         var marker = new google.maps.Marker(markerOptions);
 
                         bindMarkerToSidePanel(map, marker, point, id);
-                        appendToList(marker, id, markers[i]);
+                        appendToList(marker, id, point, markers[i]);
 
                         marker.setMap(map);
 
@@ -499,11 +499,11 @@ function filterMarker() {
         });
 }
 
-function appendToList(mapElement, id, markerDetails){
+function appendToList(mapElement, id, center, markerDetails){
 
     //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
     //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
-    console.log("append to list started here");
+    //console.log("append to list started here with id");
 
     var div  = document.getElementById('incidentList');
     var listItem;
@@ -512,7 +512,7 @@ function appendToList(mapElement, id, markerDetails){
         listItem += "<div class=\"accordion-heading\">";
         listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + id + "\" href=\"#collapse" + id + "\" style= \"display: inline-block; width: 330px;\">" + markerDetails.getAttribute("disaster_type") + "</a>";
         //place icon-links here [show details]
-        listItem += "<a class= \"show-details-btn\"  data-id=\""+id+"\"><i class= \"icon-eye-open icon-white\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayDetails()\"> </i></a>"; // show details icon
+        listItem += "<a class= \"show-details-btn\"  data-id=\""+id+"\"><i class= \"icon-eye-open icon-white\" data-mapElement="+mapElement+" data-id=\""+id+"\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayDetails(this);\"> </i></a>"; // show details icon
         //end div
         listItem += "</div>";
         listItem += "<div id=\"collapse" + id + "\" class=\"accordion-body collapse in\">";
@@ -522,8 +522,7 @@ function appendToList(mapElement, id, markerDetails){
     
     //append to the list
     div.innerHTML = div.innerHTML + listItem;
-    console.log("append to list ended here");
-    //marker.setMap(map);
+
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
 }
 
@@ -537,15 +536,13 @@ function clearIncidentList(){
     document.getElementById('incidentList').innerHTML = "";
 }
 
-function displayDetails(){
+function displayDetails(element){
 	
 		  console.log('sdb-clicked');
 		  $( "#incidentList" ).hide( "fast" );
 		  $( "#table-rows-victims" ).removeData( "fast" );
-		  var incident_report_id = $( ".show-details-btn, #show-details-btn" ).data('id');
-			console.log(incident_report_id);
+		  var incident_report_id = element.getAttribute("data-id");
 		  var dataStr = 'id='+incident_report_id;
-          console.log(dataStr)
 
 		  
 					/* Send the data using post and put results to the members table */
