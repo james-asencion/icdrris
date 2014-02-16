@@ -23,7 +23,7 @@
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>
 		
-		<link href="<?php echo base_url();?>css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="<?php echo base_url();?>css/bootstrap.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
 
 		<style type = "text/css">

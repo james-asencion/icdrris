@@ -142,9 +142,10 @@
                   <!-- onclick="displayList()-->
                  <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
-            <div id= "map_canvass">
-              <div id="map_canvas" style="width:100%; height:570px;"></div>   
-            </div>
+           
+<div id= "map_canvass">
+    <div id="map_canvas" style="top:30px; width:100%; height:595px;"></div>   
+</div>
              <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
