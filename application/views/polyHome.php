@@ -142,10 +142,25 @@
                   <!-- onclick="displayList()-->
                  <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
-			<div id= "map_canvass">
+            <div id= "map_canvass">
               <div id="map_canvas" style="width:100%; height:570px;"></div>   
             </div>
+             <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
+                </div>
+                 <div class="modal-body">
+                    <div name="message">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="btnYesDeleteVictim" class="btn danger">Yes</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
+                </div>
+            </div> 
 			<div id="directionsPanel"></div>
+                        
 	    </div>
 	  </div>
 	</div>

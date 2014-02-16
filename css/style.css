@@ -40,6 +40,16 @@ color: #cccccc;
 margin-left: 15px;
 }
 
+#fieldlabel{
+ font-weight: bold;
+}
+
+#fieldvalue{
+ font-weight: bolder;
+ font-size: small;
+ color:lightsteelblue;
+}
+
 /**
 *	END FOR DISPLAYDETAILS LABEL, VALUES
 */
@@ -262,6 +272,7 @@ background:#333333 url(http://localhost/icdrris/img/glyphicons-halflings-white.p
 background-position: -423px -64px;
 left: 51.1%;
 top: 103px;
+z-index: 50;
 }
 
 

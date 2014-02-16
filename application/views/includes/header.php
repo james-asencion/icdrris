@@ -35,9 +35,13 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$(".trigger").click(function(){
+                                        $("#map_canvass").removeClass("span12");
 					$("#map_canvass").addClass("span6"); //added
-					$("#map_canvass").css({"float":"right"}); //added
-					$(".panel").toggle("fast");
+					$("#map_canvass").css({"float":"right"}); //added					
+                                        lastCenter=map.getCenter(); 
+                                        google.maps.event.trigger(map_canvas, 'resize');
+                                        map.setCenter(lastCenter);
+                                        $(".panel").toggle("fast");
 					$(this).toggleClass("active");
 					return false;
 				});
@@ -45,9 +49,13 @@
 					if (!$(this).hasClass("active")) {
 					 $("#map_canvass").removeClass("span6");
 					 $("#map_canvass").addClass("span12");
+                                        lastCenter=map.getCenter(); 
+                                        google.maps.event.trigger(map_canvas, 'resize');
+                                        map.setCenter(lastCenter);
 					 }
 				});
 			});
+                       
 		</script>
   </head>
   

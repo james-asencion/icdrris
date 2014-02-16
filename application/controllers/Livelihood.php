@@ -22,7 +22,6 @@ class Livelihood extends CI_Controller
     function addMembers($orgId){
 
             $this->load->view('includes/header');
-            $this->load->view('login_form'); 
             $this->load->view('addOrgView.php');
             $this->load->view('includes/footer'); 
     }
@@ -52,21 +51,18 @@ class Livelihood extends CI_Controller
     function registerLivelihoodOrg()
     {
             $this->load->view('includes/header');
-            $this->load->view('login_form'); 
             $this->load->view('addOrgView');
             $this->load->view('includes/footer'); 
     }
     function success(){
             $data['message'] = 'SUCCESS';
             $this->load->view('includes/header');
-            $this->load->view('login_form'); 
             $this->load->view('testView', $data);
             $this->load->view('includes/footer');    
     }
     function fail(){
             $data['message'] = 'FAIL';
             $this->load->view('includes/header');
-            $this->load->view('login_form'); 
             $this->load->view('testView', $data);
             $this->load->view('includes/footer');    
     }
@@ -85,7 +81,6 @@ class Livelihood extends CI_Controller
     function addOrgMembers($data){
         
             $this->load->view('includes/header');
-            $this->load->view('login_form');
             $this->load->view('addOrgMembersView',$data);
             $this->load->view('includes/footer');
     }
@@ -128,14 +123,12 @@ class Livelihood extends CI_Controller
             
         //pass the query results to the view
         $this->load->view('includes/header');
-        $this->load->view('login_form');
         $this->load->view('livelihoodOrganizationsView',$data);
         $this->load->view('includes/footer');        
     }
     function viewAllLivelihoodOrgs(){
         $data['organizations'] = $this->LivelihoodModel->getAllLivelihoodOrgs();
         $this->load->view('includes/header');
-        $this->load->view('login_form');
         $this->load->view('livelihoodOrganizationsView',$data);
         $this->load->view('includes/footer');
 

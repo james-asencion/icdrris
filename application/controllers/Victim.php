@@ -19,66 +19,69 @@ class Victim extends CI_Controller
         $this->load->view('forms/victimReport');
     }
 	
-	function viewAllVictims(){
-		$id = $this->input->post("id");
-            $query_results = $this->VictimModel->viewAllVictims($id); 
-            
-			if($query_results == 'false'){
-				echo "error";
-			}
-			else{
-				if($query_results-> num_rows() == 0){
-				echo '<center><font style="color: red;"><b>No results found.</b></font></center>';
-				}else{
-				
-				
-				echo ' <table id="victimTable" class="table table-condensed " style="color:#cccccc;">
-							<caption><h4>List of Victims Reported</h4><br></caption>
-							<thead>
-							  <tr>
-								<th>No.</th>
-								<th>Name</th>
-								<th>Status</th>
-								<th>Confirmation</th>
-								<th>Actions</th>
-							  </tr>
-							</thead>
-							<tbody>';
-							$i=0;
-				foreach($query_results->result() as $row_victims){
-					$incident_report_id = $row_victims->incident_report_id;
-					$victim_id = $row_victims->victim_id;
-					$first_name = $row_victims->first_name;
-					$middle_name = $row_victims->middle_name;
-					$last_name = $row_victims->last_name;
-					$address = $row_victims->address;
-					$victim_status = $row_victims->victim_status;
-					$flag_confirmed = $row_victims->flag_confirmed;
-					$report_rating_false = $row_victims->report_rating_false;
-					$report_rating_true = $row_victims->report_rating_true;
-					
-				echo '
-						<tr>
-							<td>'.(++$i).'</td>
-							<td>'.$first_name.' '.$middle_name.' '.$last_name.'</td>
-							<td>'.$victim_status.'</td>
-							<td>'.$flag_confirmed.'</td>
-							<td>
-								<a href="#" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
-								<a href="#" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" > </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
-								<a href="#" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-info-sign" title="Show Details"> </i> </a><span class="divider"> | </span>
-								<a href="#" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-edit" title="Edit Victim"> </i> </a><span class="divider"> | </span>
-								<a href="#" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-trash" title="Delete Report"> </i> </a><span class="divider"> | </span>
-							</td>
-					  </tr>
-					   
-					';
-				}
-				echo ' 		</tbody>
-                        </table>';
-				}
-			}
-	}
+    function viewAllVictims(){
+            $id = $this->input->post("id");
+        $query_results = $this->VictimModel->viewAllVictims($id); 
+
+                    if($query_results == 'false'){
+                            echo "error";
+                    }
+                    else{
+                            if($query_results-> num_rows() == 0){
+                            echo '<center><font style="color: red;"><b>No results found.</b></font></center>';
+                            }else{
+
+
+                            echo ' <table id="victimTable" class="table table-condensed " style="color:#cccccc;">
+                                                    <caption><h4>List of Victims Reported</h4><br></caption>
+                                                    <thead>
+                                                      <tr>
+                                                            <th>No.</th>
+                                                            <th>Name</th>
+                                                            <th>Status</th>
+                                                            <th>Actions</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>';
+                                                    $i=0;
+                            foreach($query_results->result() as $row_victims){
+                                    $incident_report_id = $row_victims->incident_report_id;
+                                    $victim_id = $row_victims->victim_id;
+                                    $first_name = $row_victims->first_name;
+                                    $middle_name = $row_victims->middle_name;
+                                    $last_name = $row_victims->last_name;
+                                    $address = $row_victims->address;
+                                    $victim_status = $row_victims->victim_status;
+                                    $flag_confirmed = $row_victims->flag_confirmed;
+                                    $report_rating_false = $row_victims->report_rating_false;
+                                    $report_rating_true = $row_victims->report_rating_true;
+
+                            echo '
+                                            <tr>
+                                                    <td>'.(++$i).'</td>
+                                                    <td>'.$first_name.' '.$middle_name.' '.$last_name.'</td>
+                                                    <td>'.$victim_status.'</td>
+                                                    <td>
+                                                            <a href="#" id="approved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
+                                                            <a href="#" id="disapproved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" > </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
+                                                            <a href="#" id="details-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-info-sign" title="Show Details"> </i> </a><span class="divider"> | </span>
+                                                            <a href="#" id="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-edit" title="Edit Victim"> </i> </a><span class="divider"> | </span>
+                                                            <a href="#" class="delete-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-trash" title="Delete Report" onclick="deleteVictim(this);"> </i> </a><span class="divider"> | </span>
+                                                    </td>
+                                      </tr>
+
+                                    ';
+                            }
+                            echo ' 		</tbody>
+                    </table>
+                    ';
+                            }
+                    }
+    }
+    
+    /** FOR REPORT VICTIM
+     *      FUNCTION
+     */
     
     function reportVictim(){
         $this->load->view('forms/victimReport');
@@ -135,5 +138,21 @@ class Victim extends CI_Controller
         }
           $this->done($data);
     }   //end of validate()
+    
+    /** DELETE VICTIM
+     *      FUNCTION
+     */
+    function deleteVictim(){
+        $incident_report_id= $this->input->post('incident_report_id');
+        $victim_id= $this->input->post('victim_id');
+        $query_result = $this->VictimModel->deleteVictim($incident_report_id, $victim_id);
+        //echo $query_result;
+		if($query_result == 'success'){
+            echo 'success';
+        }
+        else{
+            echo $query_result;
+        }
+    }
 }
 

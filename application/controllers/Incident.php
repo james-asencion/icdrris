@@ -59,10 +59,26 @@ class Incident extends  CI_Controller
 					$lng = $row_incident->lng;
 					$reportPolygon = $row_incident->reportPolygon;
 				}
-				echo '<div style="margin-left: 15px; margin-top: 10px">
-							<p> Disaster Name: '.$incident_description.'</p>
-							<p> Type: '.$disaster_type.'</p>
-							<p> Date Occurred: '.$incident_date.'</p>
+				echo '<div class="details" style="margin-left: 15px; margin-top: 10px">
+							<div class="row-fluid">
+									<div class="span12">
+										<div id="fieldlabel" class="span4">Disaster Name:  </div>
+										<div id="fieldvalue" class="span8"> '.$incident_description.'</div>
+									</div>
+							</div>
+							<div class="row-fluid">
+									<div class="span12">
+										<div id="fieldlabel" class="span4">Type:  </div>
+										<div id="fieldvalue" class="span8">  '.$disaster_type.'</div>
+									</div>
+							</div>
+							<div class="row-fluid">
+									<div class="span12">
+										<div id="fieldlabel" class="span4">Date Occurred:  </div>
+										<div id="fieldvalue" class="span8"> '.$incident_date.'</div>
+									</div>
+							</div>
+							
 						</div>
 							  
 						<div class="navbar" style="height:30px;">
@@ -75,37 +91,40 @@ class Incident extends  CI_Controller
 							<div class="row-fluid">
 								<div class="row-fluid">
 									<div class="span6">
-										<div class="span7">Deaths: </div>
+										<div id="fieldlabel" class="span7">Deaths: </div>
 										<div class="span1">'.$death_toll.'</div>
 									</div>
 								
 									<div class="span6">
-										<div class="span7"> Families Affected: </div>
+										<div id="fieldlabel" class="span7"> Families Affected: </div>
 										<div class="span1">'.$no_of_families_affected.'</div>
 									</div>
 								</div>
 								<div class="row-fluid">
 									<div class="span6">
-										<div class="span7">People Missing: </div>
+										<div id="fieldlabel" class="span7">People Missing: </div>
 										<div class="span1">'.$no_of_people_missing.'</div>
 									</div>
 									<div class="span6">
-										<div class="span7"> Houses Destroyed: </div>
+										<div id="fieldlabel" class="span7"> Houses Destroyed: </div>
 										<div class="span1">'.$no_of_houses_destroyed.'</div>
 									</div>
 								</div>
 								<div class="row-fluid">
 									<div class="span6">
-										<div class="span7"> Injured: </div>
+										<div id="fieldlabel" class="span7"> Injured: </div>
 										<div class="span1">'.$no_of_injuries.'</div>
 									</div>
 									<div class="span6">
-										<div class="span7"> Damage Cost: </div>
+										<div id="fieldlabel" class="span7"> Damage Cost: </div>
 										<div class="span5"> PHP '.$estimated_damage_cost.'</div>
 									</div>
 								</div>        
 								<div class="row-fluid">
-									<div class="span12">Information Source: <i> '.$incident_info_source.'</i></div>
+									<div class="span12">
+										<div id="fieldlabel" class="span5">Information Source: </div>
+										<div class="span4"> <i> '.$incident_info_source.'</i></div>
+									</div>
 								</div>
 							</div>
 						</div>';

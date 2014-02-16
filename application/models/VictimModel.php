@@ -9,29 +9,30 @@
 
 class VictimModel extends CI_Model{
     
-	
-	function viewAllVictims($incident_report_id){
-		$sql= 'select iv.incident_report_id, v.victim_id, v.first_name, v.middle_name, v.last_name, v.address, iv.victim_status, iv.flag_confirmed, iv.report_rating_false, iv.report_rating_true from incident_victim iv right outer join victims v on v.victim_id = iv.victim_id where iv.incident_report_id="'.$incident_report_id.'"';
-
+    function viewAllVictims($incident_report_id){
+       $sql= 'select iv.incident_report_id, v.victim_id, v.first_name, v.middle_name, v.last_name, v.address, iv.victim_status, iv.flag_confirmed, iv.report_rating_false, iv.report_rating_true from incident_victim iv right outer join victims v on v.victim_id = iv.victim_id where iv.incident_report_id="'.$incident_report_id.'"';
        $query= $this->db->query($sql);
+       
        if($query){ //victim in a specific incident is unique
             return $query; 
         }
-        else{ //victim in the specific incident already exists
+       else{ //victim in the specific incident already exists
             return false;
-        }
-	}
+       }
+    }
+    
+    
     function validate($fname, $mname, $lname, $reportNo){
        /** AVOID NAME DUPLICATION */
        $sql= 'SELECT v.victim_id,v.first_name, v.last_name,v.middle_name, iv.incident_report_id FROM icdrris.victims v, icdrris.incident_victim iv WHERE iv.victim_id= v.victim_id and v.first_name= "'.$fname.'" and v.last_name = "'.$lname.'" and v.middle_name = "'.$mname.'" and iv.incident_report_id = "'.$reportNo.'"';
-
        $query= $this->db->query($sql);
+       
        if($query->num_rows() <1){ //victim in a specific incident is unique
             return true; 
-        }
-        else{ //victim in the specific incident already exists
+       }
+       else{ //victim in the specific incident already exists
             return false;
-        }
+       }
     }
     
     function reportVictim($fname, $mname, $lname, $address, $victim_status, $reportNo){
@@ -61,6 +62,21 @@ class VictimModel extends CI_Model{
             $query_insertIncidentVictim= $this->db->query($sql_insertIncidentVictim);
             return true;
       }
+    }
+    
+    function deleteVictim($incident_report_id, $victim_id){
+        $this->db->where('incident_report_id', $incident_report_id);
+		$this->db->where('victim_id', $victim_id);
+		$query= $this->db->delete('incident_victim');
+        
+        if($query){
+           // echo 'success frm victimmodel';
+            return true;
+        }else{
+            //echo 'db query error';
+            echo $this->db->_error_message();
+        }
+
 
     }
     
