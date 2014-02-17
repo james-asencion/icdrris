@@ -35,7 +35,8 @@ function initializeMap() {
         shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
     }
     var marker = new google.maps.Marker(markerOptions);
-    marker.setMap(map);
+    //marker.setMap(map);
+    //console.log("DATE FROM---->>>>>>"+$("#dateFrom").val().replace(/-/g,'')+"  DATE TO------>>>>>>>"+$("#dateTo").val().replace(/-/g,''));
     
     
 }
@@ -175,8 +176,11 @@ function getAllMarkersPolygons() {
 
     };
 
+    var dateTo = $("#dateTo").val().replace(/-/g,'');
+    var dateFrom = $("#dateFrom").val().replace(/-/g,'');
     // Change this depending on the name of your PHP file
-    downloadUrl("http://localhost/icdrris/application/views/getAllMapElements.php", function(data) {
+    //alert("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom);
+    downloadUrl("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data) {
 
         var xml = data.responseXML;
         //console.log(xml);
@@ -304,7 +308,9 @@ function filterPolygon() {
         }
     }
     // Change this depending on the name of your PHP file
-    downloadUrl("http://localhost/icdrris/application/views/getAllMapElements.php", function(data) {
+    var dateTo = $("#dateTo").val().replace(/-/g,'');
+    var dateFrom = $("#dateFrom").val().replace(/-/g,'');
+    downloadUrl("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data)  {
 
         var xml = data.responseXML;
         //console.log(xml);
@@ -313,7 +319,7 @@ function filterPolygon() {
 
         //empty the Polygon array first
         emptyArray(polygonsArray1);
-        console.log("polygons array length: " + polygonsArray1.length);
+        console.log("polygons count: " + polygons.length);
         //initialize the div for the list in the sidebar
         //and empty the output string to fill with fresh values
 
@@ -450,11 +456,13 @@ function filterMarker() {
     };
 
     // Change this depending on the name of your PHP file
-    downloadUrl("http://localhost/icdrris/application/views/getAllMapElements.php", function(data) {
+    var dateTo = $("#dateTo").val().replace(/-/g,'');
+    var dateFrom = $("#dateFrom").val().replace(/-/g,'');
+    downloadUrl("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data)  {
         var xml = data.responseXML;
         var markers = xml.documentElement.getElementsByTagName("markers")[0].getElementsByTagName("marker");
         var loopCount = 0;
-
+        console.log("markers count: "+markers.length);
         for (var i = 0; i < markers.length; i++) {
 
             var id = markers[i].getAttribute("incident_report_id");

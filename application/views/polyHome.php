@@ -27,14 +27,14 @@
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm3">
                     <div class="center" align="center"><p>Date To:</p>   
-                        <input type = "date" name = "birthdate" class = "span2" />
+                        <input id="dateTo" type = "date" name = "birthdate" class = "span2" value="<?php echo date('Y-m-d'); ?>" />
                     </div>
                 </form>
             </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm4">
                     <div class="center" align="center"><p>Date From:</p>   
-                       <input type = "date" name = "birthdate" class = "span2" />
+                       <input id="dateFrom" type = "date" name = "birthdate" class = "span2" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>"/>
                     </div>
                 </form>
             </div>

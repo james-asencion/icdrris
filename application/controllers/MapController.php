@@ -1,54 +1,32 @@
 <?php
 class MapController extends  CI_Controller
 {
-	public function index(){
-		/**
-		$this->load->library('googlemaps');
-		$this->load->model('PolygonModel');
-		$res=$this->PolygonModel->getPolyPoints();
+	public function __construct(){
+        parent :: __construct();
+        $this->load->model('MapModel');
+    }
 
-		$config['center'] = '8.228021,124.245242';
-		$config['zoom'] = '12';
-		$this->googlemaps->initialize($config);
-
-		
-		if($res->num_rows()>0)
-		{
-			foreach($res->result() as $row)
-			{
-				$coordinates_array=explode(";",$row->poly_points);
-				$polygon=array();
-				$points=array();
-				
-				foreach ($coordinates_array as $element) {
-						
-						array_push($points, $element);
-						//echo $element;
-						//echo "<br>";	
-					
-				}
-				$polygon['points']=$points;
-				echo count($polygon);
-				$polygon['strokeColor'] = '#000099';
-				$polygon['fillColor'] = '#000099';
-				
-				$this->googlemaps->add_polygon($polygon);
-				//$data[]=$row;
-			}
-
-			$data['map']=$this->googlemaps->create_map();
-			*/
-			$this->load->view('polyHome');
-		
-
-
-		//$this->load->view('');
-	}
 	public function viewPolygonReports(){
 		$this->load->view('polyHome');
 	}
+
 	public function viewMarkerReports(){
 		$this->load->view('markerHome');
+	}
+
+	public function getAllMapElements(){
+		//$dateFrom = $_GET['dateFrom'];
+		$get = $this->uri->uri_to_assoc();
+		//$dateFrom = $get['fromYear']."-".$get['fromMonth']."-".$get['fromDay'];
+		//$dateTo = $get['toYear']."-".$get['toMonth']."-".$get['toDay'];
+		$dateFrom = date('Y-m-d', strtotime($get['dateFrom']));
+		$dateTo = date('Y-m-d', strtotime($get['dateTo']));
+		//echo $dateFrom."   ".$dateTo;
+
+		$data['elements']  = $this->MapModel->getMapElements1($dateFrom, $dateTo);
+		$this->load->view('getAllMapElements',$data);
+
+
 	}
 }
 
