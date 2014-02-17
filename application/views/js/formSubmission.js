@@ -44,6 +44,8 @@ $("#addMemberButton").click(function(event)	{
 	});
 });
 
+
+//LOGIN FORM
 $(document).ready(function(){
 
     $('#login-btn').on('click', function(e){
@@ -86,3 +88,90 @@ $(document).ready(function(){
 		});
     });
 });
+// --end
+
+// UPDATE VICTIM
+function editVictim(element){
+	$('.edit-victim').on('click', function(e){
+		e.preventDefault();
+		console.log('edit-victim clicked');
+		
+		var incidentid = $(this).data('incidentid');
+		var victimid = $(this).data('victimid');
+		var firstname = $(this).data('firstname');
+		var middlename = $(this).data('middlename');
+		var lastname = $(this).data('lastname');
+		var address = $(this).data('address');
+		var victimstatus = $(this).data('victimstatus');
+		console.log('update victim: '+ incidentid + ' ' + victimid + ' '+ firstname+ ' '+ middlename+ ' '+ lastname+ ' '+ address+ ' '+ victimstatus);
+		$('#modalUpdateVictim').data('incidentid',incidentid);	//for AND query
+		$('#modalUpdateVictim').data('victimid',victimid);	//for AND query
+		$('#modalUpdateVictim').data('firstname',firstname);	//for AND query
+		$('#modalUpdateVictim').data('middlename',middlename);	//for AND query
+		$('#modalUpdateVictim').data('lastname',lastname);	//for AND query
+		$('#modalUpdateVictim').data('address',address);	//for AND query
+		$('#modalUpdateVictim').data('victimstatus',victimstatus);	//for AND query
+		console.log('passed the data to the modalUpdateVictim');
+	//	$('#modalUpdateVictim .modal-body').html("<p>Are you sure you want to delete: "+victimName+" </p>");
+		$('#modalUpdateVictim').modal('show');
+	});
+	
+	$('#modalUpdateVictim').on('show.bs.modal', function(){
+			var incidentid  = $(this).data('incidentid');
+			var victimid  = $(this).data('victimid');
+			var firstname  = $(this).data('firstname');
+			var middlename  = $(this).data('middlename');
+			var lastname  = $(this).data('lastname');
+			var address  = $(this).data('address');
+			var victimstatus  = $(this).data('victimstatus');
+			$("#first_name").attr("value", firstname);
+			$("#middle_name").attr("value", middlename);
+			$("#last_name").attr("value", lastname);
+			$("#address").attr("value", address);
+			//$("#victim_status").attr("value", victimstatus);
+			var i=0;
+			while ((document.updateVictimForm.victim_status.options[i].value != victimstatus) && (i < document.updateVictimForm.victim_status.options.length))
+			  {i++;}
+			if (i < document.updateVictimForm.victim_status.options.length)
+			  {document.updateVictimForm.victim_status.selectedIndex = i;}
+			removeBtn = $(this).find('.danger');
+	});
+	
+	    $('#updateVictimForm').submit(function(event){
+        // Stop form from submitting normally
+        event.preventDefault();
+        
+        // Get some values from elements on the modal login page:
+        var incidentid  = $('#modalUpdateVictim').data('incidentid');
+		var victimid  = $('#modalUpdateVictim').data('victimid');
+        var firstname = $("#first_name").val();
+        var middlename = $("#middle_name").val();
+        var lastname = $("#last_name").val();
+        var address = $("#address").val();
+        var victimstatus = document.updateVictimForm.victim_status.value;
+        var dataStr = 'incidentid='+incidentid+'&victimid='+victimid+'&firstname='+firstname+'&middlename='+middlename+'&lastname='+lastname+'&address='+address+'&victimstatus='+victimstatus;
+		console.log(dataStr);
+        /* Send the data using post and put results to the members table */
+		request = $.ajax({
+			url: "http://localhost/icdrris/Victim/updateVictim",
+			type: "POST",
+			data: dataStr,
+			success: function(msg){
+				console.log("success");
+				console.log(msg);
+				if(msg == 'success'){
+					console.log('naedit na bai. check the database');
+					$('#modalUpdateVictim').modal('hide');
+				}else{
+					console.log('naay mali sa controller or model. recheck the code.')
+					$(".modal-body").innerHTML(msg);
+				}
+			},
+			error: function(){
+				console.log("fail");
+				$(".modal-body").html("Sorry, system error.");
+			}
+		});
+    });
+	
+};

@@ -142,11 +142,104 @@
                   <!-- onclick="displayList()-->
                  <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
-           
-<div id= "map_canvass">
-    <div id="map_canvas" style="top:30px; width:100%; height:595px;"></div>   
-</div>
-             <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div id= "map_canvass">
+              <div id="map_canvas" style="width:100%; height:570px;"></div>   
+            </div>
+			
+	<!-- MODALS: deleteVictim, updateVictim>
+			
+			<!-- modalUpdateVictim -->
+			<div id="modalUpdateVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                
+				<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_150_edit.png"  alt="bin" style="margin-top:-10px"> Edit Victim</h3>
+                </div>
+                
+				<div class="modal-body">
+					
+						<fieldset>
+						
+						<form method = "post" action = "<?php echo base_url();?>Victim/updateVictim" name= "updateVictimForm" id= "updateVictimForm">
+				 
+
+							<?php  if((function_exists('validation_errors') && validation_errors() != '') || isset($err_message)){?>
+								<div class="alert alert-error" >  
+									<strong>Error!</strong>	<br />
+									<?php // found in system/libraries/Form_validation.php
+											echo validation_errors();
+											echo $err_message;
+											
+									?>
+								</div> 
+							<?php } ?>
+
+							<?php  if(isset($succ_message)){ ?>
+								<div class="alert alert-success" >  
+									<strong>Success!</strong>	<br />
+									<?php 
+											echo $succ_message;  
+									?>
+								</div> 
+							<?php } ?>
+
+						
+							
+							<div class = "row-fluid">
+								<strong>First Name</strong><br>
+								<?php 
+									$fNameProperties=array('type'=>'text','class'=>'span7','name'=>'first_name', 'id'=>'first_name', 'value'=>set_value('first_name'));
+									echo form_input($fNameProperties);?>
+							</div>
+
+							<div class = "row-fluid">
+								<strong>Middle Name</strong><br>
+								<?php 
+									$mNameProperties=array('type'=>'text','class'=>'span7','name'=>'middle_name', 'id'=>'middle_name', 'value'=>set_value('middle_name'));
+									echo form_input($mNameProperties);?>
+							</div>
+
+							<div class = "row-fluid">
+								<strong>Last Name</strong><br>
+								<?php 
+									$lNameProperties=array('type'=>'text','class'=>'span7','name'=>'last_name', 'id'=>'last_name','value'=>set_value('last_name'));
+									echo form_input($lNameProperties);?>
+							</div>
+
+							<div class = "row-fluid">
+								<strong>Address</strong><br>
+								<?php 
+									$addressProperties=array('type'=>'text','class'=>'span9','name'=>'address', 'id'=>'address','value'=>set_value('address'));
+									echo form_input($addressProperties);?>
+							</div>
+							
+							<div class = "row-fluid">
+								<strong>Victim Status</strong><br>
+								<?php 
+									$vstat_options = array(
+											' '     => '-Select-',
+											'dead'  => 'Dead',
+											'alive'    => 'Alive',
+											'missing'   => 'Missing',
+											'injured' => 'Injured',
+										  );
+									$vstatProperties=array('id'=>'victim_status');
+									echo form_dropdown('victim_status', $vstat_options, $vstatProperties);?>
+							</div>
+						</fieldset>	
+                </div>
+                <div class="modal-footer">
+					<?php $submit_property = array( 'type' => 'submit', 'class' => 'btn btn-primary', 'name' => 'update', 'value' =>'Update Victim');
+						   echo form_submit($submit_property);
+					?>
+					<a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Cancel</a>
+                </div>
+            </div> 
+			<!-- end modalUpdateVictim -->
+			
+			
+			<!-- modalDeleteVictim -->
+			 <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
@@ -160,6 +253,8 @@
                     <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
                 </div>
             </div> 
+			<!-- end modalDeleteVictim -->
+			
 			<div id="directionsPanel"></div>
                         
 	    </div>

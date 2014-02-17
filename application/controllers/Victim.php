@@ -62,10 +62,10 @@ class Victim extends CI_Controller
                                                     <td>'.$first_name.' '.$middle_name.' '.$last_name.'</td>
                                                     <td>'.$victim_status.'</td>
                                                     <td>
-                                                            <a href="#" id="approved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
-                                                            <a href="#" id="disapproved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" > </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
-                                                            <a href="#" id="details-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-info-sign" title="Show Details"> </i> </a><span class="divider"> | </span>
-                                                            <a href="#" id="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-edit" title="Edit Victim"> </i> </a><span class="divider"> | </span>
+                                                            <a href="#" class="approved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
+                                                            <a href="#" class="disapproved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" > </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
+                                                            <a href="#" class="details-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-info-sign" title="Show Details"> </i> </a><span class="divider"> | </span>
+                                                            <a href="#" class="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-address="'.$address.'" data-victimstatus="'.$victim_status.'"><i class="icon-white icon-edit" title="Edit Victim" onclick="editVictim(this);"> </i> </a><span class="divider"> | </span>
                                                             <a href="#" class="delete-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-trash" title="Delete Report" onclick="deleteVictim(this);"> </i> </a><span class="divider"> | </span>
                                                     </td>
                                       </tr>
@@ -139,8 +139,69 @@ class Victim extends CI_Controller
           $this->done($data);
     }   //end of validate()
     
-    /** DELETE VICTIM
-     *      FUNCTION
+	/**
+	 *		GET VICTIM DETAILS FUNCTION
+	 */
+	function getVictimDetails(){
+	
+		// variables for post id values
+		$incident_report_id= $this->input->post('incident_report_id');
+        $victim_id= $this->input->post('victim_id');
+		
+		// call Victim Model
+       // $query_result = $this->VictimModel->selectVictim($incident_report_id, $victim_id);
+		
+	}
+	
+	
+	/**
+	 *		UPDATE VICTIM FUNCTION
+	 */ 
+	 
+	function updateVictim(){
+
+        $incident_report_id= $this->input->post('incidentid');
+        $victim_id= $this->input->post('victimid');
+        $first_name= $this->input->post('firstname');
+        $middle_name= $this->input->post('middlename');
+        $last_name= $this->input->post('lastname');
+        $address= $this->input->post('address');
+        $victim_status= $this->input->post('victimstatus');
+        
+        /**
+        $this->form_validation->set_rules('first_name','First Name','trim|required|min_length[1]|max_length[40]');
+        $this->form_validation->set_rules('middle_name','Middle Name','trim|required|min_length[1]|max_length[40]');
+        $this->form_validation->set_rules('last_name','Last Name','trim|required|min_length[1]|max_length[40]');
+        $this->form_validation->set_rules('address','Address','trim|required|min_length[1]|max_length[40]');
+        $this->form_validation->set_rules('victim_status','Victim Status','trim|required|max_length[40]');
+	*/	
+        //if($this->form_validation-> run()){
+
+            if($this->VictimModel->validateOnUpdate($first_name, $middle_name, $last_name, $incident_report_id, $victim_id)){
+                
+                $query=$this->VictimModel->updateVictim($incident_report_id, $victim_id, $first_name, $middle_name, $last_name, $address, $victim_status);
+                if($query){
+                   echo 'success';
+                }
+                else{   //$query == false
+					echo $query.'.\n';
+                    echo 'Something is wrong with the data input.';
+                }
+            }
+            else{   // error $this->$victimModel->validate
+                echo 'The victim is already reported.';
+            }
+       //}
+       /** else{   //form_validation_run == false
+              echo validation_errors();
+			  $variables = 'incidentid='.$incident_report_id.'&victimid='.$victim_id.'&firstname='.$first_name.'&middlename='.$middle_name.'&lastname='.$last_name.'&address='.$address.'&victimstatus='.$victim_status;
+			  echo '\n'.$variables;
+           
+        }*/
+	}
+	
+    /** 
+     *     DELETE VICTIM FUNCTION
      */
     function deleteVictim(){
         $incident_report_id= $this->input->post('incident_report_id');
