@@ -396,7 +396,8 @@ function displayDetails(incident_report_id, arrId) {
                 $("#incident-title").html(msg);
                 $("#li0").after('<li><a class="subBreadCrumb">' + msg + '</a></li>');
                 $("#victims-tab, #details-tab, #overview-li, #editinfo-li, #delete-li, #displaychart-li, #victimslist-li, #reportvictim-li").attr("data-incidentid", incident_report_id);
-                $("#tabbable").show("slow");
+			    $("#delete-li").attr("data-incidentdesc", msg);
+			    $("#tabbable").show("slow");
             }
         },
         error: function() {

@@ -97,3 +97,53 @@ $('#btnYesDeleteVictim').click(function(){
 });
   
 }
+
+//DELETE INCIDENT
+$(document).ready(function(){
+	$('#delete-li').on('click', function(e){
+			e.preventDefault();
+			console.log('delete-incident clicked');
+			var incidentid = $(this).data('incidentid');
+			var incidentdesc = $(this).data('incidentdesc');
+			console.log(incidentid + ' '+ incidentdesc);
+			$('#modalDeleteIncident').data('incidentid',incidentid);
+			$('#modalDeleteIncident .modal-body').html("<p>Are you sure you want to delete this Incident? </p><br /><p>Incident: "+incidentdesc);
+			$('#modalDeleteIncident').modal('show');	
+	});
+
+	$('#modalDeleteIncident').on('show.bs.modal', function(){
+			var incidentid  = $(this).data('incidentid');
+                        console.log('onshowbsmodal: '+ incidentid);
+			removeBtn = $(this).find('.danger');
+	});
+
+	$('#btnYesDeleteIncident').click(function(){
+
+		var incidentid = $('#modalDeleteIncident').data('incidentid');
+		console.log('this is the incidentid->' + incidentid);
+		var dataStr = 'incident_report_id='+incidentid;
+		$.ajax({
+				url: "http://localhost/icdrris/Incident/deleteIncident",
+				type: "POST",
+				data: dataStr,
+				success: function(msg){
+					if(msg == 'success'){
+						$('#modalDeleteIncident').modal('hide');	
+						console.log('success: '+incidentid);
+					   // $('#success-delete-victim').html('');
+					}
+					else{
+						console.log('Results: '+msg)
+						$("#modalDeleteIncident .modal-body").html('<p>Opps. Query failed. Please contact the admin.</p>');
+					}
+				},
+				error: function(msg){
+						console.log("something went wrong");
+						$('#modalDeleteIncident .modal-body').html("<p>Opss..Sorry, something went wrong</p>");
+						$('#modalDeleteIncident').modal('show');
+				}
+
+			});
+	});
+});
+

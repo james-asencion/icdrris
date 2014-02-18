@@ -36,7 +36,7 @@ class Incident extends  CI_Controller
         }
 		
         public function incidentDetails(){
-			$id = $this->input->post("id");
+            $id = $this->input->post("id");
             $query_results = $this->IncidentModel->getIncidentDetails($id); 
             
 			if($query_results == 'false'){
@@ -137,8 +137,15 @@ class Incident extends  CI_Controller
             $this->load->view();
         }
         
-        public function doDelete($id){
-            $this->load->view();
+        public function deleteIncident(){
+            $incident_report_id = $this->input->post("incident_report_id");
+            $query_results = $this->IncidentModel->deleteIncident($incident_report_id); 
+            if($query_results){
+                echo 'success';
+            }
+            else{
+                echo $query_results;
+            }
         }
        
 }

@@ -28,11 +28,12 @@ class Victim extends CI_Controller
                     }
                     else{
                             if($query_results-> num_rows() == 0){
-                            echo '<center><font style="color: red;"><b>No results found.</b></font></center>';
+                            echo '
+<center><font style="color: red;"><b>No results found.</b></font></center>';
                             }else{
 
 
-                            echo ' <table id="victimTable" class="table table-condensed " style="color:#cccccc;">
+                            echo '<table id="victimTable" class="table table-condensed " style="color:#cccccc;">
                                                     <caption><h4>List of Victims Reported</h4><br></caption>
                                                     <thead>
                                                       <tr>
@@ -56,18 +57,17 @@ class Victim extends CI_Controller
                                     $report_rating_false = $row_victims->report_rating_false;
                                     $report_rating_true = $row_victims->report_rating_true;
 
-                            echo '
-                                            <tr>
-                                                    <td>'.(++$i).'</td>
-                                                    <td>'.$first_name.' '.$middle_name.' '.$last_name.'</td>
-                                                    <td>'.$victim_status.'</td>
-                                                    <td>
-                                                            <a href="#" class="approved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
-                                                            <a href="#" class="disapproved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" > </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
-                                                            <a href="#" class="details-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-info-sign" title="Show Details"> </i> </a><span class="divider"> | </span>
-                                                            <a href="#" class="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-address="'.$address.'" data-victimstatus="'.$victim_status.'"><i class="icon-white icon-edit" title="Edit Victim" onclick="editVictim(this);"> </i> </a><span class="divider"> | </span>
-                                                            <a href="#" class="delete-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-trash" title="Delete Report" onclick="deleteVictim(this);"> </i> </a><span class="divider"> | </span>
-                                                    </td>
+                            echo '    <tr>
+										<td>'.(++$i).'</td>
+										<td>'.$first_name.' '.$middle_name.' '.$last_name.'</td>
+										<td>'.$victim_status.'</td>
+										<td>
+												<a href="#" class="approved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
+												<a href="#" class="disapproved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" > </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
+												<a href="#" class="details-victim" data-toggle="popover" title="" data-content="Hello there.\n How are you?" data-original-title="A Title"><i class="icon-white icon-info-sign" title="Show Details"> </i> </a><span class="divider"> | </span>
+												<a href="#" class="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-address="'.$address.'" data-victimstatus="'.$victim_status.'"><i class="icon-white icon-edit" title="Edit Victim" onclick="editVictim(this);"> </i> </a><span class="divider"> | </span>
+												<a href="#" class="delete-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-trash" title="Delete Report" onclick="deleteVictim(this);"> </i> </a><span class="divider"> | </span>
+										</td>
                                       </tr>
 
                                     ';

@@ -126,11 +126,11 @@
                                         <li class="active">
                                           <a href="#" id="overview-li" data-incidentid="" onclick="displayDetails()"><i class="icon-white icon-info-sign"></i> Overview</a>
                                         </li>
-                                        <li data-id="">
+                                        <li>
                                           <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
                                         </li>
                                         <li>
-                                          <a href="#myModal" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
+                                          <a href="#" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
                                         </li>
                                         <li >
                                           <a href="#" id="displaychart-li" data-incidentid=""><i class="icon-white icon-globe"></i> Display Chart</a>
@@ -176,7 +176,7 @@
               <div id="map_canvas" style="width:100%; height:570px;"></div>   
             </div>
 			
-	<!-- MODALS: deleteVictim, updateVictim>
+	<!-- MODALS: deleteIncident, deleteVictim, updateVictim>
 			
 			<!-- modalUpdateVictim -->
 			<div id="modalUpdateVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -267,6 +267,22 @@
             </div> 
 			<!-- end modalUpdateVictim -->
 			
+			<!-- modalDeleteIncident -->
+			 <div id="modalDeleteIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
+                </div>
+                 <div class="modal-body">
+                    <div name="message">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="btnYesDeleteIncident" class="btn danger">Yes</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
+                </div>
+            </div> 
+			<!-- end modalDeleteIncident -->
 			
 			<!-- modalDeleteVictim -->
 			 <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

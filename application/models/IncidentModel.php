@@ -35,5 +35,17 @@ class IncidentModel extends CI_Model
 				return false;
 			}
         }
+        
+        function deleteIncident($id){
+            $this->db->where('incident_report_id', $id);
+            $query= $this->db->delete('incidents'); 
+            
+            if($query){
+                return true;
+            }
+            else{
+                return $query;
+            }
+        }
 }
 ?>
