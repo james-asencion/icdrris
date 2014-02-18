@@ -27,6 +27,7 @@ if($element->lat == null && $element->lng == null){
     $polygon->setAttribute("no_of_houses_destroyed",$element->no_of_houses_destroyed);
     $polygon->setAttribute("estimated_damage_cost",$element->estimated_damage_cost);
     $polygon->setAttribute("incident_info_source",$element->incident_info_source);
+    $polygon->setAttribute("elementType","2");
     $polygon->setAttribute("flag_confirmed",$element->flag_confirmed);
     $polygon->setAttribute("flag_true_rating",$element->flag_true_rating);
     $polygon->setAttribute("flag_false_rating",$element->flag_false_rating);
@@ -73,6 +74,7 @@ if($element->lat == null && $element->lng == null){
     $marker->setAttribute("incident_info_source",$element->incident_info_source);
     $marker->setAttribute("lat",$element->lat);
     $marker->setAttribute("lng",$element->lng);
+    $marker->setAttribute("elementType","1");
     $marker->setAttribute("flag_confirmed",$element->flag_confirmed);
     $marker->setAttribute("flag_true_rating",$element->flag_true_rating);
     $marker->setAttribute("flag_false_rating",$element->flag_false_rating);

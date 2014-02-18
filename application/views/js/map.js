@@ -2,6 +2,7 @@
 var directionDisplay;
 
 var directionsService = new google.maps.DirectionsService();
+var mapElements = [];
 var polygonsArray1 = new Array();
 var polygonsArray2 = new Array();
 var markersArray1 = new Array();
@@ -10,9 +11,64 @@ var output;
 var map;
 
 $(document).ready(function() {
-    initializeMap();
-    filterReports();
+    getAllMarkersPolygons();
+    //filterReports();
+//------------------------FOR THE FILTER FUNCTION------------------------------
+    $('.dropdown-menu').on('click', function(e) {
+    
+        if($(this).hasClass('dropdown-menu-form')) {
+            e.stopPropagation();
+        }
+    });
+    var boxes = $('#elementBoxes input:checkbox');
+    boxes.change(function(e){
+    var props = 0;
+        $.each(boxes, function(i,b){
+            props += ($(b).is(':checked'))?Math.pow(2,i):0;
+        });
+        //sendProps(props);
+
+    //alert("Map Element size is now -->>> "+mapElements.length+"<<<------");
+    clearIncidentList();
+    for(var i=0;i<mapElements.length;i++){
+        console.log("props="+props+" mapElements.props="+mapElements[i].props);
+        console.log("props & mapElements[i].props="+(props & mapElements[i].props));
+        console.log((((props & mapElements[i].props)>>>0) === props));
+        mapElements[i].setVisible(((props & mapElements[i].props)>>>0 === props)?((props)?true:false):false);
+        if(((props & mapElements[i].props)>>>0) === props) 
+        {
+            appendToList(mapElements[i]);
+
+        }
+    }
+    });
+//------------------------------------------------------------------------------
+
 });
+function sendProps(props){
+    //alert(props);
+}
+function createPropertiesArray(mapElement){
+    var disasterType = mapElement.getAttribute("disaster_type");
+    var elementType = mapElement.getAttribute("elementType");
+    var propArray = new Array(7);
+    (elementType === "1")?propArray[6]=1:propArray[6]=0;
+    //console.log(propArray[6]);
+    (elementType === "2")?propArray[5]=1:propArray[5]=0;
+    //console.log(propArray[5]);
+    (disasterType === "Flashflood")?propArray[4]=1:propArray[4]=0;
+    //console.log(propArray[4]);
+    (disasterType === "Tsunami")?propArray[3]=1:propArray[3]=0;
+    //console.log(propArray[3]);
+    (disasterType === "Landslide")?propArray[2]=1:propArray[2]=0;
+    //console.log(propArray[2]);
+    (disasterType === "Mudslide")?propArray[1]=1:propArray[1]=0;
+    //console.log(propArray[1]);
+    (disasterType === "Infrastructure Damage")?propArray[0]=1:propArray[0]=0;
+    //console.log(propArray[0]);
+
+    return propArray;
+}
 
 function initializeMap() {
     var latlng = new google.maps.LatLng(8.228021, 124.245242);
@@ -28,15 +84,7 @@ function initializeMap() {
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
-    var infoWindow = new google.maps.InfoWindow;
-    var markerOptions = {
-        position: latlng,
-        icon: 'icons/earthquake.png',
-        shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
-    }
-    var marker = new google.maps.Marker(markerOptions);
     //marker.setMap(map);
-    //console.log("DATE FROM---->>>>>>"+$("#dateFrom").val().replace(/-/g,'')+"  DATE TO------>>>>>>>"+$("#dateTo").val().replace(/-/g,''));
     
     
 }
@@ -55,16 +103,18 @@ function bindInfoWindow(marker, map, infoWindow, html) {
     });
 }
 
-function bindPolygonToSidePanel(map, polygon, center, id) {
+function bindPolygonToSidePanel(polygon) {
+    var incidentId = polygon.id;
     google.maps.event.addListener(polygon, 'click', function() {
-        map.setCenter(center);
-        displayDetailsFromMap(id);
+        map.setCenter(polygon.center);
+        displayDetailsFromMap(incidentId);
     });
 }
-function bindMarkerToSidePanel(map, marker, center, id) {
+function bindMarkerToSidePanel(marker) {
+    var incidentId = marker.id;
     google.maps.event.addListener(marker, 'click', function() {
-        map.setCenter(center);
-        displayDetailsFromMap(id);
+        map.setCenter(marker.center);
+        displayDetailsFromMap(incidentId);
     });
 }
 function downloadUrl(url, callback) {
@@ -96,37 +146,16 @@ function calculateCenter(coordinates) {
     return bounds.getCenter();
 }
 
-function filterReports() {
-
-    var filterValue1 = document.filterForm1.filterMenu1.value;
-    var filterValue2 = document.filterForm2.filterMenu2.value;
-    console.log("FILTER VALUE1: " + filterValue1);
-    console.log("FILTER VALUE2: " + filterValue2);
-    if (filterValue1 === 'Polygon') {
-        filterPolygon();
-    }
-    else if (filterValue1 === 'Marker') {
-        filterMarker();
-    }
-    else if (filterValue2 != 'null') {
-        //filterMarkersPolygons(filterValue2);
-        console.log("inside else if filetervalue != null ");
-        getAllMarkersPolygons();
-    } else {
-        getAllMarkersPolygons();
-        console.log("inside else statement");
-    }
-
-}
-
 function getAllMarkersPolygons() {
 
     console.log("***** getAllMarkersPolygons invoked *****");
     //var filterValue = document.filterForm2.filterMenu2.value;
     //console.log("FILTER VALUE 2: "+filterValue);
 
-    //initializeMap();
-    //clearIncidentList();
+    initializeMap();
+    clearIncidentList();
+    mapElements = [];
+    console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
 
     //This is the option to change the polygon color according to the disaster type
     var polygonColor = {
@@ -183,7 +212,7 @@ function getAllMarkersPolygons() {
     downloadUrl("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data) {
 
         var xml = data.responseXML;
-        //console.log(xml);
+        console.log(xml);
         var polygons = xml.documentElement.getElementsByTagName("polygons")[0].getElementsByTagName("polygon");
         var markers = xml.documentElement.getElementsByTagName("markers")[0].getElementsByTagName("marker");
 
@@ -192,19 +221,23 @@ function getAllMarkersPolygons() {
         //console.log("polygons array length: "+polygonsArray1.length);
         //initialize the div for the list in the sidebar
         //and empty the output string to fill with fresh values
-
-        for (var polygonIndex = 0; polygonIndex < polygons.length; polygonIndex++) {
-
+        var polygonIndex = 0;
+        for (polygonIndex = 0; polygonIndex < polygons.length; polygonIndex++) {
+            var arr = createPropertiesArray(polygons[polygonIndex]);
+            var int = parseInt(arr.join(''),2);
+            console.log("Integer Equivalent -->>"+int+"<<<---");
             //Extract all the elements needed for the sidebar(incident details)
             var incident_report_id = polygons[polygonIndex].getAttribute("incident_report_id");
-            var disaster_type = polygons[polygonIndex].getAttribute("disaster_type");
+            var disasterType = polygons[polygonIndex].getAttribute("disaster_type");
+            var incidentDescription = polygons[polygonIndex].getAttribute("incident_description");
+            var incidentDate = polygons[polygonIndex].getAttribute("incident_date");
+            var location = polygons[polygonIndex].getAttribute("location_address");
 
             //============DECLARE VARIABLES=============
             var coordinates = [];
             //var bounds = new google.maps.LatLngBounds();
             var myPolygon;
             var center;
-            var id;
             var points = polygons[polygonIndex].getElementsByTagName("point");
 
             var polygonsArray2 = new Array();
@@ -224,327 +257,110 @@ function getAllMarkersPolygons() {
 
             var polyOptions = {
                 paths: coordinates,
-                strokeColor: polygonColor[disaster_type],
+                visible: false, 
+                strokeColor: polygonColor[disasterType],
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
-                fillColor: polygonStroke[disaster_type],
-                fillOpacity: 0.35
+                fillColor: polygonStroke[disasterType],
+                fillOpacity: 0.35,
+                arrId: polygonIndex,
+                id: incident_report_id,
+                disasterType: disasterType,
+                incidentDescription: incidentDescription,
+                incidentDate: incidentDate,
+                location: location,
+                center: center,
+                props: int
             }
 
             myPolygon = new google.maps.Polygon(polyOptions);
+            mapElements.push(myPolygon);
+            appendToList(myPolygon);
 
             //APPEND THE POLYGON DETAILS TO SIDEBAR HERE
-            bindPolygonToSidePanel(map, myPolygon, center, incident_report_id);
-            appendToList(myPolygon, incident_report_id, center, polygons[polygonIndex]);
+            bindPolygonToSidePanel(myPolygon);
+            //appendToList(myPolygon, incident_report_id, center, polygons[polygonIndex]);
 
-            //myPolygon.setMap(map);
+            myPolygon.setMap(map);
 
 
         }
-
+        console.log(">>>>>>>>>>>>>>>value after polygon loop"+polygonIndex+"<<<<<<<<<<<<<<<<<<<<<");
         for (var i = 0; i < markers.length; i++) {
+            var arr = createPropertiesArray(markers[i]);
+            var int = parseInt(arr.join(''),2);
+            console.log("Integer Equivalent -->>"+int+"<<<---");
+            var incident_report_id = markers[i].getAttribute("incident_report_id");
+            var disasterType = markers[i].getAttribute("disaster_type");
+            var incidentDescription = markers[i].getAttribute("incident_description");
+            var incidentDate = markers[i].getAttribute("incident_date");
+            var location = markers[i].getAttribute("location_address");
 
-            var id = markers[i].getAttribute("incident_report_id");
-            var disaster_type = markers[i].getAttribute("disaster_type");
-
-            var icon = customIcons[disaster_type] || {};
+            var icon = customIcons[disasterType] || {};
             var point = new google.maps.LatLng(
                     parseFloat(markers[i].getAttribute("lat")),
                     parseFloat(markers[i].getAttribute("lng")));
 
             var markerOptions = {
                 position: point,
+                visible:false,
                 icon: icon.icon,
-                shadow: icon.shadow
+                shadow: icon.shadow,
+                center: point,
+                arrId: (polygonIndex+i),
+                id: incident_report_id,
+                disasterType: disasterType,
+                incidentDescription: incidentDescription,
+                incidentDate: incidentDate,
+                location: location,
+                props: int
             }
             var marker = new google.maps.Marker(markerOptions);
+            mapElements.push(marker);
+            appendToList(marker);
 
-            console.log("marker loop reached here");
-            bindMarkerToSidePanel(map, marker, point, id);
-            appendToList(marker, id, point, markers[i]);
-            //marker.setMap(map);
-
-        }
-    });
-
-}
-
-function filterPolygon() {
-
-    var filterValue = document.filterForm2.filterMenu2.value;
-    console.log("filter polygon called");
-
-    initializeMap();
-    clearIncidentList();
-
-    //This is the option to change the polygon color according to the disaster type
-    var polygonColor = {
-        Flashflood: {
-            //blue
-            fillColor: "#0404B4"
-        },
-        Mudslide: {
-            //brown
-            fillColor: "#7A4444"
-        },
-        Landslide: {
-            //red
-            fillColor: "#E92222"
-        }
-
-    };
-    var polygonStroke = {
-        Flashflood: {
-            //blue
-            fillColor: "#0404B4"
-        },
-        Mudslide: {
-            //brown
-            fillColor: "#7A4444"
-        },
-        Landslide: {
-            //red
-            fillColor: "#E92222"
-        }
-    }
-    // Change this depending on the name of your PHP file
-    var dateTo = $("#dateTo").val().replace(/-/g,'');
-    var dateFrom = $("#dateFrom").val().replace(/-/g,'');
-    downloadUrl("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data)  {
-
-        var xml = data.responseXML;
-        //console.log(xml);
-        var polygons = xml.documentElement.getElementsByTagName("polygons")[0].getElementsByTagName("polygon");
-
-
-        //empty the Polygon array first
-        emptyArray(polygonsArray1);
-        console.log("polygons count: " + polygons.length);
-        //initialize the div for the list in the sidebar
-        //and empty the output string to fill with fresh values
-
-        for (var polygonIndex = 0; polygonIndex < polygons.length; polygonIndex++) {
-
-            //Extract all the elements needed for the sidebar(incident details)
-            var incident_report_id = polygons[polygonIndex].getAttribute("incident_report_id");
-            var disaster_type = polygons[polygonIndex].getAttribute("disaster_type");
-
-            console.log("DISASTER TYPE: " + disaster_type);
-
-            //============DECLARE VARIABLES=============
-            console.log("FILTERMENU2 VALUE : " + document.filterForm2.filterMenu2.value)
-            if (document.filterForm2.filterMenu2.value != 'null')
-            {
-
-                //console.log("inside if statement");
-                if (filterValue === disaster_type)
-                {
-
-                    var coordinates = [];
-                    var myPolygon;
-
-                    var center;
-                    var id;
-
-
-                    var points = polygons[polygonIndex].getElementsByTagName("point");
-                    //======EXTRACT MULTIPLE POINTS======
-                    for (var j = 0; j < points.length; j++)
-                    {
-                        var point = new google.maps.LatLng(
-                                parseFloat(points[j].getAttribute("lat")),
-                                parseFloat(points[j].getAttribute("lng")));
-                        coordinates[j] = point;
-                    }
-
-                    center = calculateCenter(coordinates);
-
-                    var polyOptions = {
-                        paths: coordinates,
-                        strokeColor: polygonColor[disaster_type],
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                        fillColor: polygonStroke[disaster_type],
-                        fillOpacity: 0.35,
-                        center: center
-                    };
-
-                    myPolygon = new google.maps.Polygon(polyOptions);
-
-                    //BIND POLYGON DETAILS TO SIDEBAR HERE
-                    bindPolygonToSidePanel(map, myPolygon, center, incident_report_id);
-                    appendToList(myPolygon, incident_report_id, center, polygons[polygonIndex]);
-
-                    myPolygon.setMap(map);
-
-                }
-                else {
-
-                    //polygonsArray1.push(myPolygon);                        
-                }
-
-            } else {
-                var coordinates = [];
-                //var bounds = new google.maps.LatLngBounds();
-                var myPolygon;
-                var center;
-                var id;
-                var points = polygons[polygonIndex].getElementsByTagName("point");
-
-                var polygonsArray2 = new Array();
-
-                //======EXTRACT MULTIPLE POINTS======
-                for (var j = 0; j < points.length; j++)
-                {
-                    var point = new google.maps.LatLng(
-                            parseFloat(points[j].getAttribute("lat")),
-                            parseFloat(points[j].getAttribute("lng")));
-                    coordinates[j] = point;
-                    //bounds.extend(point);
-                }
-
-                //console.log( "CALCULATED CENTER: "+calculateCenter(coordinates));
-                center = calculateCenter(coordinates);
-
-                var polyOptions = {
-                    paths: coordinates,
-                    strokeColor: polygonColor[disaster_type],
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    fillColor: polygonStroke[disaster_type],
-                    fillOpacity: 0.35
-                }
-
-                myPolygon = new google.maps.Polygon(polyOptions);
-
-                //APPEND THE POLYGON DETAILS TO SIDEBAR HERE
-                bindPolygonToSidePanel(map, myPolygon, center, incident_report_id);
-                appendToList(myPolygon, incident_report_id, center, polygons[polygonIndex]);
-
-                myPolygon.setMap(map);
-
-            }
+            //console.log("marker loop reached here");
+            bindMarkerToSidePanel(marker);
+            //appendToList(marker, id, point, markers[i]);
+            marker.setMap(map);
 
         }
     });
 
 }
 
-function filterMarker() {
 
-
-    var filterValue = document.filterForm2.filterMenu2.value;
-    console.log("filter marker called");
-
-    initializeMap();
-    clearIncidentList();
-
-    var customIcons = {
-        Flashflood: {
-            icon: 'icons/flood.png',
-            shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
-        },
-        Mudslide: {
-            icon: 'icons/earthquake.png',
-            shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
-        },
-        Landslide: {
-            icon: 'icons/earthquake.png',
-            shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
-        }
-
-    };
-
-    // Change this depending on the name of your PHP file
-    var dateTo = $("#dateTo").val().replace(/-/g,'');
-    var dateFrom = $("#dateFrom").val().replace(/-/g,'');
-    downloadUrl("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data)  {
-        var xml = data.responseXML;
-        var markers = xml.documentElement.getElementsByTagName("markers")[0].getElementsByTagName("marker");
-        var loopCount = 0;
-        console.log("markers count: "+markers.length);
-        for (var i = 0; i < markers.length; i++) {
-
-            var id = markers[i].getAttribute("incident_report_id");
-            var disaster_type = markers[i].getAttribute("disaster_type");
-
-            if (document.filterForm2.filterMenu2.value != 'null')
-            {
-                //console.log("inside if statement");
-                if (filterValue === disaster_type)
-                {
-                    var icon = customIcons[disaster_type] || {};
-                    var point = new google.maps.LatLng(
-                            parseFloat(markers[i].getAttribute("lat")),
-                            parseFloat(markers[i].getAttribute("lng")));
-
-                    var markerOptions = {
-                        position: point,
-                        icon: icon.icon,
-                        shadow: icon.shadow
-                    };
-
-                    var marker = new google.maps.Marker(markerOptions);
-                    bindMarkerToSidePanel(map, marker, point, id);
-                    appendToList(marker, id, point, markers[i]);
-
-                    marker.setMap(map);
-
-                }
-            } else {
-
-                var icon = customIcons[disaster_type] || {};
-                var point = new google.maps.LatLng(
-                        parseFloat(markers[i].getAttribute("lat")),
-                        parseFloat(markers[i].getAttribute("lng")));
-
-                var markerOptions = {
-                    position: point,
-                    icon: icon.icon,
-                    shadow: icon.shadow
-                };
-
-                var marker = new google.maps.Marker(markerOptions);
-
-                bindMarkerToSidePanel(map, marker, point, id);
-                appendToList(marker, id, point, markers[i]);
-
-                marker.setMap(map);
-
-            }
-        }
-
-    });
-}
-
-function appendToList(mapElement, id, center, markerDetails) {
+function appendToList(mapElement) {
 
     //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
     //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
     //console.log("append to list started here with id");
 
-    var div = document.getElementById('incidentList');
-    var listItem;
-    listItem += "<div class=\"accordion\" id=\"accordion" + id + "\">";
+    
+    var listItem="";
+    listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
-    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + id + "\" href=\"#collapse" + id + "\" style= \"display: inline-block; width: 330px;\">" + markerDetails.getAttribute("disaster_type") + "</a>";
+    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\">" + mapElement.disasterType + "</a>";
     //place icon-links here [show details]
-    listItem += "<a class= \"show-details-btn\"  data-id=\"" + id + "\"><i class= \"icon-eye-open icon-white\" data-mapElement=" + mapElement + " data-id=\"" + id + "\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayDetails(this);\"> </i></a>"; // show details icon
+    listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayDetails("+mapElement.id+","+mapElement.arrId+");\"> </i></a>"; // show details icon
     //end div
     listItem += "</div>";
-    listItem += "<div id=\"collapse" + id + "\" class=\"accordion-body collapse in\">";
+    listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
     listItem += "<div class=\"accordion-inner\">";
-    listItem += "<p class=\"list-group-item-text\">Description :" + markerDetails.getAttribute("incident_description") + "<br> Date:" + markerDetails.getAttribute("incident_date") + "<br> Location: " + markerDetails.getAttribute("location_address") + "</p>";
+    listItem += "<p class=\"list-group-item-text\">Description :" + mapElement.incidentDescription + "<br> Date:" + mapElement.incidentDate + "<br> Location: " + mapElement.location + "</p>";
     listItem += "</div></div></div>";
 
     //append to the list
+    var div = document.getElementById('incidentList');
+    console.log(div);
     div.innerHTML = div.innerHTML + listItem;
 
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
 }
 
 function backToList() {
+    console.log(">>>>---backToList invoked---<<<<<");
     $(".subBreadCrumb").remove();
     $("#tabbable").hide("fast");
     $("#incidentList").show("fast");
@@ -554,13 +370,14 @@ function clearIncidentList() {
     document.getElementById('incidentList').innerHTML = "";
 }
 
-function displayDetails(element) {
+function displayDetails(incident_report_id, arrId) {
 
     console.log('sdb-clicked');
     $("#incidentList").hide("fast");
     $("#table-rows-victims").removeData("fast");
-    var incident_report_id = element.getAttribute("data-id");
+    openSideBar();
     var dataStr = 'id=' + incident_report_id;
+    console.log("incident report id = "+incident_report_id);
 
 
     /* Send the data using post and put results to the members table */
@@ -642,7 +459,7 @@ function displayDetails(element) {
         }
     });
 
-
+    map.setCenter(mapElements[arrId].center);
 
 }
 
@@ -659,7 +476,7 @@ function displayDetailsFromMap(incident_report_id)
 {
 
     console.log('displayDetails invoked with id');
-
+    $(".subBreadCrumb").remove();
     $("#incidentList").hide("fast");
     openSideBar();
 
@@ -668,7 +485,7 @@ function displayDetailsFromMap(incident_report_id)
     var dataStr = 'id=' + incident_report_id;
 
 
-    /* Send the data using post and put results to the members table */
+     /* Send the data using post and put results to the members table */
     request = $.ajax({
         url: "http://localhost/icdrris/Incident/incidentTitle",
         type: "POST",
@@ -682,12 +499,16 @@ function displayDetailsFromMap(incident_report_id)
             } else {
                 console.log("success pa jud title");
                 $("#incident-title").html(msg);
+                $("#li0").after('<li><a class="subBreadCrumb">' + msg + '</a></li>');
+                $("#victims-tab, #details-tab, #overview-li, #editinfo-li, #delete-li, #displaychart-li, #victimslist-li, #reportvictim-li").attr("data-incidentid", incident_report_id);
+                $("#tabbable").show("slow");
             }
         },
         error: function() {
             console.log("system error oy!");
-            //console.log(values);
+            console.log(values);
             $("#incident-title").html("Sorry, system error.");
+            $("#tabbable").show("slow");
         }
     });
 
@@ -702,21 +523,46 @@ function displayDetailsFromMap(incident_report_id)
             if (msg == 'error') {
                 console.log("naay mali sa query getIncidentDetails doy.\n ");
                 $("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
+                $("#tabbable").show("slow");
             } else {
                 console.log("success pa jud");
                 $("#incident-information").html(msg);
+                $("#tabbable").show("slow");
             }
         },
         error: function() {
             console.log("system error oy!");
             console.log(values);
             $("#incident-information").html("Sorry, system error.");
+            $("#tabbable").show("slow");
         }
     });
 
-
-    $("#tabbable").show("slow");
-    console.log("#tabbable invoked to show");
+    /* Send the data using post and put results to the members table */
+    request = $.ajax({
+        url: "http://localhost/icdrris/Victim/viewAllVictims",
+        type: "POST",
+        data: dataStr,
+        success: function(msg) {
+            console.log("success");
+            //console.log(msg);
+            if (msg == 'error') {
+                console.log("naay mali sa query getIncidentDetails doy.\n ");
+                $("#tabbable").show("slow");
+                $("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
+            } else {
+                console.log("success pa jud");
+                $("#tabbable").show("slow");
+                $("#table-rows-victims").html(msg);
+            }
+        },
+        error: function() {
+            console.log("system error oy!");
+            console.log(values);
+            $("#tabbable").show("slow");
+            $("#table-rows-victims").html("Sorry, system error.");
+        }
+    });
 
 }
 

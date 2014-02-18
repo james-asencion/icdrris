@@ -1,40 +1,87 @@
     </div>
         
         <div id="controls" style="display:block">
+            <div id="elementBoxes">
             <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm1">
                     <div class="center" align="center"><p>View Incidents by:</p>   
-                            <select class="span2" name="filterMenu1" onChange="filterReports()">
-                                    <option value='null'></option>
-                                    <option value='Marker'> <i class = "icon-map-marker"></i>  Marker</option>
-                                    <option value='Polygon'>Polygon</option>
-                            </select>
-                    </div> 
+                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                              Select Elements
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Marker
+                                  </label>
+                              </li>
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Polygon
+                                  </label>
+                              </li>                                                                                                                      
+                          </ul>
+                      </div> 
                 </form>
             </div>
             <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm2">
                     <div class="center" align="center"><p>Filter Incidents:</p>   
-                        <select class="span2" name="filterMenu2" onChange="filterReports()">
-                                <option value='null'></option>
-                                <option value='Flashflood'>Flashflood</option>
-                                <option value='Landslide'>Landslide</option>
-                                <option value='Mudslide'>Mudslide</option>
-                        </select>
+                      <div class="dropdown">
+                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                              Select Disaster Type
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Flashflood
+                                  </label>
+                              </li>
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Tsunami
+                                  </label>
+                              </li>  
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Landslide
+                                  </label>
+                              </li>
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Mudslide
+                                  </label>
+                              </li>
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Infrastructure Damage
+                                  </label>
+                              </li>                                                                                                                    
+                          </ul>
+                      </div>
                     </div>
                 </form>
             </div>
+          </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm3">
                     <div class="center" align="center"><p>Date To:</p>   
-                        <input id="dateTo" type = "date" name = "birthdate" class = "span2" value="<?php echo date('Y-m-d'); ?>" />
+                        <input id="dateTo" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMarkersPolygons()"/>
                     </div>
                 </form>
             </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm4">
                     <div class="center" align="center"><p>Date From:</p>   
-                       <input id="dateFrom" type = "date" name = "birthdate" class = "span2" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>"/>
+                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMarkersPolygons()"/>
                     </div>
                 </form>
             </div>
@@ -55,24 +102,7 @@
 					<!-- LIST OF INCIDENTS -->
 						<div class = "span12" id="incidentList"></div>
 					<!-- end LIST OF INCIDENTS -->
-					
-					<!-- PAGINATION --INSIDE INCIDENTLIST DIV
-						<div id= "pagination" class="pagination">
-							<ul>
-							  <li class="disabled"><a href="#">&laquo;</a></li>
-							  <li class="active"><a href="#">1</a></li>
-							  <li><a href="#">2</a></li>
-							  <li><a href="#">3</a></li>
-							  <li><a href="#">4</a></li>
-							  <li><a href="#">5</a></li>
-							  <li><a href="#">&raquo;</a></li>
-							</ul>
-						</div> 
-					-->
-						<?php //echo $links; ?>
-						<?php //echo $links; ?>
-						<?php //echo $total_rows; ?>
-					<!-- end PAGINATION -->
+
 					
 					
 					<!-- DISPLAY DETAILS DIV -->

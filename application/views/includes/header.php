@@ -12,16 +12,22 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
+
+
 		
 		<!--<script type="text/javascript" src="<?php echo base_url();?>js/jquery.js"></script>-->
          <!--
 		<script src="<?php //echo base_url();?>application/views/js/dropdown.js"></script>
 		<script src="<?php //echo base_url();?>application/views/js/polygonScript.js"></script>
+		<script src="<?php //echo base_url();?>application/views/js/polygonScript.js"></script>
 		<script src="<?php //echo base_url();?>application/views/js/markerScript.js"></script>
 		<script src="<?php //echo base_url();?>application/views/js/verify.js"></script>-->
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/bootstrap.min.js"></script>
+
 		
 		<link href="<?php echo base_url();?>css/bootstrap.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
