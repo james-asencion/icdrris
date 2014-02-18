@@ -44,14 +44,14 @@ $reportNum = $mysqli->insert_id;
 console.log($query1);
 
 $query3 = "INSERT INTO incident_location ".
-                " (incident_report_id, incident_location_id, incident_intensity, lat, lng, polygon)".
+                " (incident_report_id,location_id, incident_intensity, lat, lng, polygon, flag_confirmed, flag_true_rating, flag_false_rating)".
                 "VALUES ('$reportNum',2,3,8.228021,124.245242,
-                 PolygonFromText('$polygon'));";
+                 PolygonFromText('$polygon'), FALSE, 0, 0);";
 
 $result3 = $mysqli->query($query3);
 
 
 
 if((!$result3)){
-    die('Invalid query: '.mysql_error());
+    die('Invalid query: '.$mysqli->error);
 }
