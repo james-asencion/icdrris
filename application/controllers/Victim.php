@@ -62,9 +62,9 @@ class Victim extends CI_Controller
 										<td>'.$first_name.' '.$middle_name.' '.$last_name.'</td>
 										<td>'.$victim_status.'</td>
 										<td>
-												<a href="#" class="approved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
-												<a href="#" class="disapproved-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" > </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
-												<a href="#" class="details-victim" data-toggle="popover" title="" data-content="Hello there.\n How are you?" data-original-title="A Title"><i class="icon-white icon-info-sign" title="Show Details"> </i> </a><span class="divider"> | </span>
+												<a href="#" id="approved-victim" data-upordown = "rateTrue" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report" onclick= "rateVictim(this)"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
+												<a href="#" id="disapproved-victim" data-upOrDown = "rateFalse" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" onclick= "rateVictim(this)"> </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
+												<a href="#" class="details-victim" data-incidentid= "'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-address="'.$address.'" data-victimstatus="'.$victim_status.'" data-flagconfirmed="'.$flag_confirmed.'" data-ratingtrue="'.$report_rating_true.'" data-ratingfalse="'.$report_rating_false.'"><i class="icon-white icon-info-sign" title="Show Details" onclick="detailsVictim(this);"> </i> </a><span class="divider"> | </span>
 												<a href="#" class="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-address="'.$address.'" data-victimstatus="'.$victim_status.'"><i class="icon-white icon-edit" title="Edit Victim" onclick="editVictim(this);"> </i> </a><span class="divider"> | </span>
 												<a href="#" class="delete-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-trash" title="Delete Report" onclick="deleteVictim(this);"> </i> </a><span class="divider"> | </span>
 										</td>
@@ -90,12 +90,12 @@ class Victim extends CI_Controller
 	function done($data){
         $this->load->view('forms/victimReport', $data);
     }
-    
+  /**  
     function success(){
         $data['succ_message']= 'Your report is sent.';
         $this->load->view('forms/victimReport', $data); 
     }
-    
+  */  
     function validate(){
         
         $this->form_validation->set_rules('reportNo','Incident No','trim|required');
@@ -120,23 +120,24 @@ class Victim extends CI_Controller
                 
                 $query=$this->VictimModel->reportVictim($fname, $mname, $lname, $address, $victim_status, $reportNo);
                 if($query){
-                   redirect('Victim/success');
+                   //redirect('Victim/success');
+				   echo "success";
                 }
                 else{   //$query == false
-                    $data['err_message'] = 'Something is wrong with the data input.';
-                  
+                    //$data['err_message'] = 'Something is wrong with the data input.';
+                  echo "query failed.";
                 }
             }
             else{   // error $this->$victimModel->validate
-                $data['err_message']= 'The victim is already reported.';
-               
+                // $data['err_message']= 'The victim is already reported.';
+               echo "the victim is already reported.";
             }
         }
         else{   //form_validation_run == false
-              $data['err_message']= '';
-           
+              //$data['err_message']= '';
+				echo " validation error";
         }
-          $this->done($data);
+          //$this->done($data);
     }   //end of validate()
     
 	/**
@@ -215,5 +216,26 @@ class Victim extends CI_Controller
             echo $query_result;
         }
     }
+	
+	function rateUpOrDown(){
+		$incident_report_id = $this->input->post('incident_report_id');
+		$victim_id = $this->input->post('victim_id');
+		$upOrDown = $this->input->post('upOrDown');
+		
+		$status = "false";
+		$updateRecords = 0;
+		
+		if($upOrDown == 'rateTrue'){
+			$updateRecords= $this->VictimModel->updateUpRate($incident_report_id, $victim_id);
+		}
+		if($upOrDown == 'rateFalse'){
+			$updateRecords= $this->VictimModel->updateDownRate($incident_report_id, $victim_id);
+		}
+		
+		if($updateRecords > 0){
+			$status = "true";
+		}
+		echo $status;
+	}
 }
 
