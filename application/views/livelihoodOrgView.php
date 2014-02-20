@@ -1,29 +1,45 @@
     </div>
 </div>
-<div id="container">
  <div class="well offset5 span 6">
  <h3>Livelihood Organization</h3> 
-	Name: &nbsp;&nbsp;<?php echo $livelihood_org->livelihood_organization_name; ?><br>Address: &nbsp;&nbsp;<?php echo $livelihood_org->livelihood_organization_address; ?>
-        <br>Members: &nbsp;&nbsp;<?php echo $livelihood_org->no_of_members; ?>&nbsp;&nbsp;&nbsp;&nbsp;<br>Initial Income: &nbsp;&nbsp;<?php echo $livelihood_org->initial_income;?>
-        <br>Status: &nbsp;&nbsp;<?php echo $livelihood_org->livelihood_organization_status; ?>&nbsp;&nbsp;&nbsp;&nbsp;<br>Date Established: &nbsp;&nbsp;<?php echo $livelihood_org->date_established; ?>
-        <br>Business Activity Type: &nbsp;&nbsp;<?php echo $livelihood_org->business_activity_type; ?>
+	Name: &nbsp;&nbsp;<?php foreach($livelihood_org as $org){ echo $org->livelihood_organization_name; ?><br>Address: &nbsp;&nbsp;<?php echo $org->livelihood_organization_address; ?>
+        <br>Members: &nbsp;&nbsp;<?php echo $org->no_of_members; ?>&nbsp;&nbsp;&nbsp;&nbsp;<br>Initial Income: &nbsp;&nbsp;<?php echo $org->initial_income;?>
+        <br>Status: &nbsp;&nbsp;<?php echo $org->livelihood_organization_status; ?>&nbsp;&nbsp;&nbsp;&nbsp;<br>Date Established: &nbsp;&nbsp;<?php echo $org->date_established; ?>
+        <br>Business Activity Type: &nbsp;&nbsp;<?php echo $org->business_activity_type; }?>
         <br><br>
 </div>
 
-<div class = "well offset3 span12">
-</div>
 <div></div>
 <br></br>
 
-<div class = "well offset3 span12">
+<div class = "well offset1 span11">
 <div id="membersTable">
-    <h4>Livelihood Organization Members</h4>;
-    <table class="table table-striped">
+    <h4>Livelihood Organization Members</h4>
+
+            <div style="float: right; margin-bottom: 10px">
+                <button class="btn edit"><i class="icon-pencil"></i>edit</button>
+                <button class="btn btn-success btn-small hide">Done Editing</button> 
+            </div>
+
+
+
+    <table id="members" class="table table-striped">
     <tr><th>First Name</th><th>Middle Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Age</th><th>Monthly Income</th><th>Source of income</th><th>Civil Status</th><th>Number of Children</th><th>Actions</th></tr>
-    <? foreach ($members as $member) {
-                echo "<tr><td>".$member->first_name."</td><td>".$member->middle_name."</td><td>".$member->last_name."</td><td>".$member->sex."</td><td>".$member->birthday."</td><td>".$member->age."</td><td>".$member->monthly_income."</td><td>".$member->source_of_income."</td><td>".$member->civil_status."</td><td>".$member->no_of_children."</td><td><a align=\"center\" href=localhost/icdrris/Livelihood/deleteMember?id=".$member->member_id."</a></td></tr>";
+    <?php foreach ($members as $member) {
+                echo "<tr>
+                <td><a href=\"#\" id=\"first_name\" data-name\"first_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter First Name\">".$member->first_name."</a></td>
+                <td><a href=\"#\" id=\"middle_name\" data-name\"middle_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Middle Name\">".$member->middle_name."</a></td>
+                <td><a href=\"#\" id=\"last_name\" data-name\"last_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Last Name\">".$member->last_name."</a></td>
+                <td><a href=\"#\" id=\"sex\" data-name\"sex\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Sex\">".$member->sex."</a></td>
+                <td><a href=\"#\" id=\"birthday\" data-name\"birthday\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Birthday\">".$member->birthday."</a></td>
+                <td><a href=\"#\" id=\"age\" data-name\"age\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Age\">".$member->age."</a></td>
+                <td><a href=\"#\" id=\"monthly_income\" data-name\"monthly_income\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Monthly Income\">".$member->monthly_income."</a></td>
+                <td><a href=\"#\" id=\"source_of_income\" data-name\"source_of_income\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Source of Income\">".$member->source_of_income."</a></td>
+                <td><a href=\"#\" id=\"civil_status\" data-name\"civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Civil Status\">".$member->civil_status."</a></td>
+                <td><a href=\"#\" id=\"no_of_children\" data-name\"no_of_children\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter No of children\">".$member->no_of_children."</a></td>
+                <td><a align=\"center\" href=localhost/icdrris/Livelihood/deleteMember?id=".$member->member_id."</a></td></tr>";
     } ?>  
-    </table>;
+    </table>
 </div>
 </div>
 <div id="modal-delete" class="modal hide fade">

@@ -116,14 +116,17 @@ class Livelihood extends CI_Controller
            echo "Fail: ".$query;
         }
     }
-    function viewLivelihoodOrg($id){
+    function viewLivelihoodOrganization(){
         //query for the data
-        $data['livelihood_org'] = $this->LivelihoodModel->getLivelihoodOrg($id);
-        $data['members'] = $this->LivelihoodModel->getAllMembers($id);
-            
+        $get = $this->uri->uri_to_assoc();
+        //echo $get['id'];
+        $data['livelihood_org'] = $this->LivelihoodModel->getLivelihoodOrg($get['id']);
+        $data['members'] = $this->LivelihoodModel->getAllMembers($get['id']);
+          
+        //echo count($data['livelihood_org']);
         //pass the query results to the view
         $this->load->view('includes/header');
-        $this->load->view('livelihoodOrganizationsView',$data);
+        $this->load->view('livelihoodOrgView',$data);
         $this->load->view('includes/footer');        
     }
     function viewAllLivelihoodOrgs(){
@@ -139,6 +142,30 @@ class Livelihood extends CI_Controller
     function deleteOrganization(){
         $result = $this->LivelihoodModel->deleteOrganization($this->input->post('org_id'));
         echo $result;
+    }
+    function testEditable(){
+         $result = $this->LivelihoodModel->updateMemberEditable($this->input->post('pk'), $this->input->post('name'), $this->input->post('value'));
+         if($result){
+            echo "can be any string";
+         }
+         else{
+            header('HTTP 400 Bad Request', true, 400);
+            echo "error encountered";
+         }
+         //else{
+            //echo "error encountered";
+            //$a = array("username"=>"username already exist");
+            //$arr = array("errors"=>$a);
+            //$responseData = json_encode($arr);
+            //echo $responseData;
+            //header('HTTP 400 Bad Request', true, 400);
+            //echo "error encountered";
+            //{"errors": {"username": "username already exist"} }
+            //$responseData = json_encode("{success:false, message:'server error'}");
+            
+            //echo "Error in Query".$this->input->post('pk');
+         //}
+        
     }
 
 

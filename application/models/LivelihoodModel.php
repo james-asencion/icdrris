@@ -52,12 +52,12 @@ class LivelihoodModel extends CI_Model{
 		$member_id = $this->db->insert_id();
 		$organization_id = $data['org_id'];
 
-		$query2 = $this->db->query("INSERT INTO recipient_org_org_members(livelihood_organization_id, member_id) VALUES ('$organization_id', '$member_id')");
+		$query2 = $this->db->query("INSERT INTO recipient_org_members(livelihood_organization_id, member_id) VALUES ('$organization_id', '$member_id')");
 		
 		$query3 = $this->db->query("SELECT s1.member_id, s2.first_name, s2.last_name, s2.middle_name, s2.sex, s2.birthday,s2.age, s2.monthly_income, s2.source_of_income, s2.civil_status, s2.no_of_children
 									FROM    
 									(SELECT member_id
-									          FROM recipient_org_org_members 
+									          FROM recipient_org_members 
 									          WHERE livelihood_organization_id='$organization_id') s1
 
 									LEFT JOIN 
@@ -91,7 +91,7 @@ class LivelihoodModel extends CI_Model{
 	function getAllMembers($id){
 		$query = $this->db->query("	SELECT m.member_id, m.first_name, m.last_name, m.middle_name, m.sex, m.birthday, m.age, m.monthly_income, m.source_of_income, m.civil_status, m.no_of_children 
 									FROM livelihood_organization_members m 
-									LEFT JOIN recipient_org_org_members r
+									LEFT JOIN recipient_org_members r
 									ON r.member_id = m.member_id 
 									WHERE r.livelihood_organization_id = '$id';");
 		return $query->result();
@@ -122,6 +122,20 @@ class LivelihoodModel extends CI_Model{
 
 		return $query->result();
 
+	}
+	function updateMemberEditable($id, $name, $value){
+		$data = array(
+               $name => $value,
+            );
+
+		$this->db->where('member_id', $id);
+		$query = $this->db->update('livelihood_organization_members', $data); 
+		if($query){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 }
 ?>
