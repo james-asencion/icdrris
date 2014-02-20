@@ -8,8 +8,25 @@
  */
 
 //VICTIM REPORT FORM
-
 ?>
+<?php $this->load->view('includes/header');?>
+
+</div></div>
+
+<div class = "row-fluid">
+	<div class = "span3"></div>
+	<div class = "span6">
+	
+	<h1>Report Victim</h1>
+	<br>
+<!--
+<html>
+<head>
+    <title> Report Victim Form </title>
+</head>
+<body>
+-->
+<?php echo form_open('Victim/validate');?>
 
     <?php  if((function_exists('validation_errors') && validation_errors() != '') || isset($err_message)){?>
                 <div class="alert alert-error" >  
@@ -33,32 +50,38 @@
                 </div> 
     <?php } ?>
 
+                <div class = "row-fluid">
+                    <strong>Choose Incident</strong><br>
+                    <?php 
+                    $reportNoProperties=array('type'=>'text','class'=>'span8','name'=>'reportNo', 'value'=>set_value('reportNo'));
+                    echo form_input($reportNoProperties);?>
+		</div>
     
                 <div class = "row-fluid">
                     <strong>First Name</strong><br>
                     <?php 
-                            $fNameProperties=array('type'=>'text','class'=>'span8','id'=>'first_name','name'=>'first_name', 'value'=>set_value('first_name'));
+                            $fNameProperties=array('type'=>'text','class'=>'span8','name'=>'first_name', 'value'=>set_value('first_name'));
                             echo form_input($fNameProperties);?>
 		</div>
 
                 <div class = "row-fluid">
 		<strong>Middle Name</strong><br>
 		<?php 
-			$mNameProperties=array('type'=>'text','class'=>'span8','id'=>'middle_name' ,'name'=>'middle_name', 'value'=>set_value('middle_name'));
+			$mNameProperties=array('type'=>'text','class'=>'span8','name'=>'middle_name', 'value'=>set_value('middle_name'));
 			echo form_input($mNameProperties);?>
 		</div>
 
 		<div class = "row-fluid">
 		<strong>Last Name</strong><br>
 		<?php 
-			$lNameProperties=array('type'=>'text','class'=>'span8', 'id'=>'last_name', 'name'=>'last_name','value'=>set_value('last_name'));
+			$lNameProperties=array('type'=>'text','class'=>'span8','name'=>'last_name','value'=>set_value('last_name'));
 			echo form_input($lNameProperties);?>
 		</div>
 
 		<div class = "row-fluid">
 		<strong>Address</strong><br>
 		<?php 
-			$addressProperties=array('type'=>'text','class'=>'span8','id'=>'address', 'name'=>'address', 'value'=>set_value('address'));
+			$addressProperties=array('type'=>'text','class'=>'span8','name'=>'address', 'value'=>set_value('address'));
 			echo form_input($addressProperties);?>
 		</div>
                 <div class = "row-fluid">
@@ -71,13 +94,16 @@
                             'missing'   => 'Missing',
                             'injured' => 'Injured',
                           );
-			$vstatProperties=array('id'=>'victim_status');
+			$vstatProperties=array(set_value('victim_status'));
 			echo form_dropdown('victim_status', $vstat_options, $vstatProperties);?>
 		</div>
-		<!--<div class = "row-fluid">
-		<?php /**
+		<div class = "row-fluid">
+		<?php
 			$buttonProperties=array('type'=>'submit','class'=>'btn btn-primary','name'=>'victim_report','value'=>'Submit Report');
 			echo form_submit($buttonProperties);
-			*/
 		?>
-		</div> -->
+		</div>
+
+
+
+<?php $this->load->view('includes/footer');?>
