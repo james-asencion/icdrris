@@ -1,18 +1,26 @@
     </div>
 </div>
- <div class="well offset5 span 6">
- <h3>Livelihood Organization</h3> 
-	Name: &nbsp;&nbsp;<?php foreach($livelihood_org as $org){ echo $org->livelihood_organization_name; ?><br>Address: &nbsp;&nbsp;<?php echo $org->livelihood_organization_address; ?>
-        <br>Members: &nbsp;&nbsp;<?php echo $org->no_of_members; ?>&nbsp;&nbsp;&nbsp;&nbsp;<br>Initial Income: &nbsp;&nbsp;<?php echo $org->initial_income;?>
-        <br>Status: &nbsp;&nbsp;<?php echo $org->livelihood_organization_status; ?>&nbsp;&nbsp;&nbsp;&nbsp;<br>Date Established: &nbsp;&nbsp;<?php echo $org->date_established; ?>
-        <br>Business Activity Type: &nbsp;&nbsp;<?php echo $org->business_activity_type; }?>
-        <br><br>
+<div class = "container-fluid">
+<!--<div class = "row-fluid">-->
+ <div class="well offset2 span7">
+ <h2>Livelihood Organization</h2>
+ <div class = "row-fluid">
+ <div class = "span4">
+	Name: <?php foreach($livelihood_org as $org){ echo $org->livelihood_organization_name; ?>
+    <br>Address: <?php echo $org->livelihood_organization_address; ?>
+    <br>Members: <?php echo $org->no_of_members; ?></div>
+    <div class = "span4">
+    Initial Income: <?php echo $org->initial_income;?>
+    <br>Status: <?php echo $org->livelihood_organization_status; ?></div>
+    <div class = "span4">
+    Date Established: <?php echo $org->date_established; ?>
+    <br>Business Activity Type: <?php echo $org->business_activity_type; }?></div></div>
+    
 </div>
 
-<div></div>
-<br></br>
 
-<div class = "well offset1 span11">
+
+<div class = "well span12">
 <div id="membersTable">
     <h4>Livelihood Organization Members</h4>
 
@@ -42,12 +50,14 @@
     </table>
 </div>
 </div>
+<!--</div>-->
+</div>
 <div id="modal-delete" class="modal hide fade">
     <div class="modal-body">
         <p>Are you sure want to delete this organization?</p>
     </div>
     <div class="modal-footer">
-        <a href="deleteLivelihoodOrg?id=" class="btn danger">Yes</a>
+        <a href="deleteResOrg?id=" class="btn danger">Yes</a>
         <a href="javascript:$('modal-delete').modal('hide')" class="btn secondary">No</a>
     </div>
 </div>

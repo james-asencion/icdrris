@@ -8,7 +8,7 @@ $('.confirm-delete').on('click', function(e){
 
 	var id = $(this).data('id');
 	var organizationName = $(this).data('name');
-	console.log(organizationName);7
+	console.log(organizationName);
 	$('#modalDelete').data('id',id);
 	$('#modalDelete .modal-body').html("<p>Are you sure you want to delete: "+organizationName+" </p>");
 	$('#modalDelete').modal('show');
@@ -39,6 +39,50 @@ $('#btnYes').click(function(){
 
 	});
 });
+
+
+//Response Organization
+
+$('.confirm-deleteResOrg').on('click', function(e){
+	e.preventDefault();
+	console.log('clicked');
+
+	var id = $(this).data('id');
+	var organizationName = $(this).data('name');
+	console.log(organizationName);
+	$('#modalDeleteResOrg').data('id',id);
+	$('#modalDeleteResOrg .modal-body').html("<p>Are you sure you want to delete: "+organizationName+"</p>");
+	$('#modalDeleteResOrg').modal('show');
+});
+
+$('#modalDeleteResOrg').on('show.bs.modal', function(){
+	var id  = $(this).data('id'),
+		removeBtn = $(this).find('.danger');
+});
+
+$('#btnYesDeleteResOrg').click(function(){
+
+	var id = $('#modalDeleteResOrg').data('id');
+	console.log('this is the id->'+id);
+	var dataStr = 'org_id='+id;
+	$.ajax({
+		url: "http://localhost/icdrris/ResponseOrg/deleteOrganization",
+		type: "POST",
+		data: dataStr,
+		success: function(msg){
+			$('#modalDeleteResOrg').modal('hide');
+			window.location = "http://localhost/icdrris/ResponseOrg/viewAllResOrgs";		
+		},
+		error: function(msg){
+			console.log("something went wrong");
+			$('#modalDeleteResOrg .modal-body').html("<p>Opss..something went wrong</p>");
+			$('#modalDeleteResOrg').modal('show');
+		}
+
+	});
+});
+
+
 
 });
 

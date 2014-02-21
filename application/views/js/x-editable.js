@@ -179,6 +179,88 @@ $(document).ready(function() {
 			    }
 			}
     });
+    $('#ro_first_name').editable({
+    		disabled:true, 
+    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
+    		validate: function(value) {
+			    if($.trim(value) == '') {
+			        return 'This field is required';
+			    }
+			},
+    		error: function(response, newValue) {
+			    if(response.status === 500) {
+			        return 'Name already exists.';
+			    } else {
+			        return response.responseText;
+			    }
+			}
+    });
+
+     $('#ro_last_name').editable({
+    		disabled:true, 
+    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
+    		validate: function(value) {
+			    if($.trim(value) == '') {
+			        return 'This field is required';
+			    }
+			},
+    		error: function(response, newValue) {
+			    if(response.status === 500) {
+			        return 'Name already exists.';
+			    } else {
+			        return response.responseText;
+			    }
+			}
+    });
+
+         $('#ro_sex').editable({
+    		disabled:true, 
+    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
+    		validate: function(value) {
+			    if($.trim(value) == '') {
+			        return 'This field is required';
+			    }
+			},
+    		error: function(response, newValue) {
+			    if(response.status === 500) {
+			        return 'Name already exists.';
+			    } else {
+			        return response.responseText;
+			    }
+			}
+    });
+             $('#ro_birthday').editable({
+    		disabled:true, 
+    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
+    		validate: function(value) {
+			    if($.trim(value) == '') {
+			        return 'This field is required';
+			    }
+			},
+    		error: function(response, newValue) {
+			    if(response.status === 500) {
+			        return 'Name already exists.';
+			    } else {
+			        return response.responseText;
+			    }
+			}
+    });
+        $('#ro_civil_status').editable({
+    		disabled:true, 
+    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
+    		validate: function(value) {
+			    if($.trim(value) == '') {
+			        return 'This field is required';
+			    }
+			},
+    		error: function(response, newValue) {
+			    if(response.status === 500) {
+			        return 'Name already exists.';
+			    } else {
+			        return response.responseText;
+			    }
+			}
+    });
 
 	$('.edit').on('click', function(){
 	    $('#members').find('.btn-success').hide();

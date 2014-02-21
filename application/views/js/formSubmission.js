@@ -270,3 +270,50 @@ function detailsVictim(element){
 	});
 
 };
+
+//Add Response Organization Member
+$(document).ready(function(){
+
+$("#addMemberButton1").click(function(event)	{
+	/* Stop form from submitting normally */
+	//event.preventDefault();
+	console.log("addMemberButton1.click()");
+	/* get the values from the elements on the page */
+	//var values = $("addMemberForm").serialize();
+	var org_id = $("#ro_org_id").val();
+	var first_name = $("#ro_first_name").val();
+	var last_name = $("#ro_last_name").val();
+	var sex = $("#ro_sex").val();
+	var birthday = $("#ro_birthday").val();
+	var civil_status = $("#ro_civil_status").val();
+	var dataStr = 'org_id='+org_id+'&first_name='+first_name+'&last_name='+last_name+'&sex='+sex+'&birthday='+birthday+'&civil_status='+civil_status;
+
+	/* Send the data using post and put results to the members table */
+	request = $.ajax({
+		url: "http://localhost/icdrris/ResponseOrg/submitMember",
+		type: "POST",
+		data: dataStr,
+		success: function(msg){
+			//$("membersTable").html(msg);
+			console.log("success");
+			console.log(msg);
+			
+			$("#membersTable").html('');
+			$("#membersTable").html(msg);
+			$("#ro_first_name").val('');
+			$("#ro_last_name").val('');
+			$("#ro_sex").val('');
+			$("#ro_birthday").val('');
+			$("#ro_civil_status").val('');
+
+		},
+		error: function(){
+			console.log("fail");
+			console.log(values);
+			$("#membersTable").html(msg);
+		}
+	});
+
+
+	});
+});

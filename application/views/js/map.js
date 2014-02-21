@@ -85,9 +85,10 @@ function initializeMap() {
     directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
     //marker.setMap(map);
+
+   }
+
     
-    
-}
 
 function emptyArray(arr) {
     while (arr.length > 0) {
