@@ -95,6 +95,7 @@
             <div class = "span12">
              
 				<div id= "panel" class="panel" style="height: 95%;">
+
 					<!-- BREADCRUMBS -->
 						<ul class="breadcrumb" style="padding: 2px 15px;">
 								<li id="li0" onclick = "backToList()" ><a id="a-ListofIncidents"> List of Incidents</a> <span class="divider">/</span></li>
@@ -195,9 +196,9 @@
 						<div class="span4">Status: </div><div class="span8" id="victim_status"></div>
 					</div><br /> 
 					<div class= "row-fluid"><span class="span2"></span><center>
-						<button id="approved-victim" class="span3 btn btn-large alert-info" type="button" data-upordown = "rateTrue"  onclick="rateVictim(this)"><img src= "<?php echo base_url();?>img/glyphicons/png/glyphicons_343_thumbs_up.png" /><h4><div class="rateTrue" style="color: blue; display:inline-table;"> </div></h4></button>
+						<button id="approved-victim" class="span3 btn btn-large alert-info" type="button"><img id="iThumbsUp2" src= "<?php echo base_url();?>img/glyphicons/png/glyphicons_343_thumbs_up.png" /><h4><div class="rateTrue" style="color: blue; display:inline-table;"> </div></h4></button>
 						<span class="span1"></span>
-						<button id="disapproved-victim" class="span3 btn btn-large alert-error" type="button" data-upordown = "rateFalse"  onclick="rateVictim(this)"><img src= "<?php echo base_url();?>img/glyphicons/png/glyphicons_344_thumbs_down.png" /><h4><div class="rateFalse" style="color: red; display:inline-table;"> </div></h4></button>
+						<button id="disapproved-victim" class="span3 btn btn-large alert-error" type="button"><img id= "iThumbsDown2" src= "<?php echo base_url();?>img/glyphicons/png/glyphicons_344_thumbs_down.png" /><h4><div class="rateFalse" style="color: red; display:inline-table;"> </div></h4></button>
 					</center></div>
 					<br />
 					<div id="flag_confirmed"> </div>

@@ -33,7 +33,9 @@ class Victim extends CI_Controller
                             }else{
 
 
-                            echo '<table id="victimTable" class="table table-condensed " style="color:#cccccc;">
+                            echo '
+				
+		<table id="victimTable" class="table table-condensed " style="color:#cccccc;">
                                                     <caption><h4>List of Victims Reported</h4><br></caption>
                                                     <thead>
                                                       <tr>
@@ -56,14 +58,54 @@ class Victim extends CI_Controller
                                     $flag_confirmed = $row_victims->flag_confirmed;
                                     $report_rating_false = $row_victims->report_rating_false;
                                     $report_rating_true = $row_victims->report_rating_true;
+									
+									$ratedTrue= 1;
+									
+									$ratedFalse = 0;
+									
+								
 
-                            echo '    <tr>
+                            echo '   
+				<script type="text/javascript">
+					console.log("Inside script for localStorage check rateVictim to change icon color");
+				$(document).ready(function(){
+					console.log("Inside document ready function for localstorage check rateVictim to change icon color")
+					if(typeof(Storage)!=="undefined"){
+					
+						//get set var in localStorage
+						var rateClick= localStorage.getItem("'.$incident_report_id.$victim_id.'");
+						for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+								var name = localStorage.key(i);             // Get the name of pair i
+								var val = localStorage.getItem(name);             // Get the val of pair name
+								console.log("localstorage names: "+ name + " value: "+ val);    // Get the value of that pair
+							}
+						if (rateClick == "rateFalse"){
+							//if disapproved, retain thumbsdown color
+							$("#iThumbsDown'.$incident_report_id.$victim_id.'").css("background-color", "red");
+							console.log("Thumbs Down color red");
+						}
+					  if(rateClick == "rateTrue"){
+							//if approved,  retain thumbsup color
+							$("#iThumbsUp'.$incident_report_id.$victim_id.'").css("background-color", "green");
+							console.log("Thumbs up color green");
+					  }
+					
+					}
+					else{
+					  alert("Sorry, your browser does not support web storage...");
+					}
+				});
+				</script>
+				
+									<tr>
 										<td>'.(++$i).'</td>
 										<td>'.$first_name.' '.$middle_name.' '.$last_name.'</td>
 										<td>'.$victim_status.'</td>
 										<td>
-												<a href="#" id="approved-victim" data-upordown = "rateTrue" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-up" title="Confirm Report" onclick= "rateVictim(this)"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
-												<a href="#" id="disapproved-victim" data-upOrDown = "rateFalse" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i class="icon-white icon-thumbs-down" title="False Report" onclick= "rateVictim(this)"> </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
+												<a href="#" class="rateVictim" data-upordown="'.$ratedTrue.'" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i id="iThumbsUp'.$incident_report_id.$victim_id.'" class="icon-white icon-thumbs-up" title="Confirm Report" onclick= "rateVictim('.$incident_report_id.','.$victim_id.','.$ratedTrue.')"> </i></a> '.$report_rating_true.' <span class="divider"> | </span>
+											
+												<a href="#" class="rateVictim" data-upordown="'.$ratedFalse.'" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i id="iThumbsDown'.$incident_report_id.$victim_id.'" class="icon-white icon-thumbs-down" title="False Report" onclick= "rateVictim('.$incident_report_id.','.$victim_id.', '.$ratedFalse.')"> </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
+											
 												<a href="#" class="details-victim" data-incidentid= "'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-address="'.$address.'" data-victimstatus="'.$victim_status.'" data-flagconfirmed="'.$flag_confirmed.'" data-ratingtrue="'.$report_rating_true.'" data-ratingfalse="'.$report_rating_false.'"><i class="icon-white icon-info-sign" title="Show Details" onclick="detailsVictim(this);"> </i> </a><span class="divider"> | </span>
 												<a href="#" class="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-address="'.$address.'" data-victimstatus="'.$victim_status.'"><i class="icon-white icon-edit" title="Edit Victim" onclick="editVictim(this);"> </i> </a><span class="divider"> | </span>
 												<a href="#" class="delete-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-trash" title="Delete Report" onclick="deleteVictim(this);"> </i> </a><span class="divider"> | </span>
@@ -221,17 +263,13 @@ class Victim extends CI_Controller
 		$incident_report_id = $this->input->post('incident_report_id');
 		$victim_id = $this->input->post('victim_id');
 		$upOrDown = $this->input->post('upOrDown');
+		$actionType = $this->input->post('actionType');
 		
 		$status = "false";
 		$updateRecords = 0;
 		
-		if($upOrDown == 'rateTrue'){
-			$updateRecords= $this->VictimModel->updateUpRate($incident_report_id, $victim_id);
-		}
-		if($upOrDown == 'rateFalse'){
-			$updateRecords= $this->VictimModel->updateDownRate($incident_report_id, $victim_id);
-		}
-		
+		$updateRecords= $this->VictimModel->updateRate($incident_report_id, $victim_id, $upOrDown, $actionType);
+	
 		if($updateRecords > 0){
 			$status = "true";
 		}

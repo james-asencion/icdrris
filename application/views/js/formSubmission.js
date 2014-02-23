@@ -255,8 +255,12 @@ function detailsVictim(element){
 		$( "#modalDetailsVictim .rateTrue" ).html( document.createTextNode( report_rating_true) );
 		$( "#modalDetailsVictim .rateFalse" ).html( document.createTextNode( report_rating_false) );
 			
-			$( "#approved-victim, #disapproved-victim" ).attr( "data-victimid", victimid);
-			$( "#approved-victim, #disapproved-victim" ).attr( "data-incidentid", incidentid);
+		
+			
+			var funcApproved= "rateVictim("+incidentid+", "+victimid+ ", "+1+")";
+			var funcDisapproved= "rateVictim("+incidentid+", "+victimid+ ", "+0+")";
+			$( "#approved-victim" ).attr( "onclick", funcApproved);
+			$( "#disapproved-victim" ).attr( "onclick", funcDisapproved );
 		if(flag_confirmed == 0){
 			$( "#flag_confirmed" ).attr( "class", "span11 alert alert-error");
 			$( "#flag_confirmed" ).html( "The victim is still not confirmed.");
@@ -267,7 +271,45 @@ function detailsVictim(element){
 		}
 		console.log('passed the data to the modalDetailsVictim');
 		$('#modalDetailsVictim').modal('show');
+		
+		console.log("Inside script for localStorage check rateVictim to change icon color");
+				$(document).ready(function(){
+					console.log("Inside document ready function for localstorage check rateVictim to change icon color")
+					if(typeof(Storage)!=="undefined"){
+					
+						//get set var in localStorage
+						var rateClick2= localStorage.getItem(""+incidentid+""+victimid+"");
+						for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+								var name = localStorage.key(i);             // Get the name of pair i
+								var val = localStorage.getItem(name);             // Get the val of pair name
+								console.log("localstorage names for show details: "+ name + " value: "+ val);    // Get the value of that pair
+							}
+						console.log("rateClick2 val: "+rateClick2);
+						if (rateClick2 == "rateFalse"){
+							//if disapproved, retain thumbsdown color
+							$("#modalDetailsVictim #iThumbsDown2").css("background-color", "red");
+							$("#modalDetailsVictim #iThumbsUp2").css("background-color", "");
+							console.log("Thumbs Down color red");
+						}
+					  if(rateClick2 == "rateTrue"){
+							//if approved,  retain thumbsup color
+							$("#modalDetailsVictim #iThumbsUp2").css("background-color", "green");
+							$("#modalDetailsVictim #iThumbsDown2").css("background-color", "");
+							console.log("Thumbs up color green");
+					  }if(rateClick2 == null){
+							$("#modalDetailsVictim #iThumbsUp2").css("background-color", "");
+							$("#modalDetailsVictim #iThumbsDown2").css("background-color", "");
+					  
+					  }
+					
+					}
+					else{
+					  alert("Sorry, your browser does not support web storage...");
+					}
+				});
 	});
+	
+	
 
 };
 

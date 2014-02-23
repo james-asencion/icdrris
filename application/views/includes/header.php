@@ -51,6 +51,7 @@
 		</style>
 		<script type="text/javascript">
 			$(document).ready(function(){
+			//localStorage.clear();
 				$(".trigger").click(function(){
                                         $("#map_canvass").removeClass("span12");
 					$("#map_canvass").addClass("span6"); //added
@@ -74,6 +75,7 @@
 			});
                        
 		</script>
+		
   </head>
   
   <!--onload="initializeMap()"-->
