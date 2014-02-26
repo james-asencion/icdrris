@@ -313,7 +313,94 @@ $("#addMemberButton1").click(function(event)	{
 			$("#membersTable").html(msg);
 		}
 	});
+});
 
+$("#addMemberButton2").click(function(event)	{
+	/* Stop form from submitting normally */
+	//event.preventDefault();
+	console.log("addMemberButton2.click()");
+	/* get the values from the elements on the page */
+	//var values = $("addMemberForm").serialize();
+	var org_id = $(this).data('org');
+	var first_name = $("#ro_first_name").val();
+	var last_name = $("#ro_last_name").val();
+	var sex = $("#ro_sex").val();
+	var birthday = $("#ro_birthday").val();
+	var civil_status = $("#ro_civil_status").val();
+	var dataStr = 'org_id='+org_id+'&first_name='+first_name+'&last_name='+last_name+'&sex='+sex+'&birthday='+birthday+'&civil_status='+civil_status;
+	 
+	/* Send the data using post and put results to the members table */
+	request = $.ajax({
+		url: "http://localhost/icdrris/ResponseOrg/addResOrgMemberModal",
+		type: "POST",
+		data: dataStr,
+		success: function(msg){
+			//$("membersTable").html(msg);
+			console.log("success");
+			console.log(msg);
+			
+			$("#members").html('');
+			$("#members").html(msg);
+			$("#ro_first_name").val('');
+			$("#ro_last_name").val('');
+			$("#ro_sex").val('');
+			$("#ro_birthday").val('');
+			$("#ro_civil_status").val('');
+			$("#modalAddResOrgMembers").modal('hide');
+
+
+		},
+		error: function(){
+			console.log("fail");
+			console.log(values);
+			$("#members").html(msg);
+		}
+	});
+});
+
+	$("#addResOrgButton1").click(function(event)	{
+	/* Stop form from submitting normally */
+	//event.preventDefault();
+	console.log("addResOrgButton1.click()");
+	/* get the values from the elements on the page */
+	//var values = $("addMemberForm").serialize();
+	//var org_id = $("#ro_org_id").val();
+	var ro_name = $("#ro_name").val();
+	var ro_phone_num = $("#ro_phone_num").val();
+	var ro_email = $("#ro_email").val();
+	var ro_address = $("#ro_address").val();
+	var ro_contact_person = $("#ro_contact_person").val();
+	var ro_members_count = $("#ro_members_count").val();
+	var ro_members_available = $("#ro_members_available").val();
+	var dataStr = 'ro_name='+ro_name+'&ro_phone_num='+ro_phone_num+'&ro_email='+ro_email+'&ro_address='+ro_address+'&ro_contact_person='+ro_contact_person+'&ro_members_count='+ro_members_count+'&ro_members_available='+ro_members_available;
+
+	/* Send the data using post and put results to the members table */
+	request = $.ajax({
+		url: "http://localhost/icdrris/ResponseOrg/addResponseOrgModal",
+		type: "POST",
+		data: dataStr,
+		success: function(msg){
+			//$("membersTable").html(msg);
+			console.log(msg);
+			
+			$("#members1").html('');
+			$("#members1").html(msg);
+			$("#ro_name").val('');
+			$("#ro_phone_num").val('');
+			$("#ro_email").val('');
+			$("#ro_address").val('');
+			$("#ro_contact_person").val('');
+			$("#ro_members_count").val('');
+			$("#ro_members_available").val('');
+			$("#modalAddResOrg").modal('hide');
+
+		},
+		error: function(){
+			console.log("fail");
+			console.log(values);
+			$("#members1").html(msg);
+		}
+	});
 
 	});
 });

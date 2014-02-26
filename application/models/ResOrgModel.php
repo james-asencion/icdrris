@@ -8,13 +8,13 @@ class ResOrgModel extends CI_Model{
 	function createResOrg(){
 
 		$data = array(
-					'response_organization_name' => $this->input->post('name'),
-					'response_organization_phone_num' => $this->input->post('phone_num'),
-					'response_organization_email' => $this->input->post('email'),
-					'response_organization_address' => $this->input->post('address'),
-					'response_organization_contact_person' => $this->input->post('contact_person'),
-					'response_organization_members_count' => $this->input->post('members_count'),
-					'response_organization_members_available' => $this->input->post('members_available')
+					'response_organization_name' => $this->input->post('ro_name'),
+					'response_organization_phone_num' => $this->input->post('ro_phone_num'),
+					'response_organization_email' => $this->input->post('ro_email'),
+					'response_organization_address' => $this->input->post('ro_address'),
+					'response_organization_contact_person' => $this->input->post('ro_contact_person'),
+					'response_organization_members_count' => $this->input->post('ro_members_count'),
+					'response_organization_members_available' => $this->input->post('ro_members_available')
 					);
 		
 		$query = $this->db->insert('response_organization',$data);
@@ -27,7 +27,25 @@ class ResOrgModel extends CI_Model{
 			return $this->db->_error_message();
 		}
 	}
+	function createResOrgModal(){
+
+		$data = array(
+					'response_organization_name' => $this->input->post('ro_name'),
+					'response_organization_phone_num' => $this->input->post('ro_phone_num'),
+					'response_organization_email' => $this->input->post('ro_email'),
+					'response_organization_address' => $this->input->post('ro_address'),
+					'response_organization_contact_person' => $this->input->post('ro_contact_person'),
+					'response_organization_members_count' => $this->input->post('ro_members_count'),
+					'response_organization_members_available' => $this->input->post('ro_members_available')
+					);
+		
+		$query = $this->db->insert('response_organization',$data);
+	}
 	
+	function addMemberModal($data){
+	
+		 $query = $this->db->insert('response_organization_members', $data);
+	}
 	function addMember($data){
 
 		        $val = array(
@@ -95,23 +113,28 @@ class ResOrgModel extends CI_Model{
 	}
 	function getResOrg($id){
 		$query = $this->db->get_where('response_organization', array('response_organization_id'=>$id));
-		return $query->result();
+		return $query->row();
 	}
 
-	function getAllMembers($id){
-		$query = $this->db->query("	SELECT m.member_id, m.first_name, m.last_name, m.middle_name, m.sex, m.birthday, m.age, m.monthly_income, m.source_of_income, m.civil_status, m.no_of_children 
-									FROM livelihood_organization_members m 
-									LEFT JOIN recipient_org_org_members r
-									ON r.member_id = m.member_id 
-									WHERE r.livelihood_organization_id = '$id';");
-		return $query->result();
-	}
+	// function getAllMembers($id){
+	// 	$query = $this->db->query("	SELECT m.member_id, m.first_name, m.last_name, m.middle_name, m.sex, m.birthday, m.age, m.monthly_income, m.source_of_income, m.civil_status, m.no_of_children 
+	// 								FROM livelihood_organization_members m 
+	// 								LEFT JOIN recipient_org_org_members r
+	// 								ON r.member_id = m.member_id 
+	// 								WHERE r.livelihood_organization_id = '$id';");
+	// 	return $query->result();
+	// }
 
 	function getAllResOrgMembers($id){
+		$this->db->where('response_organization_id', $id);
 		$query = $this->db->get('response_organization_members');
 		return $query->result();
 	}
 
+	function getAllSkills(){
+		$query = $this->db->get('response_org_members_skills');
+		return $query->result();
+	}
 	function updateMember(){
 		$data = array(
 				''
@@ -138,6 +161,27 @@ class ResOrgModel extends CI_Model{
 
 		return $query->result();
 
+	}
+
+	function deleteResOrgMember($id){
+		$this->db->where("response_organization_member_id", $id);
+		$query = $this->db->delete("response_organization_members");
+	//	return $query->result();
+	}
+
+	function updateResOrgEditable($id, $name, $value) {
+		$data = array(
+               $name => $value,
+            );
+
+		$this->db->where('response_organization_id', $id);
+		$query = $this->db->update('response_organization', $data); 
+		if($query){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	function updateMemberEditable($id, $name, $value){

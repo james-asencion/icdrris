@@ -82,6 +82,54 @@ $('#btnYesDeleteResOrg').click(function(){
 	});
 });
 
+//Response Organization Member
+$('.confirm-deleteResOrgMember').on('click', function(e){
+	e.preventDefault();
+	console.log('clicked');
+
+	var id = $(this).data('id');
+	var lastname = $(this).data('lastname');
+	var orgid = $(this).data('orgid');
+	//var memberName = $(this).data('memberName');
+	//console.log(memberName);
+
+	$('#modalDeleteResOrgMember').data('id',id);
+	$('#modalDeleteResOrgMember').data('lastname',lastname);
+	$('#modalDeleteResOrgMember').data('orgid',orgid);
+	$('#modalDeleteResOrgMember .modal-body').html("<p>Are you sure you want to delete: "+lastname+"</p>");
+	$('#modalDeleteResOrgMember').modal('show');
+});
+
+$('#modalDeleteResOrgMember').on('show.bs.modal', function(){
+	var memberid  = $(this).data('memberid'),
+		removeBtn = $(this).find('.danger');
+});
+
+$('#btnYesDeleteResOrgMember').click(function(){
+
+	var id = $('#modalDeleteResOrgMember').data('id');
+	var orgid = $('#modalDeleteResOrgMember').data('orgid');
+	console.log('this is the id->'+id);
+	var dataStr = 'member_id='+id+'&org_id='+orgid;
+	$.ajax({
+		url: "http://localhost/icdrris/ResponseOrg/deleteResOrgMember",
+		type: "POST",
+		data: dataStr,
+		success: function(msg){
+			$('#members').html('');
+			$('#members').html(msg);
+			$('#modalDeleteResOrgMember').modal('hide');
+		//	window.location = "http://localhost/icdrris/ResponseOrg/viewResOrg;		
+		},
+		error: function(msg){
+			console.log("something went wrong");
+			$('#modalDeleteResOrgMember .modal-body').html("<p>Opss..something went wrong</p>");
+			$('#modalDeleteResOrgMember').modal('show');
+		}
+
+	});
+});
+
 
 
 });

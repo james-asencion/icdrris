@@ -2,19 +2,20 @@
 </div>
 
 <div id="container">
-<?php $attributes = array('class' => 'form-horizontal well span9 offset3', 'method'=>'post');
+<?php $attributes = array('class' => 'form-horizontal well span7 offset2', 'method'=>'post');
 
       echo form_open("ResponseOrg/addResOrg",$attributes); ?>
       
       <?php echo validation_errors('<p class="error">'); ?>
       <h1 class="text-center">Register Response Organization</h1>
-        <label for="name">Response Organization Name: </label><input type="text" name="name" id="name" value="<?php echo set_value('name'); ?>"/><div id="name_verify" class="verify"></div>
-        <label for="phone_num">Phone Number: </label><input type="text" name="phone_num" id="phone_num" value="<?php echo set_value('phone_num'); ?>"/><span id="address_verify" class="verify"></span>
-        <label for="email">Email: </label><input type="text" name="email" id="email" value="<?php echo set_value('email'); ?>"/><span id="members_verify" class="verify"></span>
-        <label for="address">Address: </label><input type="text" name="address" id="address" value="<?php echo set_value('address'); ?>"/><span id="income_verify" class="verify"></span>
-        <label for="contact_person">Contact Person: </label><input type="text" name="contact_person" id="contact_person" value="<?php echo set_value('contact_person'); ?>"/><span id="status_verify" class="verify"></span>
-        <label for="members_count">Members Count: </label><input type="text" name="members_count" id="members_count" value="<?php echo set_value('members_count'); ?>"/><span id="date_verify" class="verify"></span>
-        <label for="members_available">Members Available: </label><input type="text" name="members_available" id="members_available" value="<?php echo set_value('members_available'); ?>"/><span id="business_type_verify" class="verify"></span>
+        <div class = "control-group"><label class = "control-label" for="name">Response Organization Name: </label><div class = "controls"><input type="text" name="ro_name" id="ro_name" value="<?php echo set_value('ro_name'); ?>"/></div></div>
+        <div class = "control-group"><label class = "control-label" for="phone_num">Phone Number: </label><div class = "controls"><input type="text" name="ro_phone_num" id="ro_phone_num" value="<?php echo set_value('ro_phone_num'); ?>"/></div></div>
+        <div class = "control-group"><label class = "control-label" for="email">Email: </label><div class = "controls"><input type="text" name="ro_email" id="ro_email" value="<?php echo set_value('ro_email'); ?>"/></div></div>
+        <div class = "control-group"><label class = "control-label" for="address">Address: </label><div class = "controls"><input type="text" name="ro_address" id="ro_address" value="<?php echo set_value('ro_address'); ?>"/></div></div>
+        <div class = "control-group"><label class = "control-label" for="contact_person">Contact Person: </label><div class = "controls"><input type="text" name="ro_contact_person" id="ro_contact_person" value="<?php echo set_value('ro_contact_person'); ?>"/></div></div>
+        <div class = "control-group"><label class = "control-label" for="members_count">Members Count: </label><div class = "controls"><input type="text" name="ro_members_count" id="ro_members_count" value="<?php echo set_value('ro_members_count'); ?>"/></div></div>
+        <div class = "control-group"><label class = "control-label" for="members_available">Members Available: </label><div class = "controls"><input type="text" name="ro_members_available" id="ro_members_available" value="<?php echo set_value('ro_members_available'); ?>"/></div></div>  
+
         <br><br>
         <input class="btn btn-small btn-primary offset3" type="submit" value="Register Now" align="center"/></div>
 <?php echo form_close()?>
