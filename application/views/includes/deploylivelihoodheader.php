@@ -15,8 +15,8 @@
 		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>-->
-		<script src="<?php echo base_url();?>application/views/js/deploymap.js"></script>
-<!--		<script src="<?php echo base_url();?>application/views/js/deployresorgmap.js"></script>-->
+		<!--<script src="<?php echo base_url();?>application/views/js/deploymap.js"></script>-->
+		<script src="<?php echo base_url();?>application/views/js/deployresorgmap.js"></script>
 
          <!--
 		<script src="<?php //echo base_url();?>application/views/js/dropdown.js"></script>

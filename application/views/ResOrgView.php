@@ -49,11 +49,19 @@
     </div>
     <div class = "modal-body">
         <form id="addMemberForm" class = "form-horizontal">
-        <div class="control-group"><label class = "label-control" for="ro_first_name">First Name: </label><div class="controls"><input type="text" name="ro_first_name" id="ro_first_name"  /></div></div>
-        <div class="control-group"><label class = "label-control" for="ro_last_name">Last Name: </label><div class="controls"><input type="text" name="ro_last_name" id="ro_last_name"  /></div></div>
-        <div class="control-group"><label class = "label-control" for="ro_sex">Sex: </label><div class="controls"><input type="text" name="ro_sex" id="ro_sex"  /></div></div>
-        <div class="control-group"><label class = "label-control" for="ro_birthday">Birthday: </label><div class="controls"><input type="date" name="ro_birthday" id="ro_birthday"  /></div></div>
-        <div class="control-group"><label class = "label-control" for="ro_civil_status">Civil Status: </label><div class="controls"><input type="text" name="ro_civil_status" id="ro_civil_status"  /></div></div> 
+        <div class="control-group"><label class = "control-label" for="ro_first_name">First Name: </label><div class="controls"><input type="text" name="ro_first_name" id="ro_first_name"  /></div></div>
+        <div class="control-group"><label class = "control-label" for="ro_last_name">Last Name: </label><div class="controls"><input type="text" name="ro_last_name" id="ro_last_name"  /></div></div>
+        <div class="control-group"><label class = "control-label" for="ro_sex">Sex: </label><div class="controls"><input type="text" name="ro_sex" id="ro_sex"  /></div></div>
+        <div class="control-group"><label class = "control-label" for="ro_birthday">Birthday: </label><div class="controls"><input type="date" name="ro_birthday" id="ro_birthday"  /></div></div>
+        <div class="control-group"><label class = "control-label" for="ro_civil_status">Civil Status: </label><div class="controls"><input type="text" name="ro_civil_status" id="ro_civil_status"  /></div></div>
+        <div class="control-group"><label class = "control-label" for="ro_skill">Skill: </label><div class="controls"><select name = "trial">
+        <option value = "null">Select</option>
+    <?php   foreach($skills as $skill) {
+            echo "<label class=\"checkbox\"><input type=\"checkbox\">";
+            echo "<option value = \"".$skill->skillset_description."\">".$skill->skillset_description."</option>";
+            echo "</label>";
+        } ?>
+    </select></div></div> 
 </form></div>
     <div class = "modal-footer">
         <div class="btn btn-primary" id="addMemberButton2" data-org="<?php echo $org->response_organization_id; ?>">Add Member</div>

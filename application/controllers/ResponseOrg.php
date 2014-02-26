@@ -159,7 +159,7 @@ class ResponseOrg extends CI_Controller
     }
 
       function viewDeploy(){
-        $this->load->view('includes/deployheader');
+        $this->load->view('includes/deploylivelihoodheader');
         $this->load->view('deployResOrg');
         $this->load->view('includes/footer');
     }
