@@ -28,7 +28,11 @@
 		<script src="<?php //echo base_url();?>application/views/js/verify.js"></script>-->
 		
 		    <!-- bootstrap -->
+		<!--
+		<link href="<?php echo base_url();?>application/views/css/bootstrap.css">
+		-->
     	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    	
     	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script> 
     	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>  
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
@@ -37,7 +41,7 @@
 	    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 	    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/js/bootstrap-editable.min.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/x-editable.js"></script>
-
+		<script src="<?php echo base_url();?>application/views/js/x-editable1.js"></script>
 
 
 
@@ -53,6 +57,7 @@
 		</style>
 		<script type="text/javascript">
 			$(document).ready(function(){
+			//localStorage.clear();
 				$(".trigger").click(function(){
                                         $("#map_canvass").removeClass("span12");
 					$("#map_canvass").addClass("span6"); //added
@@ -76,6 +81,7 @@
 			});
                        
 		</script>
+		
   </head>
   
   <!--onload="initializeMap()"-->

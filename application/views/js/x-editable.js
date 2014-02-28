@@ -4,10 +4,12 @@ $(document).ready(function() {
 	//$.fn.editable.defaults.mode = 'popover';
 	//$('#firstname').editable({disabled:true});
 	var defaults = {
+
 	    disabled:true, 
 	    showbuttons: true,
 	    inputclass: 'input-small',  
 	    url: "http://localhost/icdrris/Livelihood/testEditable"
+
 	};
   
     $('#first_name').editable({
@@ -179,7 +181,9 @@ $(document).ready(function() {
 			    }
 			}
     });
-    $('#ro_first_name').editable({
+    
+    $('#members span').editable({
+    		placement:'right',
     		disabled:true, 
     		url: "http://localhost/icdrris/ResponseOrg/testEditable",
     		validate: function(value) {
@@ -196,9 +200,10 @@ $(document).ready(function() {
 			}
     });
 
-     $('#ro_last_name').editable({
+ 	$('#members1 span').editable({
+    		placement:'right',
     		disabled:true, 
-    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
+    		url: "http://localhost/icdrris/ResponseOrg/testEditable2",
     		validate: function(value) {
 			    if($.trim(value) == '') {
 			        return 'This field is required';
@@ -213,56 +218,10 @@ $(document).ready(function() {
 			}
     });
 
-         $('#ro_sex').editable({
-    		disabled:true, 
-    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
-    		validate: function(value) {
-			    if($.trim(value) == '') {
-			        return 'This field is required';
-			    }
-			},
-    		error: function(response, newValue) {
-			    if(response.status === 500) {
-			        return 'Name already exists.';
-			    } else {
-			        return response.responseText;
-			    }
-			}
-    });
-             $('#ro_birthday').editable({
-    		disabled:true, 
-    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
-    		validate: function(value) {
-			    if($.trim(value) == '') {
-			        return 'This field is required';
-			    }
-			},
-    		error: function(response, newValue) {
-			    if(response.status === 500) {
-			        return 'Name already exists.';
-			    } else {
-			        return response.responseText;
-			    }
-			}
-    });
-        $('#ro_civil_status').editable({
-    		disabled:true, 
-    		url: "http://localhost/icdrris/ResponseOrg/testEditable",
-    		validate: function(value) {
-			    if($.trim(value) == '') {
-			        return 'This field is required';
-			    }
-			},
-    		error: function(response, newValue) {
-			    if(response.status === 500) {
-			        return 'Name already exists.';
-			    } else {
-			        return response.responseText;
-			    }
-			}
-    });
+
 
 	$('.edit').on('click', function(){
+		$('#members').find('.editable-open').editable('hide');
 	    $('#members').find('.btn-success').hide();
 	    $('#members').find('.edit').show();
 	    $(this).hide().siblings('.btn-success').show();
@@ -271,6 +230,7 @@ $(document).ready(function() {
 
 	$('.btn-success').on('click', function() {
 	    var $btn = $(this);
+	    $('#members').find('.editable').editable('hide');
 	    $('#members').find('.editable').editable('toggleDisabled');
 	    $btn.hide().siblings('.edit').show();
 	});

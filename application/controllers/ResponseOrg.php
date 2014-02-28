@@ -28,13 +28,13 @@ class ResponseOrg extends CI_Controller
     function addResOrg()
     {
     	$this->load->library('form_validation');
-    	$this->form_validation->set_rules('name', 'Response Organization Name', 'trim|required');
-    	$this->form_validation->set_rules('phone_num', 'Phone Number', 'trim|required');
-    	$this->form_validation->set_rules('email', 'E-mail Address', 'trim|required');
-    	$this->form_validation->set_rules('address', 'Address', 'trim|required');
-    	$this->form_validation->set_rules('contact_person', 'Contact Person', 'trim|required');
-    	$this->form_validation->set_rules('members_count', 'Members Count', 'trim|required');
-    	$this->form_validation->set_rules('members_available', 'Members Available', 'trim|required');
+    	$this->form_validation->set_rules('ro_name', 'Response Organization Name', 'trim|required');
+    	$this->form_validation->set_rules('ro_phone_num', 'Phone Number', 'trim|required');
+    	$this->form_validation->set_rules('ro_email', 'E-mail Address', 'trim|required');
+    	$this->form_validation->set_rules('ro_address', 'Address', 'trim|required');
+    	$this->form_validation->set_rules('ro_contact_person', 'Contact Person', 'trim|required');
+    	$this->form_validation->set_rules('ro_members_count', 'Members Count', 'trim|required');
+    	$this->form_validation->set_rules('ro_members_available', 'Members Available', 'trim|required');
 
     	if($this->form_validation->run() == FALSE){
     		echo "failed";
@@ -46,6 +46,52 @@ class ResponseOrg extends CI_Controller
             $this->addOrgMembers($dataArray);
     	}
 
+    }
+    function addResponseOrgModal(){
+        $this->ResOrgModel->createResOrgModal();
+        return $this->getAllResponseOrgTable();
+    }
+
+    function getAllResponseOrgTable(){
+        $organizations = $this->ResOrgModel->getAllResOrgs();
+        echo "<tr><th>Response Organization Name</th><th>Phone Number</th><th>Email</th><th>Address</th><th>Contact Person</th><th>Members Count</th><th>Members Available</th><th>Actions</th></tr>";
+        foreach ($organizations as $organization) {
+                echo "<tr><td><span href=\"#\" id=\"response_organization_name\" data-name\"response_organization_name\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Name\">".$organization->response_organization_name.
+                "</span></td><td><span href=\"#\" id=\"response_organization_phone_num\" data-name\"response_organization_phone_num\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Phone Number\">".$organization->response_organization_phone_num."</span></td>
+                <td><span href=\"#\" id=\"response_organization_email\" data-name\"response_organization_email\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Email\">".$organization->response_organization_email."</span></td>
+                <td><span href=\"#\" id=\"response_organization_address\" data-name\"response_organization_address\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Address\">".$organization->response_organization_address."</span></td>
+                <td><span href=\"#\" id=\"response_organization_contact_person\" data-name\"response_organization_contact_person\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Contact Person\">".$organization->response_organization_contact_person."</span></td>
+                <td><span href=\"#\" id=\"response_organization_members_count\" data-name\"response_organization_members_count\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Members Count\">".$organization->response_organization_members_count."</span></td>
+                <td><span href=\"#\" id=\"response_organization_members_available\" data-name\"response_organization_members_available\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Members Available\">".$organization->response_organization_members_available."</span></td>
+                <td><a href=\"#\" class=\"confirm-deleteResOrgMember\" data-orgid=".$org->response_organization_id." data-lastname=\"".$member->response_organization_member_last_name."\" data-id=".$member->response_organization_member_id."><i class=\"icon-trash\"></i></a></td></tr>";
+        }
+    }
+
+    function addResOrgMemberModal(){
+        $data = array(
+                    'response_organization_id' => $this->input->post('org_id'),
+                    'response_organization_member_first_name' => $this->input->post('first_name'),
+                    'response_organization_member_last_name' => $this->input->post('last_name'),
+                    'response_organization_member_sex' => $this->input->post('sex'), 
+                    'response_organization_member_birthday' => $this->input->post('birthday'),
+                    'response_organization_member_civil_status' => $this->input->post('civil_status')
+                    );
+        $this->ResOrgModel->addMemberModal($data);
+        return $this->getAllResOrgMembersTable($this->input->post('org_id'));
+    }
+
+    function getAllResOrgMembersTable($id){
+        $members = $this->ResOrgModel->getAllResOrgMembers($id);
+        echo "<tr><th>First Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Civil Status</th><th>Actions</th></tr>";
+       foreach ($members as $member) {
+                echo "<tr>
+                <td><span href=\"#\" id=\"response_organization_member_first_name\" data-name\"response_organization_member_first_name\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter First Name\">".$member->response_organization_member_first_name."</span></td>
+                <td><span href=\"#\" id=\"response_organization_member_last_name\" data-name\"response_organization_member_last_name\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter Last Name\">".$member->response_organization_member_last_name."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_sex\" data-name\"response_organization_member_sex\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter Sex\">".$member->response_organization_member_sex."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_birthday\" data-name\"response_organization_member_birthday\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter Birthday\">".$member->response_organization_member_birthday."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter Civil Status\">".$member->response_organization_member_civil_status."</a></td>
+                <td><a href=\"#\" class=\"confirm-deleteResOrgMember\" data-lastname=\"".$member->response_organization_member_last_name."\" data-id=".$member->response_organization_member_id."><i class=\"icon-trash\"></i></a></td></tr>";
+    }
     }
 
     function registerResOrg()
@@ -102,7 +148,7 @@ class ResponseOrg extends CI_Controller
             echo "<tr><th>First Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Civil Status</th></tr>";
           
            foreach ($query->result() as $row) {
-                echo "<tr><td>".$row->response_organization_member_first_name."</td><td>".$row->response_organization_members_last_name."</td><td>".$row->response_organization_members_sex."</td><td>".$row->response_organization_members_birthday."</td><td>".$row->response_organization_members_civil_status."</td></tr>";
+                echo "<tr><td>".$row->response_organization_member_first_name."</td><td>".$row->response_organization_member_last_name."</td><td>".$row->response_organization_member_sex."</td><td>".$row->response_organization_member_birthday."</td><td>".$row->response_organization_member_civil_status."</td></tr>";
            }  
            echo "</table>";
         }
@@ -113,7 +159,7 @@ class ResponseOrg extends CI_Controller
     }
 
       function viewDeploy(){
-        $this->load->view('includes/deployheader');
+        $this->load->view('includes/deploylivelihoodheader');
         $this->load->view('deployResOrg');
         $this->load->view('includes/footer');
     }
@@ -122,7 +168,7 @@ class ResponseOrg extends CI_Controller
         //query for the data
         $get = $this->uri->uri_to_assoc();
         //echo $get['id'];
-        $data['response_org'] = $this->ResOrgModel->getResOrg($get['id']);
+        $data['org'] = $this->ResOrgModel->getResOrg($get['id']);
         $data['members'] = $this->ResOrgModel->getAllResOrgMembers($get['id']);
           
         //echo count($data['livelihood_org']);
@@ -140,9 +186,35 @@ class ResponseOrg extends CI_Controller
 
     }
 
+    function getAllSkills() {
+
+        $data['skills']=$this->ResOrgModel->getAllSkills();
+        $this->load->view('includes/header');
+        $this->load->view('dropdowntrial', $data);
+        $this->load->view('includes/footer');
+    }
+
     function deleteOrganization(){
         $result = $this->ResOrgModel->deleteOrganization($this->input->post('org_id'));
         echo $result;
+    }
+
+    function deleteResOrgMember(){
+        $result = $this->ResOrgModel->deleteResOrgMember($this->input->post('member_id'));
+        return $this->getAllResOrgMembersTable($this->input->post('org_id'));
+
+        //echo $result;
+    }
+
+    function testEditable2() {
+         $result = $this->ResOrgModel->updateResOrgEditable($this->input->post('pk'), $this->input->post('name'), $this->input->post('value'));
+         if($result){
+            echo "can be any string";
+         }
+         else{
+            header('HTTP 400 Bad Request', true, 400);
+            echo "error encountered";
+         }
     }
 
     function testEditable(){
@@ -169,6 +241,14 @@ class ResponseOrg extends CI_Controller
          //}
         
     }
+
+    function test(){
+        $this->load->view('includes/header');
+        $this->load->view('dropdowntrial');
+        $this->load->view('includes/footer');
+    }
+
+ 
 
 }
 

@@ -82,6 +82,54 @@ $('#btnYesDeleteResOrg').click(function(){
 	});
 });
 
+//Response Organization Member
+$('.confirm-deleteResOrgMember').on('click', function(e){
+	e.preventDefault();
+	console.log('clicked');
+
+	var id = $(this).data('id');
+	var lastname = $(this).data('lastname');
+	var orgid = $(this).data('orgid');
+	//var memberName = $(this).data('memberName');
+	//console.log(memberName);
+
+	$('#modalDeleteResOrgMember').data('id',id);
+	$('#modalDeleteResOrgMember').data('lastname',lastname);
+	$('#modalDeleteResOrgMember').data('orgid',orgid);
+	$('#modalDeleteResOrgMember .modal-body').html("<p>Are you sure you want to delete: "+lastname+"</p>");
+	$('#modalDeleteResOrgMember').modal('show');
+});
+
+$('#modalDeleteResOrgMember').on('show.bs.modal', function(){
+	var memberid  = $(this).data('memberid'),
+		removeBtn = $(this).find('.danger');
+});
+
+$('#btnYesDeleteResOrgMember').click(function(){
+
+	var id = $('#modalDeleteResOrgMember').data('id');
+	var orgid = $('#modalDeleteResOrgMember').data('orgid');
+	console.log('this is the id->'+id);
+	var dataStr = 'member_id='+id+'&org_id='+orgid;
+	$.ajax({
+		url: "http://localhost/icdrris/ResponseOrg/deleteResOrgMember",
+		type: "POST",
+		data: dataStr,
+		success: function(msg){
+			$('#members').html('');
+			$('#members').html(msg);
+			$('#modalDeleteResOrgMember').modal('hide');
+		//	window.location = "http://localhost/icdrris/ResponseOrg/viewResOrg;		
+		},
+		error: function(msg){
+			console.log("something went wrong");
+			$('#modalDeleteResOrgMember .modal-body').html("<p>Opss..something went wrong</p>");
+			$('#modalDeleteResOrgMember').modal('show');
+		}
+
+	});
+});
+
 
 
 });
@@ -192,15 +240,38 @@ $(document).ready(function(){
 });
 
 
-// UP AND DOWN RATING ON REPORTED VICTIM
-	function rateVictim(element){
-		$("#approved-victim , #disapproved-victim").click(function(){
-			console.log('clicked rate-victim');
-			var incident_report_id = $(this).data('incidentid');
-			var victim_id = $(this).data('victimid');
-			var upOrDown = $(this).data('upordown');
-			dataStr = "incident_report_id="+incident_report_id+ "&victim_id="+victim_id+"&upOrDown="+upOrDown;
+//  RATING ON REPORTED VICTIM
+	function rateVictim(incident_report_id, victim_id, rateType){
+	
+	
+			
+			//var incident_report_id = $("#disapproved-victim").data('incidentid');
+			//var victim_id = $("#disapproved-victim").data('victimid');
+			var upOrDown= "";
+			if(rateType == 0){
+				upOrDown = "rateFalse";
+			}
+			else{
+				upOrDown = "rateTrue";
+			}
+			var lastUpOrDown = localStorage.getItem(""+incident_report_id+""+ victim_id+"");
+			
+			console.log("last upOrDown: "+ lastUpOrDown+ ", Recent upOrDown: "+upOrDown);
+			
+			var actionType;
+			if(upOrDown == lastUpOrDown){ //if the user wants to take back the vote
+				actionType = "off";
+			}
+			if(lastUpOrDown != null && lastUpOrDown != upOrDown){	//if the user already rated before
+				actionType = "onOff";
+			}
+			if(lastUpOrDown == null){ // if the user rated for the first time
+				actionType = "on";
+			}
+
+			dataStr = "incident_report_id="+incident_report_id+ "&victim_id="+victim_id+"&upOrDown="+upOrDown+"&actionType="+actionType;
 			console.log('data passed to rate: '+ dataStr);
+			
 			$.ajax({
 				type: "POST",
 				url: "http://localhost/icdrris/Victim/rateUpOrDown",
@@ -209,12 +280,56 @@ $(document).ready(function(){
 				success: function(msg){
 					try{
 						if(msg == 'true'){
-							//var newValue = parseInt($("#"+incident_report_id+'_result').text())+ 1;
-							//$("#"+incident_report_id+"_result").html(newValue);
-							console.log('success');
+						
+							console.log('success :' + upOrDown);
+							
+							
+							
+							
+							if(actionType == "off"){
+								
+								
+								console.log("after removed: "+incident_report_id +""+victim_id+"");
+								for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+									var name = localStorage.key(i);             // Get the name of pair i
+									var val = localStorage.getItem(name);
+									if(name == ""+incident_report_id +""+victim_id+""){
+										localStorage.removeItem(name);
+										console.log("removed: in off");
+									}
+									console.log("localstorage names: "+ name + " value: "+ val);    // Get the value of that pair
+								}
+									$("#iThumbsUp").css("background-color", "");
+									$("#iThumbsDown").css("background-color", "");
+									
+							
+							}
+							if(actionType == "on" || actionType == "onOff"){
+									if(upOrDown == "rateTrue"){
+										$("#iThumbsUp").css("background-color", "green");
+										$("#iThumbsDown").css("background-color", "");
+									}
+									if(upOrDown == "rateFalse"){
+										$("#iThumbsUp").css("background-color", "");
+										$("#iThumbsDown").css("background-color", "red");
+									}
+								//localStorage.removeItem(incident_report_id+victim_id);
+								localStorage.setItem(""+incident_report_id+""+ victim_id+"", upOrDown);
+							
+								console.log(""+incident_report_id +""+victim_id+"");
+								for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+									var name = localStorage.key(i);             // Get the name of pair i
+									var val = localStorage.getItem(name);
+									console.log("localstorage names: "+ name + " value: "+ val);    // Get the value of that pair
+								}
+							
+							}
+							
 							
 						}else{
+						
 							console.log('failed');
+							
 							alert('Sorry. Unable to update..' + msg);
 						}
 					}catch(e){
@@ -225,8 +340,64 @@ $(document).ready(function(){
 					alert('Error while request..');
 				}
 			});
-		});
-	
 	};
-// end UPDOWNRATE
+// end  RATE
+
+			
+			
+// CHECK IF RATED: SAMPLE
+/**
+function rateVictim()
+{
+
+	$(document).ready(function(){
+			if(typeof(Storage)!=="undefined"){
+			
+				//get set var in localStorage
+				var rateClick= localStorage.getItem("rateClickMe");
+				if (rateClick == "disapproved"){
+					$("#iThumbsDown").css("background-color", "red");
+				}
+			  if(rateClick == "approved"){
+				$("#iThumbsUp").css("background-color", "green");
+			  }
+				
+			}
+			else{
+			  alert("Sorry, your browser does not support web storage...");
+			}
+		});
+/**	//IF CLICKED APPROVED
+	
+		if(typeof(Storage)!=="undefined") {
+		$("#btn-clickme").click(function(){
+		
+		
+			localStorage.removeItem("rateClickMe");
+			localStorage.setItem("rateClickMe", "approved");
+		
+		});
+		
+		$("#btn-clickme2").click(function(){
+		
+		
+			localStorage.removeItem("rateClickMe");
+			localStorage.setItem("rateClickMe", "disapproved");
+		
+		});
+				if (localStorage.clickcount){
+					localStorage.clickcount=Number(localStorage.clickcount)+1;
+				}
+				else{
+					localStorage.clickcount=1;
+				}
+			document.getElementById("result").innerHTML="You have clicked the button clickme " + localStorage.clickcount + " time(s).";
+		}
+		else{
+		  document.getElementById("result").innerHTML="Sorry, your browser does not support web storage...";
+		}
+		
+
+}*/
+// END ON CHECK IF RATED
 

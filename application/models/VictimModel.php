@@ -171,18 +171,37 @@ class VictimModel extends CI_Model{
 
     }
 	
-	function updateUpRate($incident_report_id, $victim_id){
-		$sql = "update incident_victim set report_rating_true = report_rating_true + 1 where incident_report_id= ? and victim_id = ?";
+	//Rate Victim
+	function updateRate($incident_report_id, $victim_id, $upOrDown, $actionType){
+		$sql= "";
+	if($actionType == "on"){
+		if($upOrDown == "rateTrue"){
+			$sql = "update incident_victim set report_rating_true = report_rating_true + 1 where incident_report_id= ? and victim_id = ?";
+		}
+		if($upOrDown == "rateFalse"){
+			$sql = "update incident_victim set report_rating_false = report_rating_false + 1 where incident_report_id= ? and victim_id = ?";
+		}
+	}
+	if($actionType == "off"){
+		if($upOrDown =="rateTrue"){
+			$sql = "update incident_victim set report_rating_true = report_rating_true - 1 where incident_report_id= ? and victim_id = ?";
+		}
+		if($upOrDown == "rateFalse"){
+			$sql = "update incident_victim set report_rating_false = report_rating_false - 1 where incident_report_id= ? and victim_id = ?";
+		}
+	}
+	if($actionType == "onOff"){
+		if($upOrDown == "rateTrue"){
+			$sql = "update incident_victim set report_rating_true = report_rating_true + 1,report_rating_false = report_rating_false -1 where incident_report_id= ? and victim_id = ?";
+		}
+		if($upOrDown == "rateFalse"){
+			$sql = "update incident_victim set report_rating_false = report_rating_false + 1, report_rating_true = report_rating_true -1 where incident_report_id= ? and victim_id = ?";
+		}
+	}
 		$this->db->query($sql, array($incident_report_id, $victim_id));
 		return $this->db->affected_rows();
 	}	
 	
-	function updateDownRate($incident_report_id, $victim_id){
-		$sql = "update incident_victim set report_rating_false = report_rating_false + 1 where incident_report_id= ? and victim_id = ?";
-		$this->db->query($sql, array($incident_report_id, $victim_id));
-		return $this->db->affected_rows();
-	}
-    
     /** NOTE!
      * ADDRESS issue...
      * 1. Address of the victim? or Location address of the victim?
