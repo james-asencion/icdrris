@@ -18,6 +18,7 @@
 		<script src="<?php echo base_url();?>application/views/js/externalOrganizationModal.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/deployLivelihoodScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/dropdownmenu.js"></script>
 
 
          <!--
@@ -79,6 +80,8 @@
 					 }
 				});
 			});
+
+			
                        
 		</script>
 		

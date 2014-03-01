@@ -52,7 +52,7 @@
 <div class = "container-fluid">
 <div class="dropdown">
     <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
-        Select Skills
+        Select
         <b class="caret"></b>
     </a>
     <ul class="dropdown-menu dropdown-menu-form" role="menu">

@@ -2,9 +2,8 @@
 </div>
 <div class = "container-fluid">
 <div class = "row-fluid">
- <div class="well span4">
- <h3>Response Organization</h3> 
-	   Name: <?php echo $org->response_organization_name; ?>
+ <div class="well span3">
+ <h4><?php echo $org->response_organization_name; ?></h4> 
         <br>Phone Number: <?php echo $org->response_organization_phone_num; ?>
         <br>Email: <?php echo $org->response_organization_email; ?>
         <br>Address: <?php echo $org->response_organization_address;?>
@@ -15,7 +14,7 @@
 </div>
 
 <div></div>
-<div class = "well span8">
+<div class = "well span9">
 <div id="membersTable">
     <h4>Response Organization Members</h4>
             
@@ -27,14 +26,22 @@
 
 
     <table id="members" class="table table-striped">
-    <tr><th>First Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Civil Status</th><th>Actions</th></tr>
+    <tr><th>First Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Civil Status</th><th>Availability</th><th>Skills</th><th>Actions</th></tr>
     <?php foreach ($members as $member) {
+
+        $skills = $this->ResOrgModel->getSkillsByMember($member);
+        $string = "";
+        foreach ($skills as $s) {
+            $string+= $s->skillset_description;
+        } 
                 echo "<tr>
                 <td><span href=\"#\" id=\"response_organization_member_first_name\" data-name\"response_organization_member_first_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter First Name\">".$member->member_first_name."</span></td>
                 <td><span href=\"#\" id=\"response_organization_member_last_name\" data-name\"response_organization_member_last_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Last Name\">".$member->member_last_name."</a></td>
                 <td><span href=\"#\" id=\"response_organization_member_sex\" data-name\"response_organization_member_sex\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Sex\">".$member->member_sex."</a></td>
                 <td><span href=\"#\" id=\"response_organization_member_birthday\" data-name\"response_organization_member_birthday\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Birthday\">".$member->member_birthday."</a></td>
                 <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Civil Status\">".$member->member_civil_status."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Member Status\">".$member->member_status."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Skills\">".$string."</a></td>
                 <td><a href=\"#\" class=\"confirm-deleteResOrgMember\" data-orgid=".$org->response_organization_id." data-lastname=\"".$member->member_last_name."\" data-id=".$member->member_id."><i class=\"icon-trash\"></i></a></td></tr>";
             
     } ?>  
@@ -54,14 +61,24 @@
         <div class="control-group"><label class = "control-label" for="ro_sex">Sex: </label><div class="controls"><input type="text" name="ro_sex" id="ro_sex"  /></div></div>
         <div class="control-group"><label class = "control-label" for="ro_birthday">Birthday: </label><div class="controls"><input type="date" name="ro_birthday" id="ro_birthday"  /></div></div>
         <div class="control-group"><label class = "control-label" for="ro_civil_status">Civil Status: </label><div class="controls"><input type="text" name="ro_civil_status" id="ro_civil_status"  /></div></div>
-        <div class="control-group"><label class = "control-label" for="ro_skill">Skill: </label><div class="controls"><select name = "trial">
-        <option value = "null">Select</option>
-    <?php   foreach($skills as $skill) {
-            echo "<label class=\"checkbox\"><input type=\"checkbox\">";
-            echo "<option value = \"".$skill->skillset_description."\">".$skill->skillset_description."</option>";
-            echo "</label>";
-        } ?>
-    </select></div></div> 
+        <div id="skillsList"><div class="control-group"><label class = "control-label" for="ro_skill">Skill: </label><div class="controls"><div class="dropdown">
+    <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+        Select
+        <b class="caret"></b>
+    </a>
+    
+    <ul class="dropdown-menu dropdown-menu-form" role="menu">
+       <?php 
+        foreach($skills as $skill) {
+          echo "<li><label class = \"checkbox\"><input type = \"checkbox\" data-id =".$skill->skillset_id.">".$skill->skillset_description."</input></label></li>";
+        }
+       ?>
+
+   
+    </ul></div>
+</div></div></div>
+    <div class="control-group"></div>
+
 </form></div>
     <div class = "modal-footer">
         <div class="btn btn-primary" id="addMemberButton2" data-org="<?php echo $org->response_organization_id; ?>">Add Member</div>

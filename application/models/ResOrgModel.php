@@ -51,6 +51,7 @@ class ResOrgModel extends CI_Model{
 					'member_id' => $member_id
 				);
 		 $this->db->insert('response_organization_members', $val2);
+		 return $member_id;
 
 		 //return $this->getAllResOrgMembers($organization_id);
 	}
@@ -74,7 +75,7 @@ class ResOrgModel extends CI_Model{
 					'response_organization_id' => $organization_id, 
 					'member_id' => $member_id
 					);
-		$this->db->insert('response_organization_members', $val2);
+		$this->db->insert('members', $val2);
 
 
 		return $this->getAllResOrgMembers($organization_id);
@@ -83,6 +84,15 @@ class ResOrgModel extends CI_Model{
 	function deployResponseOrganization($data){
 		$this->db->insert('response_organization_locations',$data);
 		return $this->db->insert_id();
+	}
+
+	function addMemberSkills($member_id, $skillset_id) {
+		$data = array(
+			'skillset_id' => $skillset_id,
+			'member_id' => $member_id
+			);
+
+		$this->db->insert('members_skillset', $data);
 	}
 
 	function getAllResOrgs(){
@@ -108,6 +118,15 @@ class ResOrgModel extends CI_Model{
 	// 	return $query->result();
 	// }
 
+	function getSkillsByMember($id){
+		$query = $this->db->query("	SELECT m.skillset_description
+									FROM members_skillset s
+									LEFT JOIN response_org_members_skills m
+									ON s.skillset_skillset_id=m.skillset_id
+									WHERE s.member_id='$id';");
+		return $query->result();
+	}
+	
 	function getAllResOrgMembers($id){
 
 		$query = $this->db->query("	SELECT m.member_id, m.member_first_name, m.member_last_name, m.member_birthday, m.member_sex, m.member_civil_status, m.member_status, r.response_organization_id

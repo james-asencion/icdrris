@@ -363,19 +363,29 @@ $("#addMemberButton2").click(function(event)	{
 	console.log("addMemberButton2.click()");
 	/* get the values from the elements on the page */
 	//var values = $("addMemberForm").serialize();
+
+	var skillsArray = new Array();
+	var checkbox = $('#skillsList input:checkbox');
+
+	$.each(checkbox, function(i,b){
+		($(b).is(':checked'))?skillsArray.push($(b).data('id')):console.log('not checked');
+	});
+
+	var skills = JSON.stringify(skillsArray);
 	var org_id = $(this).data('org');
 	var first_name = $("#ro_first_name").val();
 	var last_name = $("#ro_last_name").val();
 	var sex = $("#ro_sex").val();
 	var birthday = $("#ro_birthday").val();
 	var civil_status = $("#ro_civil_status").val();
-	var dataStr = 'org_id='+org_id+'&first_name='+first_name+'&last_name='+last_name+'&sex='+sex+'&birthday='+birthday+'&civil_status='+civil_status;
+
+	//var dataStr = 'org_id='+org_id+'&first_name='+first_name+'&last_name='+last_name+'&sex='+sex+'&birthday='+birthday+'&civil_status='+civil_status;
 	 
 	/* Send the data using post and put results to the members table */
 	request = $.ajax({
 		url: "http://localhost/icdrris/ResponseOrg/addResOrgMemberModal",
 		type: "POST",
-		data: dataStr,
+		data: {skill:skills, org_id:org_id, first_name:first_name, last_name:last_name, sex:sex, birthday:birthday, civil_status:civil_status},
 		success: function(msg){
 			//$("membersTable").html(msg);
 			console.log("success");
@@ -446,3 +456,4 @@ $("#addMemberButton2").click(function(event)	{
 
 	});
 });
+
