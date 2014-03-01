@@ -15,6 +15,8 @@
 		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/polygonScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/externalOrganizationModal.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/deployLivelihoodScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
 
 
@@ -122,17 +124,26 @@
 				<li> 
 						<a href = "http://localhost/icdrris/Livelihood/registerLivelihoodOrg" ><i class = "icon-edit"></i> Register Livelihood Org </a>
 				</li>
-                <li>
-                    <a href = "#" ><i class = "icon-briefcase"></i> Register External Org</a>
+				<li>
+                    <a href = "http://localhost/icdrris/Livelihood/registerLivelihoodProgram" ><i class = "icon-briefcase"></i> Register Livelihood Program</a>
                 </li>
                 <li>
-                    <a href = "http://localhost/icdrris/Livelihood/viewDeploy"><i class = "icon-share"></i> Deploy Livelihood Org</a>
+                    <a href = "http://localhost/icdrris/Livelihood/registerExternalOrganization" ><i class = "icon-briefcase"></i> Register External Org</a>
+                </li>
+                <li>
+                    <a href = "#"><i class = "icon-share"></i> Deploy Livelihood Org</a>
                 </li>
                 <li>
                     <a href = "#"><i class = "icon-search"></i> Search Livelihood Org</a>
                 </li>
                 <li>
                     <a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodOrgs" ><i class = "icon-search"></i> View All Livelihood Orgs</a>
+                </li>
+                <li>
+                    <a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodPrograms" ><i class = "icon-search"></i> View All Livelihood Programs</a>
+                </li>
+                <li>
+                    <a href = "http://localhost/icdrris/Livelihood/viewAllExternalOrganizations" ><i class = "icon-search"></i> View All External Organizations</a>
                 </li>
             </ul>
     </ul>

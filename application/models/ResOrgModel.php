@@ -42,64 +42,47 @@ class ResOrgModel extends CI_Model{
 		$query = $this->db->insert('response_organization',$data);
 	}
 	
-	function addMemberModal($data){
+	function addMemberModal($data, $org_id){
 	
-		 $query = $this->db->insert('response_organization_members', $data);
+		 $this->db->insert('members', $data);
+		 $member_id = $this->db->insert_id();
+		 $val2 = array(
+					'response_organization_id' => $org_id, 
+					'member_id' => $member_id
+				);
+		 $this->db->insert('response_organization_members', $val2);
+
+		 //return $this->getAllResOrgMembers($organization_id);
 	}
 	function addMember($data){
 
-		        $val = array(
-		        	'response_organization_id' => $data['org_id'],
-                    'response_organization_member_first_name' => $data['first_name'],
-                    'response_organization_members_last_name' => $data['last_name'],
-                    'response_organization_members_sex' => $data['sex'], 
-                    'response_organization_members_birthday' => $data['birthday'],
-                    'response_organization_members_civil_status' => $data['civil_status']
-                    );
+		    $val1 = array(
+                 	'member_first_name' => $data['first_name'],
+                    'member_last_name' => $data['last_name'],
+                    'member_sex' => $data['sex'], 
+                    'member_birthday' => $data['birthday'],
+                    'member_civil_status' => $data['civil_status']
+                   );
 
 
 		
-		$query1 = $this->db->insert('response_organization_members',$val);
-		
-		//id to be used in the connecting table
+		$query1 = $this->db->insert('members',$val1);
 		$member_id = $this->db->insert_id();
-
 		$organization_id = $data['org_id'];
-//		$query2 = $this->getAllResOrgMembers('org_id');
 
-		$this->db->where("response_organization_id", $organization_id);
-		$query = $this->db->get("response_organization_members");
+			$val2 = array(
+					'response_organization_id' => $organization_id, 
+					'member_id' => $member_id
+					);
+		$this->db->insert('response_organization_members', $val2);
 
 
-//		return $query;
-
-//		$query2 = $this->db->query("INSERT INTO recipient_org_org_members(livelihood_organization_id, member_id) VALUES ('$organization_id', '$member_id')");
+		return $this->getAllResOrgMembers($organization_id);
 		
-//		$query3 = $this->db->query("SELECT s1.member_id, s2.first_name, s2.last_name, s2.middle_name, s2.sex, s2.birthday,s2.age, s2.monthly_income, s2.source_of_income, s2.civil_status, s2.no_of_children
-//									FROM    
-//									(SELECT member_id
-//									          FROM recipient_org_org_members 
-//									          WHERE livelihood_organization_id='$organization_id') s1
-
-//									LEFT JOIN 
-
-//									(SELECT *
-//									          FROM livelihood_organization_members) s2
-//									ON s1.member_id = s2.member_id");
-        
-//		if($query1 && $query2){
-//			return $query3;
-//		}else{
-//			return $this->db->_error_message();
-//		}
-
-		if($query) {
-			return $query;
-		}
-		else {
-			return $this->db->_error_message();
-		}
-		
+	}
+	function deployResponseOrganization($data){
+		$this->db->insert('response_organization_locations',$data);
+		return $this->db->insert_id();
 	}
 
 	function getAllResOrgs(){
@@ -126,11 +109,32 @@ class ResOrgModel extends CI_Model{
 	// }
 
 	function getAllResOrgMembers($id){
-		$this->db->where('response_organization_id', $id);
-		$query = $this->db->get('response_organization_members');
+
+		$query = $this->db->query("	SELECT m.member_id, m.member_first_name, m.member_last_name, m.member_birthday, m.member_sex, m.member_civil_status, m.member_status, r.response_organization_id
+									FROM response_organization_members r
+									LEFT JOIN members m 
+									ON m.member_id=r.member_id
+									WHERE r.response_organization_id='$id';");
 		return $query->result();
 	}
 
+	function getAllDeployableResOrgMembers($id){
+
+		$query = $this->db->query("	SELECT m.member_id, m.member_first_name,m.member_status, m.member_last_name, m.member_birthday, m.member_sex, m.member_civil_status, m.member_status, r.response_organization_id
+									FROM response_organization_members r
+									LEFT JOIN members m 
+									ON m.member_id=r.member_id
+									WHERE r.response_organization_id='$id' AND m.member_status='available';");
+		return $query->result();
+	}
+	function updateMemberStatus($member_id){
+		$data = array(
+               'member_status' => 'deployed'
+            );
+
+		$this->db->where('member_id', $member_id);
+		$this->db->update('members', $data); 
+	}
 	function getAllSkills(){
 		$query = $this->db->get('response_org_members_skills');
 		return $query->result();
@@ -154,7 +158,9 @@ class ResOrgModel extends CI_Model{
 			return false;
 		}
 	}
-
+	function deployResponseOrgMember($values){
+		$this->db->insert('member_deployments',$values);
+	}
 	function deleteOrganization($id){
 		$this->db->where("response_organization_id",$id);
 		$query = $this->db->delete("response_organization");
