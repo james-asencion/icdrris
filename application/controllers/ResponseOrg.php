@@ -68,15 +68,14 @@ class ResponseOrg extends CI_Controller
     }
 
     function addResOrgMemberModal(){
-        $data = array(
-                    'response_organization_id' => $this->input->post('org_id'),
-                    'response_organization_member_first_name' => $this->input->post('first_name'),
-                    'response_organization_member_last_name' => $this->input->post('last_name'),
-                    'response_organization_member_sex' => $this->input->post('sex'), 
-                    'response_organization_member_birthday' => $this->input->post('birthday'),
-                    'response_organization_member_civil_status' => $this->input->post('civil_status')
+        $data1= array(
+                    'member_first_name' => $this->input->post('first_name'),
+                    'member_last_name' => $this->input->post('last_name'),
+                    'member_sex' => $this->input->post('sex'), 
+                    'member_birthday' => $this->input->post('birthday'),
+                    'member_civil_status' => $this->input->post('civil_status')
                     );
-        $this->ResOrgModel->addMemberModal($data);
+        $this->ResOrgModel->addMemberModal($data1,$this->input->post('org_id'));
         return $this->getAllResOrgMembersTable($this->input->post('org_id'));
     }
 
@@ -85,13 +84,49 @@ class ResponseOrg extends CI_Controller
         echo "<tr><th>First Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Civil Status</th><th>Actions</th></tr>";
        foreach ($members as $member) {
                 echo "<tr>
-                <td><span href=\"#\" id=\"response_organization_member_first_name\" data-name\"response_organization_member_first_name\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter First Name\">".$member->response_organization_member_first_name."</span></td>
-                <td><span href=\"#\" id=\"response_organization_member_last_name\" data-name\"response_organization_member_last_name\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter Last Name\">".$member->response_organization_member_last_name."</a></td>
-                <td><span href=\"#\" id=\"response_organization_member_sex\" data-name\"response_organization_member_sex\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter Sex\">".$member->response_organization_member_sex."</a></td>
-                <td><span href=\"#\" id=\"response_organization_member_birthday\" data-name\"response_organization_member_birthday\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter Birthday\">".$member->response_organization_member_birthday."</a></td>
-                <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->response_organization_member_id."\" data-title=\"Enter Civil Status\">".$member->response_organization_member_civil_status."</a></td>
-                <td><a href=\"#\" class=\"confirm-deleteResOrgMember\" data-lastname=\"".$member->response_organization_member_last_name."\" data-id=".$member->response_organization_member_id."><i class=\"icon-trash\"></i></a></td></tr>";
+                <td><span href=\"#\" id=\"response_organization_member_first_name\" data-name\"response_organization_member_first_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter First Name\">".$member->member_first_name."</span></td>
+                <td><span href=\"#\" id=\"response_organization_member_last_name\" data-name\"response_organization_member_last_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Last Name\">".$member->member_last_name."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_sex\" data-name\"response_organization_member_sex\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Sex\">".$member->member_sex."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_birthday\" data-name\"response_organization_member_birthday\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Birthday\">".$member->member_birthday."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Civil Status\">".$member->member_civil_status."</a></td>
+                <td><a href=\"#\" class=\"confirm-deleteResOrgMember\" data-lastname=\"".$member->member_last_name."\" data-id=".$member->member_id."><i class=\"icon-trash\"></i></a></td></tr>";
+        }
     }
+
+    function getAllResOrgCheckboxList(){
+        $members = $this->ResOrgModel->getAllDeployableResOrgMembers($this->input->post('org_id'));
+
+       foreach ($members as $member) {
+                echo "<label class='checkbox'><input type='checkbox' data-id=".$member->member_id.">".$member->member_first_name."</input></label>";
+        }
+    }
+    function deployMembers(){
+        $members = json_decode($_POST['membersToDeploy']);
+
+        $orgDeploymentData = array(
+                                'response_organization_id' => $this->input->post('org_id'),
+                                'location_id' => $this->input->post('location_id'),
+                                'activity_description' => $this->input->post('response_activity_description'),
+                                'activity_start_date' => $this->input->post('activity_start_date'),
+                                'activity_end_date' => $this->input->post('activity_end_date'),
+                                'deployment_lat' => $this->input->post('deployment_lat'),
+                                'deployment_lng' => $this->input->post('deployment_lng')
+                                );
+
+
+        $deploymentId = $this->ResOrgModel->deployResponseOrganization($orgDeploymentData);
+
+        foreach ($members as $member) {
+            $deploymentData = array(
+                                'member_id' => $member,
+                                'response_organization_location_id' => $deploymentId
+                                );
+
+            $this->ResOrgModel->deployResponseOrgMember($deploymentData);
+            $this->ResOrgModel->updateMemberStatus($member);
+        }
+
+        //$this->getAllResOrgCheckboxList($org_id);
     }
 
     function registerResOrg()
@@ -147,8 +182,8 @@ class ResponseOrg extends CI_Controller
             echo "<table class=\"table table-striped\">";
             echo "<tr><th>First Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Civil Status</th></tr>";
           
-           foreach ($query->result() as $row) {
-                echo "<tr><td>".$row->response_organization_member_first_name."</td><td>".$row->response_organization_member_last_name."</td><td>".$row->response_organization_member_sex."</td><td>".$row->response_organization_member_birthday."</td><td>".$row->response_organization_member_civil_status."</td></tr>";
+           foreach ($query as $row) {
+                echo "<tr><td>".$row->member_first_name."</td><td>".$row->member_last_name."</td><td>".$row->member_sex."</td><td>".$row->member_birthday."</td><td>".$row->member_civil_status."</td></tr>";
            }  
            echo "</table>";
         }

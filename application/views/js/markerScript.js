@@ -74,11 +74,19 @@ function initialize() {
     });
 
     google.maps.event.addListener(map, "click", function(event) {
-        marker = new google.maps.Marker({
-            position: event.latLng,
-            map: map,
-            draggable: true
-        });
+        if (marker){
+            marker.setPosition(event.latLng);
+            infowindow.close(map, marker);
+            console.log('inside if');
+        }else{
+            marker = new google.maps.Marker({
+                position: event.latLng,
+                map: map,
+                draggable: true
+            });
+            //marker.setMap(map);
+            console.log('inside else');
+        }
         google.maps.event.addListener(marker, "click", function() {
             infowindow.open(map, marker);
         });
