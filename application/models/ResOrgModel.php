@@ -22,7 +22,7 @@ class ResOrgModel extends CI_Model{
 		$data['org_id'] = $orgId;
 
 		if($query){
-			return $data;
+			return $orgId;
 		}else{
 			return $this->db->_error_message();
 		}

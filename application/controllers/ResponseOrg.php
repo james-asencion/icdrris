@@ -41,9 +41,11 @@ class ResponseOrg extends CI_Controller
             //$this->registerLivelihoodOrg();
     	}
         else{
-            $dataArray = $this->ResOrgModel->createResOrg();
+            $id = $this->ResOrgModel->createResOrg();
+            //http://localhost/icdrris/ResponseOrg/ViewResOrg/id/2
+            $this->viewNewResOrg($id);
             //echo $response['org_id'];
-            $this->addOrgMembers($dataArray);
+            //$this->addOrgMembers($dataArray);
     	}
 
     }
@@ -225,6 +227,20 @@ class ResponseOrg extends CI_Controller
         //echo $get['id'];
         $data['org'] = $this->ResOrgModel->getResOrg($get['id']);
         $data['members'] = $this->ResOrgModel->getAllResOrgMembers($get['id']);
+        $data['skills']=$this->ResOrgModel->getAllSkills();
+          
+        //echo count($data['livelihood_org']);
+        //pass the query results to the view
+        $this->load->view('includes/header');
+        $this->load->view('ResOrgView',$data);
+        $this->load->view('includes/footer');       
+    }
+    function viewNewResOrg($id){
+        //query for the data
+        $get = $this->uri->uri_to_assoc();
+        //echo $get['id'];
+        $data['org'] = $this->ResOrgModel->getResOrg($id);
+        $data['members'] = $this->ResOrgModel->getAllResOrgMembers($id);
         $data['skills']=$this->ResOrgModel->getAllSkills();
           
         //echo count($data['livelihood_org']);
