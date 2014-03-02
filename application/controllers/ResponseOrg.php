@@ -94,7 +94,7 @@ class ResponseOrg extends CI_Controller
 
         $skills = $this->ResOrgModel->getSkillsByMember($member);
         echo $member;
-        //$string = "";
+        $string = "";
         if($skills){
             foreach ($skills as $s) {
             echo $s->skillset_description;

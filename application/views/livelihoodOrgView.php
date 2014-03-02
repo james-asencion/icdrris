@@ -1,26 +1,22 @@
     </div>
 </div>
 <div class = "container-fluid">
+<div class = "row-fluid">
 <!--<div class = "row-fluid">-->
- <div class="well offset2 span7">
- <h2>Livelihood Organization</h2>
- <div class = "row-fluid">
- <div class = "span4">
-	Name: <?php foreach($livelihood_org as $org){ echo $org->livelihood_organization_name; ?>
+ <div class="well span3">
+ <h3><?php foreach($livelihood_org as $org){ echo $org->livelihood_organization_name; ?></h3>
     <br>Address: <?php echo $org->livelihood_organization_address; ?>
-    <br>Members: <?php echo $org->no_of_members; ?></div>
-    <div class = "span4">
-    Initial Income: <?php echo $org->initial_income;?>
-    <br>Status: <?php echo $org->livelihood_organization_status; ?></div>
-    <div class = "span4">
-    Date Established: <?php echo $org->date_established; ?>
-    <br>Business Activity Type: <?php echo $org->business_activity_type; }?></div></div>
+    <br>Members: <?php echo $org->no_of_members; ?>
+    <br>Initial Income: <?php echo $org->initial_income;?>
+    <br>Status: <?php echo $org->livelihood_organization_status; ?>
+    <br>Date Established: <?php echo $org->date_established; ?>
+    <br>Business Activity Type: <?php echo $org->business_activity_type; }?>
     
 </div>
 
 
 
-<div class = "well span12">
+<div class = "well span9">
 <div id="membersTable">
     <h4>Livelihood Organization Members</h4>
 
