@@ -39,25 +39,29 @@ class Login extends CI_Controller{
 				   </div>';
 		}else{
 			$username = $this->input->post("username");
+			$password = md5($this->input->post("password"));
 			//$this->load->model('membership_model');
-			$query=$this->membership_model->getUserDetails($username);
+			$query=$this->membership_model->getUserDetails($username, $password);
+			
 			foreach($query->result() as $row_user){
 				 $user_id= $row_user->user_id;
 				 $fname= $row_user->user_first_name;
 				 $lname= $row_user->user_last_name;
 				 $utype= $row_user->user_type;
-		}
-		$data= array(
-					'user_id' => $user_id,
-					'username' => $username,
-					'is_logged_in' => 1,
-					'firstname' => $fname,
-					'lastname' => $lname,
-					'utype' => $utype
-				);
-		$this->session->set_userdata($data);
-		//redirect('Login/home');
-		echo "success";
+			}
+			
+			$data= array(
+						'user_id' => $user_id,
+						'username' => $username,
+						'is_logged_in' => 1,
+						'firstname' => $fname,
+						'lastname' => $lname,
+						'user_type' => $utype
+					);
+			
+			$this->session->set_userdata($data);
+			//redirect('Login/home');
+			echo "success";
 		}
     }
            

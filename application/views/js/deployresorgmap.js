@@ -41,7 +41,7 @@ function initializeMap2() {
 
     
     var urlString = window.location.pathname.split('/');
-    alert(urlString[4]);
+    //alert(urlString[5]);
     var str ="";
     testAjax(function(data){
 
@@ -89,7 +89,8 @@ function initializeMap2() {
         type: "POST",
         data: {membersToDeploy:membersSelected, org_id:url_org_id, location_id:locationId, response_activity_description:activityDescription , activity_start_date:startDate , activity_end_date:endDate , deployment_lat:lat , deployment_lng:lng },
         success: function(msg){
-            $("#deployMembersList").innerHTML = msg;
+            $("#deployMembersList").html(msg);
+            console.log(msg);
             console.log("deployment success!");
         },
         error: function(){
@@ -111,11 +112,15 @@ function initializeMap2() {
 
 
 function testAjax(handleData) {
+    var urlString = window.location.pathname.split('/');
+    alert(urlString[4]);
+
     $.ajax({
         url: "http://localhost/icdrris/ResponseOrg/getAllResOrgCheckboxList",
         type: "POST",
-        data: {org_id:2},
+        data: {org_id:urlString[4]},
         success: function(data) {
+            console.log("able to get data: "+data);
             handleData(data); 
         },
         error: function(){

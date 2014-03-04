@@ -6,6 +6,8 @@ $polygons = $dom->createElement("polygons");
 $polygonsNode = $mapElementsNode->appendChild($polygons);
 $markers = $dom->createElement("markers");
 $markersNode = $mapElementsNode->appendChild($markers); 
+$responseOrganizations = $dom->createElement("responseOrganizations");
+$responseOrgNode = $mapElementsNode->appendChild($responseOrganizations);
 
 header("Content-type: text/xml"); 
 
@@ -83,6 +85,22 @@ if($element->lat == null && $element->lng == null){
     
   }
 
+}
+foreach($respondents as $org){
+    $responseOrganization = $dom->createElement("responseOrganization");
+    $responseOrganization->setAttribute("response_organization_location_id",$org->response_organization_location_id);
+    $responseOrganization->setAttribute("response_organization_name",$org->response_organization_name);
+    $responseOrganization->setAttribute("activity_start_date",$org->activity_start_date);
+    $responseOrganization->setAttribute("activity_end_date",$org->activity_end_date);
+    $responseOrganization->setAttribute("activity_status",$org->activity_status);
+    $responseOrganization->setAttribute("deployment_lat",$org->deployment_lat);
+    $responseOrganization->setAttribute("deployment_lng",$org->deployment_lng);
+    $responseOrganization->setAttribute("activity_description",$org->activity_description);
+    $responseOrganization->setAttribute("location_address",$org->location_address);
+    $responseOrganization->setAttribute("elementType", "3");
+
+    $newRespondentOrg = $responseOrganizations->appendChild($responseOrganization);
+        
 }
 /**
 while ($row = $result->fetch_assoc()) {

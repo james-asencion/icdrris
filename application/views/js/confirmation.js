@@ -71,7 +71,7 @@ $('#btnYesDeleteResOrg').click(function(){
 		data: dataStr,
 		success: function(msg){
 			$('#modalDeleteResOrg').modal('hide');
-			window.location = "http://localhost/icdrris/ResponseOrg/viewAllResOrgs";		
+			window.location = "http://localhost/icdrris/ResponseOrg/viewAllUserResOrgs";		
 		},
 		error: function(msg){
 			console.log("something went wrong");

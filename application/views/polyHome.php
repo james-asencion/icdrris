@@ -2,6 +2,24 @@
         
         <div id="controls" style="display:block">
             <div id="elementBoxes">
+              <!-- <div class="toppanel">
+                <form class = "navbar-form pull-left" name="filterForm0">
+                    <div class="center" align="center"><p>View Respondents:</p>   
+                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                              View Respondents
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      View Respondents
+                                  </label>
+                              </li>                                                                                                                     
+                          </ul>
+                      </div> 
+                </form>
+            </div> -->
             <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm1">
                     <div class="center" align="center"><p>View Incidents by:</p>   
@@ -70,18 +88,36 @@
                     </div>
                 </form>
             </div>
-          </div>
+          <div class="toppanel">
+                <form class = "navbar-form pull-left" name="filterForm0">
+                    <div class="center" align="center"><p>Response Organizations:</p>   
+                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                              View Respondents
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      View Deployed Respondents
+                                  </label>
+                              </li>                                                                                                                     
+                          </ul>
+                      </div> 
+                </form>
+            </div>
+            </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm3">
                     <div class="center" align="center"><p>Date To:</p>   
-                        <input id="dateTo" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMarkersPolygons()"/>
+                        <input id="dateTo" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMapElements()"/>
                     </div>
                 </form>
             </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm4">
                     <div class="center" align="center"><p>Date From:</p>   
-                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMarkersPolygons()"/>
+                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMapElements()"/>
                     </div>
                 </form>
             </div>
@@ -98,17 +134,25 @@
 
 					<!-- BREADCRUMBS -->
 						<ul class="breadcrumb" style="padding: 2px 15px;">
-								<li id="li0" onclick = "backToList()" ><a id="a-ListofIncidents"> List of Incidents</a> <span class="divider">/</span></li>
+                <li id="homeBreadCrumb" onclick = "backToHome()" ><a id="a-ListofIncidents"> Home </a> <span class="divider">/</span></li>
 						</ul>
+
+          <!-- HOME VIEW -->
+          <div class="span12" id="homeView">
+              <a onclick="incidentList()" id="a-ListofIncidents"> Incidents</a><br>
+              <a onclick="respondentList()" id="a-ListofIncidents"> Response Organizations</a><br>
+              <a onclick="requestList()" id="a-ListofIncidents"> List of Requests</a><br>
+          </div>
+
+       <!--  <div id="mapElementsDetails" style="display:none"> -->
 					<!-- LIST OF INCIDENTS -->
-						<div class = "span12" id="incidentList"></div>
+						<div class = "span12" id="incidentList" style="display:none"></div>
 					<!-- end LIST OF INCIDENTS -->
 
 					
 					
-					<!-- DISPLAY DETAILS DIV -->
-                   
-                       <div id="tabbable" class="tabbable" style="display:none">
+					<!-- DISPLAY INCIDENT DETAILS DIV -->
+          <div id="incidentTabbable" class="incidentTabbable" style="display:none">
                            
 						   <ul class="nav nav-tabs" style="margin-bottom:10px;">
 								<li class="span8" style="color:darkorange">
@@ -164,9 +208,27 @@
                                 
                             </div>
                </div>
-					<!-- end DISPLAY DETAILS -->
+					<!-- end DISPLAY INCIDENT DETAILS -->
+
+
+
+        <!-- LIST OF RESPONDENTS -->
+        <div class = "span12" id="respondentList" style="display:none"></div>
+
+            <!--  DISPLAY RESPONDENT DETAILS -->
+            <div id="respondentTabbable" class="respondentTabbable" style="display:none">
+              <div id="respondent-information" ></div>
+              <div id="respondent-membersTable" class="table table-condensed " style="color:#cccccc;"></div>
+            </div>
+
+        <!-- LIST OF REQUESTS -->
+        <div class = "span12" id="requestList" style="display:none"></div>
+          <!-- DISPLAY REQUEST DETAILS  -->
+          <div id="requestTabbable" class="requestTabbable" style="display:none">
+          </div>
+
 					
-					
+				<!-- </div>  end of map elements details div  -->
 				</div>	<!-- end #PANEL .PANEL 	-->
                    
               <a  id= "trigger" class="trigger" href="#">

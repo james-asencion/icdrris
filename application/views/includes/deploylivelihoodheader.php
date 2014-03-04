@@ -125,7 +125,7 @@
                     <a href = "#"><i class = "icon-search"></i> Search Response Org</a>
                 </li>
                 <li>
-                    <a href = "http://localhost/icdrris/ResponseOrg/viewAllResOrgs" ><i class = "icon-search"></i> View All Response Orgs</a>
+                    <a href = "http://localhost/icdrris/ResponseOrg/viewAllUserResOrgs" ><i class = "icon-search"></i> View All Response Orgs</a>
                 </li>
             </ul>
     </ul>

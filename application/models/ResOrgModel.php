@@ -18,11 +18,13 @@ class ResOrgModel extends CI_Model{
 					);
 		
 		$query = $this->db->insert('response_organization',$data);
-		$orgId = $this->db->insert_id();
-		$data['org_id'] = $orgId;
+		$resOrgId = $this->db->insert_id();
+		$userId = $this->session->userdata('user_id');
+		$this->db->insert('user_response_organizations',array('response_organization_id'=>$resOrgId, 'user_id'=>$userId));
+		$data['org_id'] = $resOrgId;
 
 		if($query){
-			return $orgId;
+			return $resOrgId;
 		}else{
 			return $this->db->_error_message();
 		}
@@ -40,6 +42,9 @@ class ResOrgModel extends CI_Model{
 					);
 		
 		$query = $this->db->insert('response_organization',$data);
+		$resOrgId = $this->db->insert_id();
+		$userId = $this->session->userdata('user_id');
+		$this->db->insert('user_response_organizations',array('response_organization_id'=>$resOrgId, 'user_id'=>$userId));
 	}
 	
 	function addMemberModal($data, $org_id){
@@ -88,7 +93,7 @@ class ResOrgModel extends CI_Model{
 
 	function addMemberSkills($member_id, $skillset_id) {
 		$data = array(
-			'skillset_id' => $skillset_id,
+			'skillset_skillset_id' => $skillset_id,
 			'member_id' => $member_id
 			);
 
@@ -104,9 +109,27 @@ class ResOrgModel extends CI_Model{
 		$query = $this->db->get_where('livelihood_org',array('livelihoodOrgName'=>$name));
 		return $query;
 	}
-	function getResOrg($id){
-		$query = $this->db->get_where('response_organization', array('response_organization_id'=>$id));
+	function getResOrg($org_id){
+		//$query = $this->db->get_where('response_organization', array('response_organization_id'=>$id));
+		//return $query->row();
+		$user_id = $this->session->userdata('user_id');
+		$query = $this->db->query("	SELECT r.response_organization_id, r.response_organization_name, r.response_organization_phone_num, r.response_organization_address, r.response_organization_email, r.response_organization_contact_person, r.response_organization_members_count, r.response_organization_members_available
+									FROM user_response_organizations u
+									LEFT JOIN response_organization r 
+									ON r.response_organization_id = u.response_organization_id
+									WHERE u.response_organization_id = '$org_id' AND 
+									u.user_id='$user_id'");
 		return $query->row();
+	}
+	function getUserResponseOrganizations(){
+		$user_id = $this->session->userdata('user_id');
+
+		$query = $this->db->query("	SELECT r.response_organization_id, r.response_organization_name, r.response_organization_phone_num, r.response_organization_address, r.response_organization_email, r.response_organization_contact_person, r.response_organization_members_count, r.response_organization_members_available
+									FROM user_response_organizations u
+									LEFT JOIN response_organization r 
+									ON r.response_organization_id = u.response_organization_id
+									WHERE u.user_id='$user_id'");
+		return $query->result();
 	}
 
 	// function getAllMembers($id){
@@ -192,6 +215,32 @@ class ResOrgModel extends CI_Model{
 		$this->db->where("response_organization_member_id", $id);
 		$query = $this->db->delete("response_organization_members");
 	//	return $query->result();
+	}
+	function getDeployedOrganization($id){
+		$query = $this->db->query("	SELECT o.response_organization_location_id, r.response_organization_name,DATE_FORMAT( o.activity_start_date,'%W, %M %e, %Y') as activity_start_date,DATE_FORMAT( o.activity_end_date,'%W, %M %e, %Y') as activity_end_date, o.activity_status, o.activity_description, l.location_address
+									FROM response_organization r
+									INNER JOIN response_organization_locations o 
+									ON r.response_organization_id = o.response_organization_id
+									INNER JOIN locations l
+									ON l.location_id = o.location_id
+									WHERE o.response_organization_location_id='$id';");
+		return $query->row();
+	}
+	function getAllDeployedMembers($id){
+		$query = $this->db->query("	SELECT m.member_id, m.member_first_name, m.member_last_name, m.member_status
+									FROM member_deployments d
+									LEFT JOIN members m
+									ON d.member_id = m.member_id
+									WHERE d.response_organization_location_id='$id';");
+		return $query;
+	}
+	function getMemberSkills($id){
+		$query = $this->db->query("	SELECT s.skillset_description
+									FROM members_skillset m
+									LEFT JOIN response_org_members_skills s
+									ON s.skillset_id = m.skillset_skillset_id
+									WHERE m.member_id='$id';");
+		return $query->result();
 	}
 
 	function updateResOrgEditable($id, $name, $value) {

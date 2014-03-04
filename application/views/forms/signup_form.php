@@ -68,7 +68,8 @@
                             ' '     => '-Select-',
                             'icdrrmo'  => 'ICDRRMO',
                             'cswd'    => 'CSWD',
-                            'cdlo'   => 'CDLO'
+                            'cdlo'   => 'CDLO',
+                            'response organization' => 'Response Organization'
                           );
 			$userTypeProperties=array(set_value('utype'));
 			echo form_dropdown('utype', $usertype, $userTypeProperties);?>
