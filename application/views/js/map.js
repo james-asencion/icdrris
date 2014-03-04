@@ -38,7 +38,7 @@ $(document).ready(function() {
         console.log("props="+props+" mapElements.props="+mapElements[i].props);
         console.log("props & mapElements[i].props="+(props & mapElements[i].props));
         console.log((((props & mapElements[i].props)>>>0) === props));
-        mapElements[i].setVisible(((props & mapElements[i].props)>>>0 === props)?((props)?true:false):false);
+        mapElements[i].setVisible((props & mapElements[i].props)?((props)?true:false):false);
         if(((props & mapElements[i].props)>>>0) === props) 
         {
             if(mapElements[i].elementType===3){
@@ -266,6 +266,7 @@ function getAllMapElements() {
             console.log("Integer Equivalent -->>"+int+"<<<---");
             //Extract all the elements needed for the sidebar(incident details)
             var incident_report_id = polygons[polygonIndex].getAttribute("incident_report_id");
+            var incident_location_id = polygons[polygonIndex].getAttribute("incident_location_id");
             var disasterType = polygons[polygonIndex].getAttribute("disaster_type");
             var incidentDescription = polygons[polygonIndex].getAttribute("incident_description");
             var incidentDate = polygons[polygonIndex].getAttribute("incident_date");
@@ -303,6 +304,7 @@ function getAllMapElements() {
                 fillOpacity: 0.35,
                 arrId: polygonIndex,
                 id: incident_report_id,
+                incidentLocationId: incident_location_id,
                 disasterType: disasterType,
                 incidentDescription: incidentDescription,
                 incidentDate: incidentDate,
@@ -332,6 +334,7 @@ function getAllMapElements() {
             var int = parseInt(arr.join(''),2);
             console.log("Integer Equivalent -->>"+int+"<<<---");
             var incident_report_id = markers[i].getAttribute("incident_report_id");
+            var incident_location_id = markers[i].getAttribute("incident_location_id");
             var disasterType = markers[i].getAttribute("disaster_type");
             var incidentDescription = markers[i].getAttribute("incident_description");
             var incidentDate = markers[i].getAttribute("incident_date");
@@ -350,6 +353,7 @@ function getAllMapElements() {
                 center: point,
                 arrId: (polygonIndex+i),
                 id: incident_report_id,
+                incidentLocationId: incident_location_id,
                 disasterType: disasterType,
                 incidentDescription: incidentDescription,
                 incidentDate: incidentDate,
@@ -435,7 +439,7 @@ function appendToIncidentList(mapElement) {
     listItem += "<div class=\"accordion-heading\">";
     listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\">" + mapElement.disasterType + "</a>";
     //place icon-links here [show details]
-    listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+");\"> </i></a>"; // show details icon
+    listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+","+mapElement.incidentLocationId+");\"> </i></a>"; // show details icon
     //end div
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
@@ -527,21 +531,18 @@ function backToRequestList() {
     $("#requestList").show("fast");
 }
 
-function displayIncidentDetails(incidentReportId, elementId) {
+function displayIncidentDetails(incidentReportId, elementId, incident_location_id) {
 
     console.log('sdb-clicked');
     $("#incidentList").hide("fast");
     $("#table-rows-victims").removeData("fast");
     openSideBar();
-    var dataStr = 'id=' + incidentReportId;
-    console.log("incident report id = "+incidentReportId);
-
 
     /* Send the data using post and put results to the members table */
     request = $.ajax({
         url: "http://localhost/icdrris/Incident/incidentTitle",
         type: "POST",
-        data: dataStr,
+        data: {id:incidentReportId},
         success: function(msg) {
             console.log("success -TITLE");
             //console.log(msg);
@@ -569,7 +570,7 @@ function displayIncidentDetails(incidentReportId, elementId) {
     request = $.ajax({
         url: "http://localhost/icdrris/Incident/incidentDetails",
         type: "POST",
-        data: dataStr,
+        data: {id:incident_location_id},
         success: function(msg) {
             console.log("success");
             //console.log(msg);
@@ -595,7 +596,7 @@ function displayIncidentDetails(incidentReportId, elementId) {
     request = $.ajax({
         url: "http://localhost/icdrris/Victim/viewAllVictims",
         type: "POST",
-        data: dataStr,
+        data: {id:incidentReportId},
         success: function(msg) {
             console.log("success");
             //console.log(msg);

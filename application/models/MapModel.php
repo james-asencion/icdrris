@@ -15,7 +15,7 @@ class MapModel extends CI_Model
 	}
 	function getMapElements1($dateFrom, $dateTo){
 
-		$query = $this->db->query("	SELECT i.incident_report_id, i.incident_description,b.location_address, l.incident_intensity, DATE_FORMAT(i.incident_date,'%W, %M %e, %Y') as incident_date, i.disaster_type, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.location_id, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon,l.flag_confirmed, l.flag_true_rating, l.flag_false_rating
+		$query = $this->db->query("	SELECT l.incident_location_id, i.incident_report_id, i.incident_description,b.location_address, l.incident_intensity, DATE_FORMAT(i.incident_date,'%W, %M %e, %Y') as incident_date, i.disaster_type, l.death_toll, l.no_of_injuries, l.no_of_people_missing, l.no_of_families_affected, l.no_of_houses_destroyed, l.estimated_damage_cost, l.incident_info_source, l.location_id, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon,l.flag_confirmed, l.flag_true_rating, l.flag_false_rating
 							        FROM incidents i
 							        INNER JOIN incident_location l 
 							        ON i.incident_report_id = l.incident_report_id

@@ -373,7 +373,7 @@ class ResponseOrg extends CI_Controller
                     foreach($members as $member){
                         $skills = $this->ResOrgModel->getMemberSkills($member->member_id);
                         echo        '<tr>
-                                        <td>'.$member->member_first_name." ".$member->member_last_name.'<td>
+                                        <td>'.$member->member_first_name." ".$member->member_last_name.'</td>
                                         <td>'.$member->member_status.'</td>
                                         <td>';
                                             foreach($skills as $skill){

@@ -16,6 +16,7 @@ foreach ($elements as $element){
 if($element->lat == null && $element->lng == null){    
 
     $polygon = $dom->createElement("polygon");
+    $polygon->setAttribute("incident_location_id",$element->incident_location_id);
     $polygon->setAttribute("incident_report_id",$element->incident_report_id);
     $polygon->setAttribute("incident_description",$element->incident_description);
     $polygon->setAttribute("location_address",$element->location_address);
@@ -61,6 +62,7 @@ if($element->lat == null && $element->lng == null){
   }else{
       
     $marker = $dom->createElement("marker");
+    $marker->setAttribute("incident_location_id",$element->incident_location_id);
     $marker->setAttribute("incident_report_id",$element->incident_report_id);
     $marker->setAttribute("disaster_type",$element->disaster_type);
     $marker->setAttribute("incident_intensity",$element->incident_intensity);
