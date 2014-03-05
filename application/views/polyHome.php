@@ -171,15 +171,21 @@
                                         <li class="active">
                                           <a href="#" id="overview-li" data-incidentid="" onclick="displayDetails()"><i class="icon-white icon-info-sign"></i> Overview</a>
                                         </li>
-                                        <li>
-                                          <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
-                                        </li>
-                                        <li>
-                                          <a href="#" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
-                                        </li>
-                                        <li >
-                                          <a href="#" id="displaychart-li" data-incidentid=""><i class="icon-white icon-globe"></i> Display Chart</a>
-                                        </li>
+                                         <li>
+                                             <a href="#" id="approve-li" class="approve-li" data-incidentid="" onclick="rateIncident(1)" style="color:whitesmoke"> <span id="span-approve-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-up"></i> Approve</a>
+                                         </li>
+                                         <li>
+                                             <a href="#" id="disapprove-li" class="disapprove-li" data-incidentid="" onclick="rateIncident(0)" style="color:whitesmoke"> <span id="span-disapprove-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-down"></i> Disapprove</a>
+                                         </li>
+                                        <?php if($this->session->userdata('user_type') == 'icdrrmo'){?>
+                                            <li>
+                                              <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
+                                            </li>
+                                            <li>
+                                              <a href="#" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
+                                            </li>
+                                        <?php }?>
+                                         
                                     </ul> 
 								    <div id="incident-information" style="font-size: 12px; line-height:normal"></div>
                                      
