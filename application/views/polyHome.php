@@ -239,8 +239,43 @@
               <div id="map_canvas" style="width:100%; height:570px;"></div>   
             </div>
 			
-	<!-- MODALS: detailsVictim, reportVictim, deleteIncident, deleteVictim, updateVictim>
+	<!-- MODALS: confirmVictim, confirmIncident, detailsVictim, reportVictim, deleteIncident, deleteVictim, updateVictim>
 			
+ 	<!-- modalConfirmVictim -->
+            <div id="modalConfirmVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Confirm Victim</h3>
+                </div>
+                 <div class="modal-body">
+                    <div name="message">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="btnYesConfirmVictim" class="btn btn-primary" onclick="btnYesConfirmVictim()">Confirm</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+                </div>
+            </div> 
+			<!-- end modalConfirmVictim -->
+			
+			<!-- modalConfirmIncident -->
+			 <div id="modalConfirmIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Confirm Incident</h3>
+                </div>
+                 <div class="modal-body">
+                    <div name="message">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="btnYesConfirmIncident" class="btn btn-primary" onclick="btnYesConfirmIncident()">Confirm</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+                </div>
+            </div> 
+			<!-- end modalConfirmIncident -->
+			
+ 
 			<!-- modalDetailsVictim -->
 			  <div id="modalDetailsVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
@@ -334,7 +369,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
                 </div>
-                 <div class="modal-body">
+                     <div class="modal-body">
                     <div name="message">
                     </div>
                 </div>

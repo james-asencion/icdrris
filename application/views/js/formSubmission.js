@@ -119,7 +119,7 @@ function editVictim(element){
 		var firstname = $(this).data('firstname');
 		var middlename = $(this).data('middlename');
 		var lastname = $(this).data('lastname');
-		var address = $(this).data('address');
+		var address = $(this).data('addressvictim');
 		var victimstatus = $(this).data('victimstatus');
 		console.log('update victim: '+ incidentid + ' ' + victimid + ' '+ firstname+ ' '+ middlename+ ' '+ lastname+ ' '+ address+ ' '+ victimstatus);
 		$('#modalUpdateVictim').data('incidentid',incidentid);	//for AND query
@@ -127,7 +127,7 @@ function editVictim(element){
 		$('#modalUpdateVictim').data('firstname',firstname);	//for AND query
 		$('#modalUpdateVictim').data('middlename',middlename);	//for AND query
 		$('#modalUpdateVictim').data('lastname',lastname);	//for AND query
-		$('#modalUpdateVictim').data('address',address);	//for AND query
+		$('#modalUpdateVictim').data('addressvictim',address);	//for AND query
 		$('#modalUpdateVictim').data('victimstatus',victimstatus);	//for AND query
 		console.log('passed the data to the modalUpdateVictim');
 		$('#modalUpdateVictim').modal('show');
@@ -139,12 +139,13 @@ function editVictim(element){
 			var firstname  = $(this).data('firstname');
 			var middlename  = $(this).data('middlename');
 			var lastname  = $(this).data('lastname');
-			var address  = $(this).data('address');
+			var address  = $(this).data('addressvictim');
+			console.log("#modalUpdateVictim #addressvictim: " + address);
 			var victimstatus  = $(this).data('victimstatus');
 			$("#modalUpdateVictim #first_name").attr("value", firstname);
 			$("#modalUpdateVictim #middle_name").attr("value", middlename);
 			$("#modalUpdateVictim #last_name").attr("value", lastname);
-			$("#modalUpdateVictim #address").attr("value", address);
+			$("#modalUpdateVictim #addressvictim").attr("value", address);
 			//$("#victim_status").attr("value", victimstatus);
 			var i=0;
 			while ((document.updateVictimForm.victim_status.options[i].value != victimstatus) && (i < document.updateVictimForm.victim_status.options.length))
@@ -158,13 +159,13 @@ function editVictim(element){
         // Stop form from submitting normally
         event.preventDefault();
         
-        // Get some values from elements on the modal login page:
+        // Get some values from elements on the modal:
         var incidentid  = $('#modalUpdateVictim').data('incidentid');
 		var victimid  = $('#modalUpdateVictim').data('victimid');
         var firstname = $("#modalUpdateVictim #first_name").val();
         var middlename = $("#modalUpdateVictim #middle_name").val();
         var lastname = $("#modalUpdateVictim #last_name").val();
-        var address = $("#modalUpdateVictim #address").val();
+        var address = $("#modalUpdateVictim #addressvictim").val();
         var victimstatus = document.updateVictimForm.victim_status.value;
         var dataStr = 'incidentid='+incidentid+'&victimid='+victimid+'&firstname='+firstname+'&middlename='+middlename+'&lastname='+lastname+'&address='+address+'&victimstatus='+victimstatus;
 		console.log(dataStr);
@@ -221,16 +222,16 @@ $(document).ready(function(){
         var firstname = $("#first_name").val();
         var middlename = $("#middle_name").val();
         var lastname = $("#last_name").val();
-        var address = $("#address").val();
+        var address = $("#addressvictim").val();
         var victimstatus = document.reportVictimForm.victim_status.value;
 		console.log(victimstatus);
-        var dataStr = 'reportNo='+incidentid+'&first_name='+firstname+'&middle_name='+middlename+'&last_name='+lastname+'&address='+address+'&victim_status='+victimstatus;
-		console.log(dataStr);
+        //var dataStr = 'reportNo='+incidentid+'&first_name='+firstname+'&middle_name='+middlename+'&last_name='+lastname+'&address='+address+'&victim_status='+victimstatus;
+		//console.log(dataStr);
         /* Send the data using post and put results to the members table */
 		request = $.ajax({
 			url: "http://localhost/icdrris/Victim/validate",
 			type: "POST",
-			data: dataStr,
+			data: {reportNo:incidentid, first_name:firstname, middle_name:middlename, last_name:lastname,address:address, victim_status:victimstatus},
 			success: function(msg){
 				console.log("success");
 				console.log(msg);
@@ -272,9 +273,7 @@ function detailsVictim(element){
 		$( "#victim_status" ).html( document.createTextNode( victimstatus) );
 		$( "#modalDetailsVictim .rateTrue" ).html( document.createTextNode( report_rating_true) );
 		$( "#modalDetailsVictim .rateFalse" ).html( document.createTextNode( report_rating_false) );
-			
-		
-			
+	
 			var funcApproved= "rateVictim("+incidentid+", "+victimid+ ", "+1+")";
 			var funcDisapproved= "rateVictim("+incidentid+", "+victimid+ ", "+0+")";
 			$( "#approved-victim" ).attr( "onclick", funcApproved);
@@ -346,13 +345,13 @@ $("#addMemberButton1").click(function(event)	{
 	var sex = $("#ro_sex").val();
 	var birthday = $("#ro_birthday").val();
 	var civil_status = $("#ro_civil_status").val();
-	var dataStr = 'org_id='+org_id+'&first_name='+first_name+'&last_name='+last_name+'&sex='+sex+'&birthday='+birthday+'&civil_status='+civil_status;
+	//var dataStr = 'org_id='+org_id+'&first_name='+first_name+'&last_name='+last_name+'&sex='+sex+'&birthday='+birthday+'&civil_status='+civil_status;
 
 	/* Send the data using post and put results to the members table */
 	request = $.ajax({
 		url: "http://localhost/icdrris/ResponseOrg/submitMember",
 		type: "POST",
-		data: dataStr,
+		data: {org_id:org_id, first_name:first_name, last_name:last_name, sex:sex, birthday:birthday, civil_status:civil_status},
 		success: function(msg){
 			//$("membersTable").html(msg);
 			console.log("success");
