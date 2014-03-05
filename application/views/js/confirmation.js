@@ -29,7 +29,8 @@ $('#btnYes').click(function(){
 		type: "POST",
 		data: dataStr,
 		success: function(msg){
-			$('#modalDelete').modal('hide');		
+			$('#modalDelete').modal('hide');
+			console.log("livelihood organization successfully deleted with message->"+msg);		
 		},
 		error: function(msg){
 			console.log("something went wrong");

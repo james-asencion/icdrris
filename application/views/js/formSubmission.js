@@ -1,28 +1,36 @@
 $(document).ready(function(){
 
-$("#addMemberButton").click(function(event)	{
+$('.addLivelihoodOrgMembers').on('click', function(e){
+	e.preventDefault();
+	console.log('clicked');
+	var id = $(this).data('org');
+	$('#modalAddLivelihoodOrgMembers').data('org',id);
+	$('#modalAddLivelihoodOrgMembers').modal('show');
+});
+
+$("#addLivelihoodMemberButton").click(function(event)	{
 	/* Stop form from submitting normally */
 	//event.preventDefault();
 
 	/* get the values from the elements on the page */
 	//var values = $("addMemberForm").serialize();
-	var org_id = $("#org_id").val();
-	var first_name = $("#first_name").val();
-	var last_name = $("#last_name").val();
-	var middle_name = $("#middle_name").val();
-	var sex = $("#sex").val();
-	var birthday = $("#birthday").val();
-	var age = $("#age").val();
-	var monthly_income = $("#monthly_income").val();
-	var source_of_income = $("#source_of_income").val();
-	var civil_status = $("#civil_status").val();
-	var dataStr = 'org_id='+org_id+'&first_name='+first_name+'&last_name='+last_name+'&middle_name='+middle_name+'&sex='+sex+'&birthday='+birthday+'&age='+age+'&monthly_income='+monthly_income+'&source_of_income='+source_of_income+'&civil_status='+civil_status;
-
+	var org_id = $("#modalAddLivelihoodOrgMembers").data('org');
+	var first_name = $("#member_first_name").val();
+	var last_name = $("#member_last_name").val();
+	var middle_name = $("#member_middle_name").val();
+	var sex = $("#member_sex").val();
+	var birthday = $("#member_birthday").val();
+	var age = $("#member_age").val();
+	var monthly_income = $("#member_monthly_income").val();
+	var source_of_income = $("#member_source_of_income").val();
+	var civil_status = $("#member_civil_status").val();
+	var no_of_children = $("#member_no_of_children").val();
+	console.log("org id--> "+org_id);
 	/* Send the data using post and put results to the members table */
 	request = $.ajax({
 		url: "http://localhost/icdrris/Livelihood/submitMember",
 		type: "POST",
-		data: dataStr,
+		data: {org_id:org_id, first_name:first_name, last_name:last_name, middle_name:middle_name, sex:sex, birthday:birthday, age:age, monthly_income:monthly_income, source_of_income:source_of_income, civil_status:civil_status, no_of_children:no_of_children},
 		success: function(msg){
 			//$("membersTable").html(msg);
 			console.log("success");
@@ -30,7 +38,17 @@ $("#addMemberButton").click(function(event)	{
 			
 			$("#membersTable").html('');
 			$("#membersTable").html(msg);
-
+			$('#modalAddLivelihoodOrgMembers').modal('hide');
+			$("#member_first_name").val('');
+			$("#member_last_name").val('');
+			$("#member_middle_name").val('');
+			$("#member_sex").val('');
+			$("#member_birthday").val('');
+			$("#member_age").val('');
+			$("#member_monthly_income").val('');
+			$("#member_source_of_income").val('');
+			$("#member_civil_status").val('');
+			$("#member_no_of_children").val('');
 
 		},
 		error: function(){

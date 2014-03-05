@@ -41,9 +41,10 @@ class Livelihood extends CI_Controller
             //$this->registerLivelihoodOrg();
         }
         else{
-            $dataArray = $this->LivelihoodModel->createLivelihoodOrg();
+            $id = $this->LivelihoodModel->createLivelihoodOrg();
             //echo $response['org_id'];
-            $this->addOrgMembers($dataArray);
+            $this->viewNewLivelihoodOrg($id);
+            //$this->addOrgMembers($dataArray);
         }
 
     }
@@ -106,8 +107,19 @@ class Livelihood extends CI_Controller
             echo "<table class=\"table table-striped\">";
             echo "<tr><th>First Name</th><th>Middle Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Age</th><th>Monthly Income</th><th>Source of income</th><th>Civil Status</th><th>Number of Children</th></tr>";
           
-           foreach ($query->result() as $row) {
-                echo "<tr><td>".$row->first_name."</td><td>".$row->middle_name."</td><td>".$row->last_name."</td><td>".$row->sex."</td><td>".$row->birthday."</td><td>".$row->age."</td><td>".$row->monthly_income."</td><td>".$row->source_of_income."</td><td>".$row->civil_status."</td><td>".$row->no_of_children."</td></tr>";
+           foreach ($query->result() as $member) {
+                echo "<tr>
+                <td><span href=\"#\" id=\"first_name\" data-name\"member_first_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter First Name\">".$member->first_name."</span></td>
+                <td><span href=\"#\" id=\"middle_name\" data-name\"member_middle_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Middle Name\">".$member->middle_name."</span></td>
+                <td><span href=\"#\" id=\"last_name\" data-name\"member_last_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Last Name\">".$member->last_name."</span></td>
+                <td><span href=\"#\" id=\"sex\" data-name\"member_sex\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Sex\">".$member->sex."</span></td>
+                <td><span href=\"#\" id=\"birthday\" data-name\"member_birthday\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Birthday\">".$member->birthday."</span></td>
+                <td><span href=\"#\" id=\"age\" data-name\"member_age\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Age\">".$member->age."</span></td>
+                <td><span href=\"#\" id=\"monthly_income\" data-name\"member_monthly_income\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Monthly Income\">".$member->monthly_income."</span></td>
+                <td><span href=\"#\" id=\"source_of_income\" data-name\"member_source_of_income\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Source of Income\">".$member->source_of_income."</span></td>
+                <td><span href=\"#\" id=\"civil_status\" data-name\"member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Civil Status\">".$member->civil_status."</span></td>
+                <td><span href=\"#\" id=\"no_of_children\" data-name\"member_no_of_children\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter No of children\">".$member->no_of_children."</span></td>
+                <td><a align=\"center\" href=localhost/icdrris/Livelihood/deleteMember?id=".$member->member_id."</a></td></tr>";
            }  
            echo "</table>";
         }
@@ -134,6 +146,22 @@ class Livelihood extends CI_Controller
         $this->load->view('livelihoodOrgView',$data);
         $this->load->view('includes/footer');        
     }
+
+    function viewNewLivelihoodOrg($id){
+
+        $data['livelihood_org'] = $this->LivelihoodModel->getLivelihoodOrg($id);
+        $data['members'] = $this->LivelihoodModel->getAllMembers($id);
+        $data['grants']=$this->LivelihoodModel->getAllOrganizationProgramGrants($id);
+        $data['requests']=$this->LivelihoodModel->getAllOrganizationRequests($id);
+          
+        //echo count($data['livelihood_org']);
+        //pass the query results to the view
+        $this->load->view('includes/header');
+        $this->load->view('livelihoodOrgView',$data);
+        $this->load->view('includes/footer'); 
+
+    }
+    
     function viewAllLivelihoodOrgs(){
         $data['organizations'] = $this->LivelihoodModel->getAllLivelihoodOrgs();
         $this->load->view('includes/header');
@@ -252,6 +280,12 @@ class Livelihood extends CI_Controller
         $this->load->view('livelihoodProgramsView',$data);
         $this->load->view('includes/footer');
     }
+    function viewAvailableLivelihoodPrograms(){
+        $data['livelihood_programs'] = $this->LivelihoodModel->getAllAvailableLivelihoodPrograms();
+        $this->load->view('includes/header');
+        $this->load->view('availableLivelihoodProgramsView',$data);
+        $this->load->view('includes/footer');
+    }
     function sendLivelihoodRequest(){
         $this->load->helper('date');
         $data = array(
@@ -321,6 +355,7 @@ class Livelihood extends CI_Controller
         $this->load->view('includes/footer');
         
     }
+
     function registerExternalOrganization(){
 
         $this->load->view('includes/header');

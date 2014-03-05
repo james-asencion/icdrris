@@ -25,8 +25,7 @@ class ResponseOrg extends CI_Controller
             $this->load->view('addResOrgView.php');
             $this->load->view('includes/footer'); 
     }
-    function addResOrg()
-    {
+    function addResOrg(){
     	$this->load->library('form_validation');
     	$this->form_validation->set_rules('ro_name', 'Response Organization Name', 'trim|required');
     	$this->form_validation->set_rules('ro_phone_num', 'Phone Number', 'trim|required');

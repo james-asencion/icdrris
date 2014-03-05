@@ -171,15 +171,15 @@ $("#confirmApproval").click(function(){
 
 $('.send-request').on('click', function(e){
 	e.preventDefault();
-	console.log('deploy livelihood program button clicked');
+	console.log('send request to livelihood program button clicked');
 	var programId = $(this).data('id');
-	var organizationId = $(this).data('organization');
+	var urlString = window.location.pathname.split('/');
+	var organizationId = urlString[4];
 	var livelihoodProgramName = $(this).data('program');
 	console.log("program id on click: "+programId+"  organization id on click: "+organizationId);
 	$("#modalSendLivelihoodRequest").data('programId', programId);
 	$("#modalSendLivelihoodRequest").data('organizationId', organizationId);
 	$('#modalSendLivelihoodRequest .modal-body').html("<h2 class=\"text-center\">Send livelihood request to: </h2><h4>"+livelihoodProgramName+"<h4><br><label class=\"control-label\">Request Description</label><textarea id=\"request_description\" rows=\"3\"></textarea>");
-	
 	$("#modalSendLivelihoodRequest").modal('show');
 
 
@@ -195,8 +195,6 @@ $("#confirmRequest").click(function(){
 	var programId = $('#modalSendLivelihoodRequest').data('programId');
 	var organizationId = $('#modalSendLivelihoodRequest').data('organizationId');
 	var requestDescription = $('#request_description').val();
-	var dataStr = "program id: "+programId+"  org id: "+organizationId+"  request_description: "+requestDescription;
-	console.log(dataStr);
 
 	request = $.ajax({
 		url: "http://localhost/icdrris/Livelihood/sendLivelihoodRequest",
@@ -206,6 +204,8 @@ $("#confirmRequest").click(function(){
 			console.log("livelihood program request successfully sent");
 			console.log(msg);
 			$("#modalSendLivelihoodRequest").modal('hide');
+			$("#modalSendLivelihoodRequestSuccess").modal('show');
+			
 		},
 		error: function(){
 			console.log("fail");
