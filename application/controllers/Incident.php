@@ -5,14 +5,14 @@ class Incident extends  CI_Controller
 		parent:: __construct();
 		$this->load->model("IncidentModel");
 	}
-        
+
 	public function index(){
 		 //temporary: should display list of incidents
 		 $this->load->view('includes/header');
 		 $this->load->view('polyHome');
 		 $this->load->view('includes/footer');
 	}
-       
+
 	public function reportIncidentPolygon(){
 		$this->load->view('polygonView');
 	}
@@ -20,9 +20,10 @@ class Incident extends  CI_Controller
 		$this->load->view('markerView');
 	}
 	 public function incidentTitle(){
-			$id = $this->input->post("id");
-            $query_results = $this->IncidentModel->getIncidentDetails($id); 
-            
+			$incident_report_id = $this->input->post("incident_report_id");
+			//$incident_location_id = $this->input->post("incident_location_id");
+            $query_results = $this->IncidentModel->getIncidentTitle($incident_report_id);
+
 			if($query_results == 'false'){
 				echo "error";
 			}
@@ -34,11 +35,11 @@ class Incident extends  CI_Controller
 				echo $incident_description;
 			}
         }
-		
+
         public function incidentDetails(){
-            $id = $this->input->post("id");
-            $query_results = $this->IncidentModel->getIncidentDetails($id); 
-            
+            $incident_location_id = $this->input->post("incident_location_id");
+            $query_results = $this->IncidentModel->getIncidentDetails($incident_location_id);
+
 			if($query_results == 'false'){
 				echo "error";
 			}
@@ -78,12 +79,12 @@ class Incident extends  CI_Controller
 										<div id="fieldvalue" class="span8"> '.$incident_date.'</div>
 									</div>
 							</div>
-							
+
 						</div>
-							  
+
 						<div class="navbar" style="height:30px;">
 							 <div class="navbar-inner" style="height: 30px; min-height: 25px; background-image: linear-gradient(to bottom,#051849,#332F2F);">
-								<p class="brand" href="#" style="font-size: 14px;"> <i class="icon-white icon-signal" style="margin-top:4px"> </i> STATISTICS</p>              
+								<p class="brand" href="#" style="font-size: 14px;"> <i class="icon-white icon-signal" style="margin-top:4px"> </i> STATISTICS</p>
 							 </div>
 						</div>
 
@@ -94,7 +95,7 @@ class Incident extends  CI_Controller
 										<div id="fieldlabel" class="span7">Deaths: </div>
 										<div class="span1">'.$death_toll.'</div>
 									</div>
-								
+
 									<div class="span6">
 										<div id="fieldlabel" class="span7"> Families Affected: </div>
 										<div class="span1">'.$no_of_families_affected.'</div>
@@ -119,7 +120,7 @@ class Incident extends  CI_Controller
 										<div id="fieldlabel" class="span7"> Damage Cost: </div>
 										<div class="span5"> PHP '.$estimated_damage_cost.'</div>
 									</div>
-								</div>        
+								</div>
 								<div class="row-fluid">
 									<div class="span12">
 										<div id="fieldlabel" class="span5">Information Source: </div>
@@ -130,6 +131,19 @@ class Incident extends  CI_Controller
 						</div>';
 			}
         }
+		
+		public function confirmIncident(){
+		$incident_location_id = $this->input->post("incident_location_id");
+		$userid = $this->session->userdata('user_id');
+		$query_results = $this->IncidentModel->confirmThisIncident($incident_location_id, $userid);
+		if($query_results){
+			echo "success";
+		}
+		else{
+			echo $query_results;
+		}
+	}
+	
         public function getDeploymentDetails($id){
         	$deployment = $this->IncidentModel->getDeploymentDetails($id);
 
@@ -152,25 +166,25 @@ class Incident extends  CI_Controller
 										<div id="fieldvalue" class="span8"> '.$incident_date.'</div>
 									</div>
 							</div>
-							
+
 						</div>
-							  
+
 						<div class="navbar" style="height:30px;">
 							 <div class="navbar-inner" style="height: 30px; min-height: 25px; background-image: linear-gradient(to bottom,#051849,#332F2F);">
-								<p class="brand" href="#" style="font-size: 14px;"> <i class="icon-white icon-signal" style="margin-top:4px"> </i> STATISTICS</p>              
+								<p class="brand" href="#" style="font-size: 14px;"> <i class="icon-white icon-signal" style="margin-top:4px"> </i> STATISTICS</p>
 							 </div>
 						</div>';
         }
-        
+
         public function doEdit($id){
-           
-            
+
+
             $this->load->view();
         }
-        
+
         public function deleteIncident(){
             $incident_report_id = $this->input->post("incident_report_id");
-            $query_results = $this->IncidentModel->deleteIncident($incident_report_id); 
+            $query_results = $this->IncidentModel->deleteIncident($incident_report_id);
             if($query_results){
                 echo 'success';
             }
@@ -178,7 +192,7 @@ class Incident extends  CI_Controller
                 echo $query_results;
             }
         }
-       
+
 }
 
 ?>

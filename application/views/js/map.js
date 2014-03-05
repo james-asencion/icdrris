@@ -271,7 +271,7 @@ function getAllMapElements() {
             var incidentDescription = polygons[polygonIndex].getAttribute("incident_description");
             var incidentDate = polygons[polygonIndex].getAttribute("incident_date");
             var location = polygons[polygonIndex].getAttribute("location_address");
-
+            var flagConfirmed = polygons[polygonIndex].getAttribute("flag_confirmed");
             //============DECLARE VARIABLES=============
             var coordinates = [];
             //var bounds = new google.maps.LatLngBounds();
@@ -309,6 +309,7 @@ function getAllMapElements() {
                 incidentDescription: incidentDescription,
                 incidentDate: incidentDate,
                 location: location,
+                flagConfirmed: flagConfirmed,
                 center: center,
                 elementType: 2,
                 props: int
@@ -339,6 +340,7 @@ function getAllMapElements() {
             var incidentDescription = markers[i].getAttribute("incident_description");
             var incidentDate = markers[i].getAttribute("incident_date");
             var location = markers[i].getAttribute("location_address");
+            var flagConfirmed = markers[i].getAttribute("flag_confirmed");
 
             var icon = customIcons[disasterType] || {};
             var point = new google.maps.LatLng(
@@ -358,6 +360,7 @@ function getAllMapElements() {
                 incidentDescription: incidentDescription,
                 incidentDate: incidentDate,
                 location: location,
+                flagConfirmed: flagConfirmed,
                 elementType:1,
                 props: int
             }
@@ -440,6 +443,9 @@ function appendToIncidentList(mapElement) {
     listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\">" + mapElement.disasterType + "</a>";
     //place icon-links here [show details]
     listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+","+mapElement.incidentLocationId+");\"> </i></a>"; // show details icon
+    if(mapElement.flagConfirmed == 0){
+      listItem += "| <a href=\"#\" id=\"confirm-incident\" role=\"button\" data-toggle=\"modal\"   data-id=\"" + mapElement.id + "\" onclick=\"confirmIncident("+mapElement.incidentLocationId+", '"+mapElement.incidentDescription+"');\"><i class= \"icon-ok icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"confirm-btn\" title= \"Confirm Report\" > </i> Confirm Report </a> "; // confirm icon
+    }
     //end div
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
@@ -467,7 +473,8 @@ function appendToRespondentList(mapElement) {
     listItem += "<div class=\"accordion-heading\">";
     listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\">" + mapElement.response_organization_name + "</a>";
     //place icon-links here [show details]
-    listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayRespondentDetails("+mapElement.id+","+mapElement.arrId+");\"> </i></a>"; // show details icon
+    listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayDetails("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Open </a> "; // show details icon
+     listItem += "| <a href=\"#\" id=\"confirm-incident\" role=\"button\" data-toggle=\"modal\" class= \"label label-important\"  data-id=\"" + mapElement.id + "\" onclick=\"confirmIncident("+mapElement.id+","+inciDesc+");\"><i class= \"icon-ok icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"confirm-btn\" title= \"Confirm Report\" > </i> Confirm Report </a> "; // confirm icon
     //end div
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
@@ -538,19 +545,18 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
     $("#table-rows-victims").removeData("fast");
     openSideBar();
 
-    /* Send the data using post and put results to the members table */
     request = $.ajax({
         url: "http://localhost/icdrris/Incident/incidentTitle",
         type: "POST",
-        data: {id:incidentReportId},
+        data: {incident_report_id:incidentReportId},
         success: function(msg) {
             console.log("success -TITLE");
-            //console.log(msg);
+			
             if (msg == 'error') {
-                console.log("naay mali sa query getIncidentDetails - TITLE doy.\n ");
+                console.log("Error getIncidentDetails - TITLE doy.\n ");
                 $("#incident-title").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-                console.log("success pa jud title");
+                console.log("Success getIncidentTitle");
                 $("#incident-title").html(msg);
                 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
                 $("#victims-tab, #details-tab, #overview-li, #editinfo-li, #delete-li, #displaychart-li, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
@@ -570,7 +576,7 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
     request = $.ajax({
         url: "http://localhost/icdrris/Incident/incidentDetails",
         type: "POST",
-        data: {id:incident_location_id},
+        data: {incident_location_id:incident_location_id},
         success: function(msg) {
             console.log("success");
             //console.log(msg);

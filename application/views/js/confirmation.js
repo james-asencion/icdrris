@@ -190,6 +190,94 @@ $('#btnYesDeleteVictim').click(function(){
   
 }
 
+
+// CONFIRM INCIDENT
+function confirmIncident(incident_location_id, inciName){
+
+	console.log('confirm incident clicked: '+ incident_location_id + ' ' +inciName);
+	$('#modalConfirmIncident').data('incident_location_id' , incident_location_id);
+	$('#modalConfirmIncident .modal-body').html("<p> You are going to confirm the incident <b>'"+inciName+"'</b>.<br> Click 'Confirm' button to continue. Click 'Cancel' button to return to the page.")
+	$('#modalConfirmIncident').modal('show');
+	
+
+}
+
+// CONFIRM INCIDENT: CONFIRM BUTTON
+function btnYesConfirmIncident(){
+
+            var incident_location_id = $('#modalConfirmIncident').data('incident_location_id');
+            console.log('btnYesConfirmIncident -> this is the incidentid->' + incident_location_id);
+       
+            $.ajax({
+                    url: "http://localhost/icdrris/Incident/confirmIncident",
+                    type: "POST",
+                    data: {incident_location_id:incident_location_id},
+                    success: function(msg){
+                        if(msg == 'success'){
+                            $('#modalConfirmIncident').modal('hide');	
+                            console.log('success: '+msg );
+                        }
+                        else{
+                            console.log('Results: '+msg)
+                            $("#modalConfirmIncident .modal-body").before('<p>Query failed.</p>');
+                        }
+                    },
+                    error: function(msg){
+                            console.log("something went wrong");
+                            $('#modalConfirmIncident .modal-body').html("<p>Opss..Sorry, something went wrong</p>");
+                            $('#modalConfirmIncident').modal('show');
+                    }
+
+                });
+
+}
+
+// CONFIRM VICTIM
+function confirmVictim(incident_report_id, victim_id){
+	$('.confirmtrue-victim').on('click', function(e){
+		e.preventDefault();
+		console.log('confirm-victim clicked');
+		var victimName = $(this).data('victimname');
+		console.log(victimName + incident_report_id + victim_id);
+		$('#modalConfirmVictim').data('victim_id',victim_id);
+		$('#modalConfirmVictim').data('incident_report_id',incident_report_id);
+		$('#modalConfirmVictim .modal-body').html("<p> You are going to confirm the victim <b>'"+victimName+"'</b>.<br> Click 'Confirm' button to continue. Click 'Cancel' button to return to the page.");
+		$('#modalConfirmVictim').modal('show');	
+	});
+
+}
+
+// CONFIRM VICTIM: CONFIRM BUTTON
+function btnYesConfirmVictim(){
+
+	   var incident_report_id = $('#modalConfirmVictim').data('incident_report_id');
+           var victim_id = $('#modalConfirmVictim').data('victim_id');
+           console.log('btnYesConfirmVictim -> this is the incidentid->' + incident_report_id);
+       
+            $.ajax({
+                    url: "http://localhost/icdrris/Victim/confirmVictim",
+                    type: "POST",
+                    data: {incident_report_id:incident_report_id, victim_id:victim_id},
+                    success: function(msg){
+                        if(msg == 'success'){
+                            $('#modalConfirmVictim').modal('hide');	
+                            console.log('success: '+msg );
+                        }
+                        else{
+                            console.log('Results: '+msg)
+                            $("#modalConfirmVictim .modal-body").before('<p>Query failed.</p>');
+                        }
+                    },
+                    error: function(msg){
+                            console.log("something went wrong");
+                            $('#modalConfirmVictim .modal-body').html("<p>Opss..Sorry, something went wrong</p>");
+                            $('#modalConfirmVictim').modal('show');
+                    }
+
+                });
+
+}
+
 //DELETE INCIDENT
 $(document).ready(function(){
 	$('#delete-li').on('click', function(e){
