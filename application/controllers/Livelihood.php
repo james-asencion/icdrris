@@ -141,6 +141,7 @@ class Livelihood extends CI_Controller
         $data['members'] = $this->LivelihoodModel->getAllMembers($get['id']);
         $data['livelihood_programs'] = $this->LivelihoodModel->getAllAvailableLivelihoodPrograms($get['id']);
         $data['requests'] = $this->LivelihoodModel->getAllOrganizationRequests($get['id']);
+        $data['grants'] = $this->LivelihoodModel->getAllOrganizationProgramGrants($get['id']);
           
         //echo count($data['livelihood_org']);
         //pass the query results to the view
@@ -149,6 +150,21 @@ class Livelihood extends CI_Controller
         $this->load->view('includes/footer');        
     }
 
+    function addNewProgramResource(){
+        $resource_description = $this->input->post('resource_description');
+        $this->LivelihoodModel->addNewProgramResource($resource_description);
+        
+        return $this->getAllLivelihoodResourcesDropdown();
+    }
+    function getAllLivelihoodResourcesDropdown(){
+        $resources = $this->LivelihoodModel->getAllLivelihoodResources();
+        echo "<select name=\"resource_id\" id=\"resource_id\">";
+        echo "<option value=\"\">   </option>";
+        foreach($resources as $resource){
+          echo "<option value=\"".$resource->livelihood_resource_id."\">".$resource->livelihood_resource_description."</option>";
+        }
+        echo "</select>";
+    }
     function viewNewLivelihoodOrg($id){
 
         $data['livelihood_org'] = $this->LivelihoodModel->getLivelihoodOrg($id);
@@ -376,9 +392,13 @@ class Livelihood extends CI_Controller
 
         $get = $this->uri->uri_to_assoc();
         $data['livelihood_program'] = $this->LivelihoodModel->getLivelihoodProgram($get['id']);
-        $data['external_organizations'] = $this->LivelihoodModel->getExternalOrganizations($get['id']);
-        $data['approved_requests'] = $this->LivelihoodModel->getAllApprovedRequests($get['id']);
+        $data['external_organizations'] = $this->LivelihoodModel->getAllExternalOrganizations();
+        $data['tagged_external_organizations'] = $this->LivelihoodModel->getTaggedExternalOrganizations($get['id']);
+        $data['resources'] = $this->LivelihoodModel->getAllLivelihoodResources();
+        $data['program_resources'] = $this->LivelihoodModel->getLivelihoodProgramResources($get['id']);
         $data['pending_requests'] = $this->LivelihoodModel->getAllPendingRequests($get['id']);
+        $data['livelihood_organizations_not_requested'] = $this->LivelihoodModel->getAllLivelihoodOrgsNotRequested($get['id']);
+        $data['recipients'] = $this->LivelihoodModel->getAllRecipients($get['id']);
         $this->load->view('includes/header');
         $this->load->view('livelihoodProgramView',$data);
         $this->load->view('includes/footer');

@@ -17,6 +17,7 @@
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/externalOrganizationModal.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/deployLivelihoodScript.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/responseOrganization.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
 
 

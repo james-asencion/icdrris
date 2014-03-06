@@ -293,6 +293,9 @@ class LivelihoodModel extends CI_Model{
 									WHERE r.request_status = 'approved' AND r.livelihood_organization_id='$orgId';");
 		return $query->result();
 	}
+	function addNewProgramResource($resource_description){
+		$this->db->insert('livelihood_resources', array('livelihood_resource_description'=>$resource_description));
+	}
 	function getAllOrganizationProgramGrants($orgId){
 		$query = $this->db->query("	SELECT g.date_granted, l.livelihood_type, l.livelihood_description, l.livelihood_program_cost 
 									FROM livelihood_organization_program_grants g

@@ -34,7 +34,9 @@
     <div id="members">
     <table id="membersTable" class="table table-striped">
     <tr><th>First Name</th><th>Middle Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Age</th><th>Monthly Income</th><th>Source of income</th><th>Civil Status</th><th>Number of Children</th><th>Actions</th></tr>
-    <?php foreach ($members as $member) {
+    <?php
+        if(count($members)>0){
+            foreach ($members as $member) {
                 echo "<tr>
                 <td><span href=\"#\" id=\"first_name\" data-name\"member_first_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter First Name\">".$member->first_name."</span></td>
                 <td><span href=\"#\" id=\"middle_name\" data-name\"member_middle_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Middle Name\">".$member->middle_name."</span></td>
@@ -47,7 +49,8 @@
                 <td><span href=\"#\" id=\"civil_status\" data-name\"member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Civil Status\">".$member->civil_status."</span></td>
                 <td><span href=\"#\" id=\"no_of_children\" data-name\"member_no_of_children\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter No of children\">".$member->no_of_children."</span></td>
                 <td><a align=\"center\" href=localhost/icdrris/Livelihood/deleteMember?id=".$member->member_id."</a></td></tr>";
-    } ?>  
+            }
+        } ?>  
     </table>
     </div>
 </div>
@@ -59,7 +62,9 @@
     <h4>Livelihood Programs</h4>
     <table class="table table-striped">
     <tr><th>Livelihood Program Type</th><th>Livelihood Program Description</th><th>Cost</th><th>Target Recipients</th><th>Status</th><th>Actions</th></tr>
-    <?php foreach ($livelihood_programs as $livelihood_program) {
+    <?php 
+        if(count($livelihood_programs)>0){
+            foreach ($livelihood_programs as $livelihood_program) {
                 echo "<tr><td>".$livelihood_program->livelihood_type.
                 "</td><td>".$livelihood_program->livelihood_description."</td>
                 <td>".$livelihood_program->livelihood_program_cost."</td>
@@ -67,7 +72,8 @@
                 <td>".$livelihood_program->livelihood_program_status."</td>
                 <td><a class=\"btn btn-success send-request\" align=\"center\" data-id=".$livelihood_program->livelihood_program_id." data-program=\"".$livelihood_program->livelihood_description."\" data-organization=\"37\"><i class=\"icon-share-alt\"></i>request</a>
                 </td></tr>";
-    } ?>  
+            }
+        } ?>  
     </table>
 </div>
 </div>
@@ -77,7 +83,9 @@
     <h4>Request History</h4>
         <table id="requestsHistoryTable" class="table table-striped">
         <tr><th>Request Status</th><th>Request Description</th><th>Date Requested</th><th>Date Granted</th><th>Livelihood Description</th><th>Livelihood Type</th><th>Actions</th></tr>
-        <?php foreach ($requests as $request) {
+        <?php 
+            if(count($requests)>0){
+                foreach ($requests as $request) {
                     echo "<tr><td>".$request->request_status.
                     "</td><td>".$request->request_description."</td>
                     <td>".$request->date_requested."</td>
@@ -86,7 +94,8 @@
                     <td>".$request->livelihood_type."</td>
                     <td><a class=\"btn btn-danger cancel-request\" align=\"center\" data-id=".$request->livelihood_organization_program_request_id." data-org=".$org->livelihood_organization_id." data-program=\"".$request->livelihood_description."\"><i class=\"icon-trash\"></i>cancel</a>
                     </td></tr>";
-        } ?>  
+                }
+            } ?>  
         </table>
     </div>
 </div>
@@ -95,16 +104,16 @@
     <div class="well offset1 span8">
     <h4>Grants History</h4>
         <table class="table table-striped">
-        <tr><th>Livelihood Program Type</th><th>Livelihood Program Description</th><th>Cost</th><th>Target Recipients</th><th>Status</th><th>Actions</th></tr>
-        <?php foreach ($livelihood_programs as $livelihood_program) {
-                    echo "<tr><td>".$livelihood_program->livelihood_type.
-                    "</td><td>".$livelihood_program->livelihood_description."</td>
-                    <td>".$livelihood_program->livelihood_program_cost."</td>
-                    <td>".$livelihood_program->target_recipients."</td>
-                    <td>".$livelihood_program->livelihood_program_status."</td>
-                    <td><a class=\"btn btn-success send-request\" align=\"center\" data-id=".$livelihood_program->livelihood_program_id." data-program=\"".$livelihood_program->livelihood_description."\" data-organization=\"37\"><i class=\"icon-share-alt\"></i>request</a>
-                    </td></tr>";
-        } ?>  
+        <tr><th>Livelihood Program Type</th><th>Livelihood Program Description</th><th>Cost</th><th>Date Granted</th>
+        <?php if(count($grants)>0){
+                foreach ($grants as $grant) {
+                    echo "<tr><td>".$grant->livelihood_type.
+                    "</td><td>".$grant->livelihood_description."</td>
+                    <td>".$grant->livelihood_program_cost."</td>
+                    <td>".$grant->date_granted."</td>
+                    </tr>";
+                }
+            } ?>  
         </table>
     </div>
 </div>

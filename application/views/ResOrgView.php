@@ -21,7 +21,7 @@
             <div style="float: right; margin-bottom: 10px">
                 <a href = "#modalAddResOrgMembers" class = "btn btn-primary" data-toggle = "modal" data-org="<?php echo $org->response_organization_id; ?>">Add Members</a>
                 <button class="btn edit"><i class="icon-pencil"></i>edit</button>
-                <button class="btn btn-success btn-small hide">Done Editing</button> 
+                <button class="btn btn-doneEdit btn-success btn-small hide">Done Editing</button> 
             </div>
 
 
@@ -29,9 +29,9 @@
     <tr><th>First Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Civil Status</th><th>Availability</th><th>Skills</th><th>Actions</th></tr>
     <?php foreach ($members as $member) {
 
-        $skills = $this->ResOrgModel->getSkillsByMember($member->member_id);
+        $memberSkills = $this->ResOrgModel->getSkillsByMember($member->member_id);
         $skillsString = "";
-        foreach ($skills as $s) {
+        foreach ($memberSkills as $s) {
             $skillsString .= $s->skillset_description.", ";
         } 
                 echo "<tr>
@@ -52,7 +52,7 @@
 <div id = "modalAddResOrgMembers"  class = "modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class = "container-fluid"><div class = "modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>Register Response Organization</h4>
+        <h4>Register Response Organization <?php echo count($skills);?></h4>
     </div>
     <div class = "modal-body">
         <form id="addMemberForm" class = "form-horizontal">
@@ -61,24 +61,30 @@
         <div class="control-group"><label class = "control-label" for="ro_sex">Sex: </label><div class="controls"><input type="text" name="ro_sex" id="ro_sex"  /></div></div>
         <div class="control-group"><label class = "control-label" for="ro_birthday">Birthday: </label><div class="controls"><input type="date" name="ro_birthday" id="ro_birthday"  /></div></div>
         <div class="control-group"><label class = "control-label" for="ro_civil_status">Civil Status: </label><div class="controls"><input type="text" name="ro_civil_status" id="ro_civil_status"  /></div></div>
-        <div id="skillsList"><div class="control-group"><label class = "control-label" for="ro_skill">Skill: </label><div class="controls"><div class="dropdown">
+        <div id="skillsList"><div class="control-group"><label class = "control-label" for="ro_skill">Skill: </label>
+    <div class="controls"><div class="dropdown">
     <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
         Select
         <b class="caret"></b>
-    </a>
+    </a>&nbsp;<button type="button" id="btnAddNewSkillTrigger" class="btn btn-small btn-default"><i class="icon-plus"></i></button>
     
-    <ul class="dropdown-menu dropdown-menu-form" role="menu">
+    
+    <ul class="skillsetDropdown dropdown-menu dropdown-menu-form" role="menu">
+        <div id="skillsetCheckboxList">
        <?php 
         foreach($skills as $skill) {
           echo "<li><label class = \"checkbox\"><input type = \"checkbox\" data-id =".$skill->skillset_id.">".$skill->skillset_description."</input></label></li>";
         }
        ?>
-
-   
+        </div>
     </ul></div>
 </div></div></div>
-    <div class="control-group"></div>
-
+    <div class="control-group">
+    
+    <div id="addNewSkillField" style="display:none;" class="control-group"><label class = "control-label" for="ro_first_name">New Skill: </label><div class="controls"><input type="text" name="newSkill" id="newSkill"  />
+    <button type="button" id="btnSubmitNewSkill" class="btn btn-small btn-success btn-submitNewSkill" style="display:none;"><i class="icon-plus" ></i></button>
+<button type="button" id="cancelNewSkill" class="btn btn-small btn-danger btn-submitNewSkill" style="display:none;"><i class="icon-plus" ></i></button></div></div>
+</div>
 </form></div>
     <div class = "modal-footer">
         <div class="btn btn-primary" id="addMemberButton2" data-org="<?php echo $org->response_organization_id; ?>">Add Member</div>

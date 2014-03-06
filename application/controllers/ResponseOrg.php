@@ -43,10 +43,18 @@ class ResponseOrg extends CI_Controller
             $id = $this->ResOrgModel->createResOrg();
             //http://localhost/icdrris/ResponseOrg/ViewResOrg/id/2
             $this->viewNewResOrg($id);
+           // $url = 
+            redirect('/ResponseOrg/viewNewResOrg/id/'.$id);
             //echo $response['org_id'];
             //$this->addOrgMembers($dataArray);
     	}
 
+    }
+    function addNewMemberSkillset(){
+        $skillset_description = $this->input->post('skillset_description');
+        $this->ResOrgModel->addNewMemberSkillset($skillset_description);
+
+        return $this->getAllSkillsCheckboxList();
     }
     function addResponseOrgModal(){
         $this->ResOrgModel->createResOrgModal();
@@ -116,6 +124,12 @@ class ResponseOrg extends CI_Controller
 
        foreach ($members as $member) {
                 echo "<label class='checkbox'><input type='checkbox' data-id=".$member->member_id.">".$member->member_first_name."</input></label>";
+        }
+    }
+    function getAllSkillsCheckboxList(){
+        $skills = $this->ResOrgModel->getAllSkillset();
+        foreach ($skills as $skill) {
+            echo "<li><label class = \"checkbox\"><input type = \"checkbox\" data-id =".$skill->skillset_id.">".$skill->skillset_description."</input></label></li>";
         }
     }
     function deployMembers(){
@@ -223,7 +237,7 @@ class ResponseOrg extends CI_Controller
         //echo $get['id'];
         $data['org'] = $this->ResOrgModel->getResOrg($get['id']);
         $data['members'] = $this->ResOrgModel->getAllResOrgMembers($get['id']);
-        $data['skills']=$this->ResOrgModel->getAllSkills();
+        $data['skills'] = $this->ResOrgModel->getAllSkillset();
           
         //echo count($data['livelihood_org']);
         //pass the query results to the view
@@ -231,13 +245,13 @@ class ResponseOrg extends CI_Controller
         $this->load->view('ResOrgView',$data);
         $this->load->view('includes/footer');       
     }
-    function viewNewResOrg($id){
+    function viewNewResOrg(){
         //query for the data
         $get = $this->uri->uri_to_assoc();
-        //echo $get['id'];
+        $id = $get['id'];
         $data['org'] = $this->ResOrgModel->getResOrg($id);
         $data['members'] = $this->ResOrgModel->getAllResOrgMembers($id);
-        $data['skills']=$this->ResOrgModel->getAllSkills();
+        $data['skills'] = $this->ResOrgModel->getAllSkillset();
           
         //echo count($data['livelihood_org']);
         //pass the query results to the view

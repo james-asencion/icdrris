@@ -182,7 +182,7 @@
         <?php foreach ($program_resources as $resource) {
             echo "  <label class=\"control-label\">".$resource->livelihood_resource_description."   (".$resource->quantity_available.")</label>
                         <div class=\"controls resourceInput\">
-                            <input type=\"text\" data-id=\"".$resource->livelihood_resource_id."\" data-resource=\"".$resource->livelihood_program_resource_id."\">
+                            <input type=\"number\" min=\"0\" max=\"".$resource->quantity_available."\"data-id=\"".$resource->livelihood_resource_id."\" data-resource=\"".$resource->livelihood_program_resource_id."\">
                         </div><br>";
 
         }?>

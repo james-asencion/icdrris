@@ -266,6 +266,42 @@ $('#btnChooseFromMap').click(function(){
 	
 });
 
+$('.submitNewLivelihoodResource').on('click', function(e){
+	e.preventDefault();
+	var programId = $(this).data('id');
+	console.log("program id on click: "+programId);
+	$("#addNewProgramResourceModal").data('programId', programId);
+	//$("#addNewProgramResourceModal").data('organizationId', organizationId);
+	$("#addNewProgramResourceModal").modal('show');
+
+
+});
+
+$("#confirmNewResource").click(function(){
+
+	var programId = $('#addNewProgramResourceModal').data('programId');
+	var resourceDescription = $('#resource_description').val();
+
+	request = $.ajax({
+		url: "http://localhost/icdrris/Livelihood/addNewProgramResource",
+		type: "POST",
+		data: {program_id:programId, resource_description:resourceDescription},
+		success: function(msg){
+			console.log("new resource successfully saved");
+			console.log(msg);
+			$("#resourceDropdown").html(msg);
+			$('#resource_description').val('');
+			$("#addNewProgramResourceModal").modal('hide');
+			
+		},
+		error: function(){
+			console.log("submit new resource fail");
+			console.log(msg);
+		}
+	});	
+		
+});
+
 $('.showOrganizations').click(function(){
 	console.log("show organizations clicked");
 	$('#livelihoodOrganizationsTable').toggle();

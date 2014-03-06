@@ -29,34 +29,12 @@ class Incident extends  CI_Controller
 
         public function incidentDetails(){
             $incident_location_id = $this->input->post("incident_location_id");
-            $query_results = $this->IncidentModel->getIncidentDetails($incident_location_id);
+            $details = $this->IncidentModel->getIncidentDetails($incident_location_id);
 
-			if($query_results == 'false'){
-				echo "error";
-			}
-			else{
-				foreach($query_results->result() as $row_incident){
-					$incident_report_id = $row_incident->incident_report_id;
-					$incident_description = $row_incident->incident_description;
-					$disaster_type = $row_incident->disaster_type;
-					$incident_date = $row_incident->incident_date;
-					$flag_true_rating = $row_incident->flag_true_rating;
-					$flag_false_rating = $row_incident->flag_false_rating;
-					$death_toll = $row_incident->death_toll;
-					$no_of_injuries = $row_incident->no_of_injuries;
-					$no_of_people_missing = $row_incident->no_of_people_missing;
-					$no_of_families_affected = $row_incident->no_of_families_affected;
-					$no_of_houses_destroyed = $row_incident->no_of_houses_destroyed;
-					$estimated_damage_cost = $row_incident->estimated_damage_cost;
-					$incident_info_source = $row_incident->incident_info_source;
-					$lat = $row_incident->lat;
-					$lng = $row_incident->lng;
-					$reportPolygon = $row_incident->reportPolygon;
-				}
 				echo '<script type="text/javascript">
                                   $(document).ready(function(){
-                                     $("#span-approve-li").html('.$flag_true_rating.');
-                                     $("#span-disapprove-li").html('.$flag_false_rating.');
+                                     $("#span-approve-li").html('.$details->flag_true_rating.');
+                                     $("#span-disapprove-li").html('.$details->flag_false_rating.');
                                 });
 
                                  $(document).ready(function(){
@@ -150,7 +128,7 @@ class Incident extends  CI_Controller
 									</div>
 									<div class="span6">
 										<div id="fieldlabel" class="span7"> Damage Cost (PHP): </div>
-										<div class="span5">  '.$estimated_damage_cost.'</div>
+										<div class="span5">  '.$details->estimated_damage_cost.'</div>
 									</div>
 								</div>
 								<div class="row-fluid">
@@ -180,7 +158,7 @@ class Incident extends  CI_Controller
 		echo $status;
 	}
         
-		public function confirmIncident(){
+		function confirmIncident(){
 		$incident_location_id = $this->input->post("incident_location_id");
 		$userid = $this->session->userdata('user_id');
 		$query_results = $this->IncidentModel->confirmThisIncident($incident_location_id, $userid);
@@ -192,7 +170,7 @@ class Incident extends  CI_Controller
 		}
 	}
 	
-        public function getDeploymentDetails($id){
+        function getDeploymentDetails($id){
         	$deployment = $this->IncidentModel->getDeploymentDetails($id);
 
 			echo '<div class="details" style="margin-left: 15px; margin-top: 10px">
@@ -224,13 +202,13 @@ class Incident extends  CI_Controller
 						</div>';
         }
 
-        public function doEdit($id){
+        function doEdit($id){
 
 
             $this->load->view();
         }
 
-        public function deleteIncident(){
+        function deleteIncident(){
             $incident_report_id = $this->input->post("incident_report_id");
             $query_results = $this->IncidentModel->deleteIncident($incident_report_id);
             if($query_results){
@@ -242,5 +220,4 @@ class Incident extends  CI_Controller
         }
 
 }
-
 ?>

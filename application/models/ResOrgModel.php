@@ -99,6 +99,9 @@ class ResOrgModel extends CI_Model{
 
 		$this->db->insert('members_skillset', $data);
 	}
+	function addNewMemberSkillset($skillset_description){
+		$this->db->insert('response_org_members_skills', array('skillset_description'=>$skillset_description));
+	}
 
 	function getAllResOrgs(){
 		$query = $this->db->get('response_organization');
@@ -177,10 +180,12 @@ class ResOrgModel extends CI_Model{
 		$this->db->where('member_id', $member_id);
 		$this->db->update('members', $data); 
 	}
-	function getAllSkills(){
-		$query = $this->db->get('response_org_members_skills');
+
+	function getAllSkillset(){
+		$query = $this->db->query("SELECT * FROM response_org_members_skills;");
 		return $query->result();
 	}
+	
 	function updateMember(){
 		$data = array(
 				''
