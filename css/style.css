@@ -1,11 +1,11 @@
 .toppanel {
 float: right;
-background-color: #4DD025;
-color: #000;
+/**background-color: #4DD025;*/
+color: #6FA2A2;
 border-right: 1px #ddd solid;
 padding: 1px 1% 2%;
 margin-top: 6px;
-height: 30px;
+height: 25px;
 line-height: 1;
 max-width: 200px;
 width: 14%;
@@ -14,10 +14,10 @@ position: relative;
 
 .toppanel1 {
 float: center;
-color: #000;
+color: #6FA2A2;
 padding: 1px 1% 10px;
 margin-top: 6px;
-height: 30px;
+height: 25px;
 line-height: 1;
 position: relative;
 }
@@ -31,15 +31,14 @@ ul.dropdown-menu-form {
 #controls {
 top: 43px;
 height: 60px;
-background: #494949;
-background-color: #4DD025;
+background: #6FA2A2;
+/**background-color: #4DD025;*/
 box-shadow: 0 0 5px black;
 position: absolute;
 z-index: 50;
 display: none;
 width: 100%;
 min-width: 760px;
-opacity: 85%;
 }
 
 #controls p{
