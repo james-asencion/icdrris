@@ -105,12 +105,14 @@ class Victim extends CI_Controller
 											<a href="#" class="rateVictim" data-upordown="'.$ratedFalse.'" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'"><i id="iThumbsDown'.$incident_report_id.$victim_id.'" class="icon-white icon-thumbs-down" title="False Report" onclick= "rateVictim('.$incident_report_id.','.$victim_id.', '.$ratedFalse.')"> </i> </a> '.$report_rating_false.' <span class="divider"> | </span>
 										
 											<a href="#" class="details-victim" data-incidentid= "'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-address="'.$address.'" data-victimstatus="'.$victim_status.'" data-flagconfirmed="'.$flag_confirmed.'" data-ratingtrue="'.$report_rating_true.'" data-ratingfalse="'.$report_rating_false.'"><i class="icon-white icon-info-sign" title="Show Details" onclick="detailsVictim(this);"> </i> </a><span class="divider"> | </span>
-											<a href="#" class="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-addressvictim="'.$address.'" data-victimstatus="'.$victim_status.'"><i class="icon-white icon-edit" title="Edit Victim" onclick="editVictim(this);"> </i> </a><span class="divider"> | </span>
-											<a href="#" class="delete-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-trash" title="Delete Report" onclick="deleteVictim(this);"> </i> </a><span class="divider"> | </span>
 											';
+                                                                        if(($this->session->userdata('user_type') == 'cswd') || ($this->session->userdata('user_type') == 'icdrrmo') ){
+                                                                                  echo '<a href="#" class="edit-victim" data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-firstname= "'.$first_name.'" data-middlename="'.$middle_name.'" data-lastname="'.$last_name.'" data-addressvictim="'.$address.'" data-victimstatus="'.$victim_status.'"><i class="icon-white icon-edit" title="Edit Victim" onclick="editVictim(this);"> </i> </a><span class="divider"> | </span>
+											<a href="#" class="delete-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-trash" title="Delete Report" onclick="deleteVictim(this);"> </i> </a><span class="divider"> | </span>';
 											if($flag_confirmed == 0){
 												echo '<a href="#" class="confirmtrue-victim"  data-incidentid="'.$incident_report_id.'" data-victimid="'.$victim_id.'" data-victimname="'.$first_name.' '.$middle_name.' '.$last_name.'"><i class="icon-white icon-ok" title="Confirm Report" onclick="confirmVictim('.$incident_report_id.', '.$victim_id.');"> </i> </a><span class="divider"> | </span>';
 											}
+                                                                        }
 							echo '</td>
 								  </tr>';
                             }

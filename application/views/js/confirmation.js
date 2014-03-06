@@ -432,61 +432,103 @@ $(document).ready(function(){
 	};
 // end  RATE
 
-			
-			
-// CHECK IF RATED: SAMPLE
-/**
-function rateVictim()
-{
-
-	$(document).ready(function(){
-			if(typeof(Storage)!=="undefined"){
-			
-				//get set var in localStorage
-				var rateClick= localStorage.getItem("rateClickMe");
-				if (rateClick == "disapproved"){
-					$("#iThumbsDown").css("background-color", "red");
-				}
-			  if(rateClick == "approved"){
-				$("#iThumbsUp").css("background-color", "green");
-			  }
-				
+//  RATING ON REPORTED INCIDENT
+	function rateIncident(rateType){
+           var incident_location_id;
+            var upOrDown= "";
+			if(rateType == 0){
+				upOrDown = "rateFalse";
+                                incident_location_id = $('.disapprove-li').data('incidentid');
 			}
 			else{
-			  alert("Sorry, your browser does not support web storage...");
+				upOrDown = "rateTrue";
+                                 incident_location_id = $('.approve-li').data('incidentid');
 			}
-		});
-/**	//IF CLICKED APPROVED
-	
-		if(typeof(Storage)!=="undefined") {
-		$("#btn-clickme").click(function(){
-		
-		
-			localStorage.removeItem("rateClickMe");
-			localStorage.setItem("rateClickMe", "approved");
-		
-		});
-		
-		$("#btn-clickme2").click(function(){
-		
-		
-			localStorage.removeItem("rateClickMe");
-			localStorage.setItem("rateClickMe", "disapproved");
-		
-		});
-				if (localStorage.clickcount){
-					localStorage.clickcount=Number(localStorage.clickcount)+1;
-				}
-				else{
-					localStorage.clickcount=1;
-				}
-			document.getElementById("result").innerHTML="You have clicked the button clickme " + localStorage.clickcount + " time(s).";
-		}
-		else{
-		  document.getElementById("result").innerHTML="Sorry, your browser does not support web storage...";
-		}
-		
+			var lastUpOrDown = localStorage.getItem("i"+incident_location_id+"");
+			
+			console.log("incident_location_id: "+incident_location_id+ "last upOrDown: "+ lastUpOrDown+ ", Recent upOrDown: "+upOrDown);
+			
+			var actionType;
+			if(upOrDown == lastUpOrDown){ //if the user wants to take back the vote
+				actionType = "off";
+			}
+			if(lastUpOrDown != null && lastUpOrDown != upOrDown){	//if the user already rated before
+				actionType = "onOff";
+			}
+			if(lastUpOrDown == null){ // if the user rated for the first time
+				actionType = "on";
+			}
 
-}*/
-// END ON CHECK IF RATED
-
+			//dataStr = "incident_location_id="+incident_location_id+ "&upOrDown="+upOrDown+"&actionType="+actionType;
+			//console.log('data passed to rate: '+ dataStr);
+			
+			$.ajax({
+				type: "POST",
+				url: "http://localhost/icdrris/Incident/rateUpOrDown",
+				cache: false,
+				data: {incident_location_id:incident_location_id, upOrDown:upOrDown, actionType:actionType},
+				success: function(msg){
+					try{
+						if(msg == 'true'){
+						
+							console.log('success :' + upOrDown);
+							
+							
+							
+							
+							if(actionType == "off"){
+								
+								
+								console.log("after removed: "+incident_location_id +"");
+								for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+									var name = localStorage.key(i);             // Get the name of pair i
+									var val = localStorage.getItem(name);
+									if(name == "i"+incident_location_id +""){
+										localStorage.removeItem(name);
+										console.log("removed: in off");
+									}
+									console.log("localstorage names: "+ name + " value: "+ val);    // Get the value of that pair
+								}
+									$("#approve-li"+incident_location_id+"").css("background-color", "");
+									$("#disapprove-li"+incident_location_id+"").css("background-color", "");
+									
+							
+							}
+							if(actionType == "on" || actionType == "onOff"){
+									if(upOrDown == "rateTrue"){
+										$("#approve-li"+incident_location_id+"").css("background-color", "green");
+										$("#disapprove-li"+incident_location_id+"").css("background-color", "");
+									}
+									if(upOrDown == "rateFalse"){
+										$("#approve-li"+incident_location_id+"").css("background-color", "");
+										$("#disapprove-li"+incident_location_id+"").css("background-color", "red");
+									}
+								//localStorage.removeItem(incident_report_id+victim_id);
+								localStorage.setItem("i"+incident_location_id+"", upOrDown);
+							
+								console.log("i"+incident_location_id+"");
+								for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+									var name = localStorage.key(i);             // Get the name of pair i
+									var val = localStorage.getItem(name);
+									console.log("localstorage names: "+ name + " value: "+ val);    // Get the value of that pair
+								}
+							
+							}
+							
+							
+						}else{
+						
+							console.log('failed');
+							
+							alert('Sorry. Unable to update..' + msg);
+						}
+					}catch(e){
+						alert('Exception while request..' + msg);
+					}
+				},
+				error: function(){
+					alert('Error while request..');
+				}
+			});
+	};
+// end  RATE

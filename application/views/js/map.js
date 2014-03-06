@@ -274,7 +274,9 @@ function getAllMapElements() {
             var incidentDate = polygons[polygonIndex].getAttribute("incident_date");
             var location = polygons[polygonIndex].getAttribute("location_address");
             var flagConfirmed = polygons[polygonIndex].getAttribute("flag_confirmed");
-            //============DECLARE VARIABLES=============
+            var flagTrueRating = polygons[polygonIndex].getAttribute("flag_true_rating");
+            var flagFalseRating = polygons[polygonIndex].getAttribute("flag_false_rating");
+           //============DECLARE VARIABLES=============
             var coordinates = [];
             //var bounds = new google.maps.LatLngBounds();
             var myPolygon;
@@ -312,6 +314,8 @@ function getAllMapElements() {
                 incidentDate: incidentDate,
                 location: location,
                 flagConfirmed: flagConfirmed,
+                flagTrueRating: flagTrueRating,
+                flagFalseRating: flagFalseRating,
                 center: center,
                 elementType: 2,
                 props: int
@@ -343,6 +347,8 @@ function getAllMapElements() {
             var incidentDate = markers[i].getAttribute("incident_date");
             var location = markers[i].getAttribute("location_address");
             var flagConfirmed = markers[i].getAttribute("flag_confirmed");
+            var flagTrueRating = markers[i].getAttribute("flag_true_rating");
+            var flagFalseRating = markers[i].getAttribute("flag_false_rating");
 
             var icon = customIcons[disasterType] || {};
             var point = new google.maps.LatLng(
@@ -363,6 +369,8 @@ function getAllMapElements() {
                 incidentDate: incidentDate,
                 location: location,
                 flagConfirmed: flagConfirmed,
+                flagTrueRating: flagTrueRating,
+                flagFalseRating: flagFalseRating,
                 elementType:1,
                 props: int
             }
@@ -430,7 +438,6 @@ function getAllMapElements() {
 
 }
 
-
 function appendToIncidentList(mapElement) {
 
     //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
@@ -442,12 +449,15 @@ function appendToIncidentList(mapElement) {
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
-    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\">" + mapElement.disasterType + "</a>";
+    listItem += "<label class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px; color: white;\">" + mapElement.disasterType + "</label>";
     //place icon-links here [show details]
-    listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\" style= \"margin-right: 10px;\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+","+mapElement.incidentLocationId+");\"> </i></a>"; // show details icon
-    if(mapElement.flagConfirmed == 0){
-      listItem += "| <a href=\"#\" id=\"confirm-incident\" role=\"button\" data-toggle=\"modal\"   data-id=\"" + mapElement.id + "\" onclick=\"confirmIncident("+mapElement.incidentLocationId+", '"+mapElement.incidentDescription+"');\"><i class= \"icon-ok icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"confirm-btn\" title= \"Confirm Report\" > </i> Confirm Report </a> "; // confirm icon
+    listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+","+mapElement.incidentLocationId+");\">Open</a>"; // show details icon
+   var sess_user = get_session();
+    if(mapElement.flagConfirmed == 0 && sess_user == 'icdrrmo'){
+    //if(mapElement.flagConfirmed == 0){
+      listItem += "| <a href=\"#\" id=\"confirm-incident\" role=\"button\" data-toggle=\"modal\"   data-id=\"" + mapElement.id + "\" onclick=\"confirmIncident("+mapElement.incidentLocationId+", '"+mapElement.incidentDescription+"');\"> Confirm Report </a>"; // confirm icon
     }
+  
     //end div
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
@@ -462,6 +472,27 @@ function appendToIncidentList(mapElement) {
 
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
 }
+
+var user_type= '';
+function get_session(){
+    $(document).ready(function(){
+        $.ajax({
+                  url: "http://localhost/icdrris/Login/get_session",
+                  type: "POST",
+                  data: {},
+                  success: function(msg){
+                          user_type= msg;
+                  },
+                  error: function(msg){
+                          alert('Error!');
+                  }
+        });
+    });
+  
+    return user_type;
+}
+
+
 function appendToRespondentList(mapElement) {
 
     //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
@@ -546,6 +577,9 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
     $("#table-rows-victims").removeData("fast");
     openSideBar();
 
+    $(".approve-li").attr("id", "approve-li"+incident_location_id+"");
+    $(".disapprove-li").attr("id", "disapprove-li"+incident_location_id+"");
+                
     request = $.ajax({
         url: "http://localhost/icdrris/Incident/incidentTitle",
         type: "POST",
@@ -560,9 +594,10 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
                 console.log("Success getIncidentTitle");
                 $("#incident-title").html(msg);
                 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
-                $("#victims-tab, #details-tab, #overview-li, #editinfo-li, #delete-li, #displaychart-li, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
-			    $("#delete-li").attr("data-incidentdesc", msg);
-			    $("#incidentTabbable").show("slow");
+                $("#victims-tab, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
+		
+                $("#delete-li").attr("data-incidentdesc", msg);
+                $("#incidentTabbable").show("slow");
             }
         },
         error: function() {
@@ -579,14 +614,11 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
         type: "POST",
         data: {incident_location_id:incident_location_id},
         success: function(msg) {
-            console.log("success");
-            //console.log(msg);
             if (msg == 'error') {
-                console.log("naay mali sa query getIncidentDetails doy.\n ");
                 $("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
                 $("#incidentTabbable").show("slow");
             } else {
-                console.log("success pa jud");
+                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
                 $("#incident-information").html(msg);
                 $("#incidentTabbable").show("slow");
             }
@@ -598,6 +630,8 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
             $("#incidentTabbable").show("slow");
         }
     });
+    
+                         
 
     /* Send the data using post and put results to the members table */
     request = $.ajax({
@@ -628,10 +662,50 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
     map.setCenter(mapElements[elementId].center);
     mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
     stopAnimation(mapElements[elementId]);
+
+
 }
 
 //---------------------------------------------- SECOND FUNCTION FOR THE MAP BINDING ------------------------------------------------------------
+/**
+function getTrueRate(incident_location_id){
+    var trueRate;
+     $(document).ready(function(){
+        $.ajax({
+                  url: "http://localhost/icdrris/Login/get_session",
+                  type: "POST",
+                  data: {},
+                  success: function(msg){
+                          trueRate= msg;
+                  },
+                  error: function(msg){
+                          alert('Error!');
+                  }
+        });
+    });
+  
+    return trueRate;
+}
 
+function getFalseRate(incident_location_id){
+     var falseRate="";
+    $(document).ready(function(){
+        $.ajax({
+                  url: "http://localhost/icdrris/Incident/getFalseRate",
+                  type: "POST",
+                  data: {incident_location_id:incident_location_id},
+                  success: function(msg){
+                          falseRate= msg;
+                  },
+                  error: function(msg){
+                          alert('Error!');
+                  }
+        });
+    });
+  
+    return falseRate;
+}
+*/
 function openSideBar() {
     $("#map_canvass").removeClass("span12");
     $("#map_canvass").addClass("span6"); //added

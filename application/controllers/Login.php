@@ -13,6 +13,11 @@ class Login extends CI_Controller{
 			redirect('Home');
 	}   
         
+        function get_session(){
+            $user_type= $this->session->userdata('user_type');
+            echo $user_type;
+        }
+        
         public function home(){
 		if($this->session->userdata('is_logged_in')){
 			redirect('Home');
