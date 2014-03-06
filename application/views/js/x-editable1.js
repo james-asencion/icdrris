@@ -32,13 +32,13 @@ $(document).ready(function() {
 
     $('.edit').on('click', function(){
 		$('#members1').find('.editable-open').editable('hide');
-	    $('#members1').find('.btn-success').hide();
+	    $('#members1').find('.btn-doneEdit').hide();
 	    $('#members1').find('.edit').show();
-	    $(this).hide().siblings('.btn-success').show();
+	    $(this).hide().siblings('.btn-doneEdit').show();
 	    $('#members1').find('.editable').editable('toggleDisabled');
 	});
 
-	$('.btn-success').on('click', function() {
+	$('.btn-doneEdit').on('click', function() {
 	    var $btn = $(this);
 	    $('#members1').find('.editable').editable('hide');
 	    $('#members1').find('.editable').editable('toggleDisabled');

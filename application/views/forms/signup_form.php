@@ -69,7 +69,8 @@
                             'icdrrmo'  => 'ICDRRMO',
                             'cswd'    => 'CSWD',
                             'cdlo'   => 'CDLO',
-                            'response organization' => 'Response Organization'
+                            'response organization' => 'Response Organization',
+                            'livelihood organization' => 'Livelihood Organization'
                           );
 			$userTypeProperties=array(set_value('utype'));
 			echo form_dropdown('utype', $usertype, $userTypeProperties);?>

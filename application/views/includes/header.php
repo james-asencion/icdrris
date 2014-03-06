@@ -114,6 +114,30 @@
 				</ul>
 					</li>
     </ul>
+    <?php if(($this->session->userdata('user_type') === 'livelihood organization') & ($this->session->userdata('is_logged_in'))){?>
+    <ul class="nav">
+            <li class="dropdown" name="livelihoodDropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class = "icon-flag icon-white"></i> Livelihood Matching
+                    <b class="caret"></b>
+                </a>
+            <ul class="dropdown-menu" role="menu">
+				<li> 
+						<a href = "http://localhost/icdrris/Livelihood/registerLivelihoodOrg" ><i class = "icon-edit"></i> Register Livelihood Org </a>
+				</li>
+                <li>
+                    <a href = "http://localhost/icdrris/Livelihood/getUserLivelihoodOrganizations" ><i class = "icon-search"></i> View Managed Livelihood Orgs</a>
+                </li>
+                <li>
+                    <a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodOrgs" ><i class = "icon-search"></i> View All Livelihood Orgs</a>
+                </li>
+                <li>
+                    <a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodPrograms" ><i class = "icon-search"></i> View All Livelihood Programs</a>
+                </li>
+            </ul>
+    </ul>
+    <?php   } ?>
+    <?php if(($this->session->userdata('user_type') === 'cdlo') & ($this->session->userdata('is_logged_in'))){?>
     <ul class="nav">
             <li class="dropdown" name="livelihoodDropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -131,12 +155,6 @@
                     <a href = "http://localhost/icdrris/Livelihood/registerExternalOrganization" ><i class = "icon-briefcase"></i> Register External Org</a>
                 </li>
                 <li>
-                    <a href = "#"><i class = "icon-share"></i> Deploy Livelihood Org</a>
-                </li>
-                <li>
-                    <a href = "#"><i class = "icon-search"></i> Search Livelihood Org</a>
-                </li>
-                <li>
                     <a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodOrgs" ><i class = "icon-search"></i> View All Livelihood Orgs</a>
                 </li>
                 <li>
@@ -147,8 +165,8 @@
                 </li>
             </ul>
     </ul>
-<?php if($this->session->userdata('is_logged_in')){ 
-	if($this->session->userdata('user_type') === 'response organization'){?>
+    <?php   } ?>
+	<?php  if(($this->session->userdata('user_type') === 'response organization') & ($this->session->userdata('is_logged_in'))){?>
     <ul class="nav">
             <li class="dropdown" name="organizationDropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -174,7 +192,7 @@
 	<?php } ?>
         
         <!-- userLogout (condition: LOGGED IN)-->	
-        	
+        <?php if($this->session->userdata('is_logged_in')){?>
 			<ul class="nav pull-right">
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">

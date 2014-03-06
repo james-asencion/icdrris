@@ -37,9 +37,9 @@ $(document).ready(function() {
     for(var i=0;i<mapElements.length;i++){
         console.log("props="+props+" mapElements.props="+mapElements[i].props);
         console.log("props & mapElements[i].props="+(props & mapElements[i].props));
-        console.log((((props & mapElements[i].props)>>>0) === props));
+        console.log(props & mapElements[i].props);
         mapElements[i].setVisible((props & mapElements[i].props)?((props)?true:false):false);
-        if(((props & mapElements[i].props)>>>0) === props) 
+        if(props & mapElements[i].props) 
         {
             if(mapElements[i].elementType===3){
                 appendToRespondentList(mapElements[i]);
