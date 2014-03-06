@@ -3,6 +3,26 @@
 class IncidentModel extends CI_Model
 {
 	 
+        function addIncident($data){
+            $this->db->insert('incidents', $data);
+            $id = $this->db->insert_id();
+            return $id;
+        }
+        function saveIncidentPolygon($data){
+            // $result = $this->db->query("  INSERT INTO incident_location(incident_report_id,location_id, incident_intensity, polygon, death_toll, no_of_injuries, no_of_people_missing, no_of_families_affected,no_of_houses_destroyed,estimated_damage_cost, incident_info_source)".
+            //                     "VALUES ('$data['incident_report_id']','$data['location_id']', '$data['incident_intensity']', PolygonFromText('$data['polygon']'), '$data['death_toll']', '$data['no_of_injuries']', '$data['no_of_people_missing']', '$data['no_of_families_affected']','$data['no_of_houses_destroyed']','$data['estimated_damage_cost']', '$data['incident_info_source']';");
+            //$result = $this->db->insert('incident_location', $data);
+
+            $sql = "    INSERT INTO incident_location(incident_report_id,location_id, incident_intensity, polygon, death_toll, no_of_injuries, no_of_people_missing, no_of_families_affected,no_of_houses_destroyed,estimated_damage_cost, incident_info_source)
+                        VALUES (?, ?, ?, PolygonFromText(?), ?,?, ?, ?,?,?,?)"; 
+
+            $result = $this->db->query($sql, $data);
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
         function confirmThisIncident($id, $userid){
 			$sql = "UPDATE icdrris.incident_location SET flag_confirmed = 1, user_id = ? WHERE incident_location_id = ?";
 			$query= $this->db->query($sql, array($userid, $id));

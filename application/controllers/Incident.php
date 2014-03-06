@@ -14,10 +14,41 @@ class Incident extends  CI_Controller
 	}
 
 	public function reportIncidentPolygon(){
+		$this->load->view('includes/mapReportingHeader');
 		$this->load->view('polygonView');
+		$this->load->view('includes/footer');
 	}
 	public function reportIncidentMarker(){
 		$this->load->view('markerView');
+	}
+	function savePolygon(){
+		$incident_data = array(
+						'incident_description' => $this->input->post('description'),
+						'disaster_type' => $this->input->post('disaster_type'),
+						'incident_date' => $this->input->post('date')
+						);
+
+		$incident_report_id = $this->IncidentModel->addIncident($incident_data);
+		$incident_location_data = array(
+									$incident_report_id, 
+									'1',
+									'3',
+									$this->input->post('polygon'),
+									$this->input->post('deaths'),
+									$this->input->post('injured'),
+									$this->input->post('missing'),
+									$this->input->post('families_affected'),
+									$this->input->post('houses_destroyed'),
+									$this->input->post('damage_cost'),
+									$this->input->post('source')
+								);
+
+		$result = $this->IncidentModel->saveIncidentPolygon($incident_location_data);
+		if($result){
+			echo "success";
+		}else{
+			echo "failed";
+		}
 	}
 	 public function incidentTitle(){
 			$incident_report_id = $this->input->post("incident_report_id");
