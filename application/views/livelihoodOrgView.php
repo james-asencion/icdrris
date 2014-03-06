@@ -12,13 +12,16 @@
     <br>Date Established: <?php echo $org->date_established; ?>
     <br>Business Activity Type: <?php echo $org->business_activity_type; }?>
     <br><br>
-    <a href="http://localhost/icdrris/Livelihood/viewAvailableLivelihoodPrograms/<?php echo $org->livelihood_organization_id; ?>" class="btn btn-success"><i class="icon-share"></i>Send Livelihood Program Request</a>
+    <button class="btn btn-small btn-default showLivelihoodOrganizationMembers"><i class="icon-share"></i>View Members</button>
+    <button class="btn btn-small btn-success sendLivelihoodProgramRequest"><i class="icon-share"></i>Send Request</button><br><br>
+    <button class="btn btn-small btn-default showRequestHistory"><i class="icon-eye"></i>View Requests</button>
+    <button class="btn btn-small btn-default showGrantsHistory"><i class="icon-eye"></i>View Grants</button>
+
 </div>
 
 
-
-<div class = "well span9">
-<div id="membersPanel">
+<div id="livelihoodOrgMembersPanel">
+<div class = "well offset1 span8">
     <h4>Livelihood Organization Members</h4>
 
             <div style="float: right; margin-bottom: 10px">
@@ -49,6 +52,63 @@
     </div>
 </div>
 </div>
+
+
+<div id="availableProgramsPanel" style="display:none;">
+<div class="well offset1 span8">
+    <h4>Livelihood Programs</h4>
+    <table class="table table-striped">
+    <tr><th>Livelihood Program Type</th><th>Livelihood Program Description</th><th>Cost</th><th>Target Recipients</th><th>Status</th><th>Actions</th></tr>
+    <?php foreach ($livelihood_programs as $livelihood_program) {
+                echo "<tr><td>".$livelihood_program->livelihood_type.
+                "</td><td>".$livelihood_program->livelihood_description."</td>
+                <td>".$livelihood_program->livelihood_program_cost."</td>
+                <td>".$livelihood_program->target_recipients."</td>
+                <td>".$livelihood_program->livelihood_program_status."</td>
+                <td><a class=\"btn btn-success send-request\" align=\"center\" data-id=".$livelihood_program->livelihood_program_id." data-program=\"".$livelihood_program->livelihood_description."\" data-organization=\"37\"><i class=\"icon-share-alt\"></i>request</a>
+                </td></tr>";
+    } ?>  
+    </table>
+</div>
+</div>
+
+<div id="livelihoodOrganizationRequestsPanel" style="display:none;">
+    <div class="well offset1 span8">
+    <h4>Request History</h4>
+        <table id="requestsHistoryTable" class="table table-striped">
+        <tr><th>Request Status</th><th>Request Description</th><th>Date Requested</th><th>Date Granted</th><th>Livelihood Description</th><th>Livelihood Type</th><th>Actions</th></tr>
+        <?php foreach ($requests as $request) {
+                    echo "<tr><td>".$request->request_status.
+                    "</td><td>".$request->request_description."</td>
+                    <td>".$request->date_requested."</td>
+                    <td>".$request->date_granted."</td>
+                    <td>".$request->livelihood_description."</td>
+                    <td>".$request->livelihood_type."</td>
+                    <td><a class=\"btn btn-danger cancel-request\" align=\"center\" data-id=".$request->livelihood_organization_program_request_id." data-org=".$org->livelihood_organization_id." data-program=\"".$request->livelihood_description."\"><i class=\"icon-trash\"></i>cancel</a>
+                    </td></tr>";
+        } ?>  
+        </table>
+    </div>
+</div>
+
+<div id="livelihoodOrganizationGrantsPanel" style="display:none;">
+    <div class="well offset1 span8">
+    <h4>Grants History</h4>
+        <table class="table table-striped">
+        <tr><th>Livelihood Program Type</th><th>Livelihood Program Description</th><th>Cost</th><th>Target Recipients</th><th>Status</th><th>Actions</th></tr>
+        <?php foreach ($livelihood_programs as $livelihood_program) {
+                    echo "<tr><td>".$livelihood_program->livelihood_type.
+                    "</td><td>".$livelihood_program->livelihood_description."</td>
+                    <td>".$livelihood_program->livelihood_program_cost."</td>
+                    <td>".$livelihood_program->target_recipients."</td>
+                    <td>".$livelihood_program->livelihood_program_status."</td>
+                    <td><a class=\"btn btn-success send-request\" align=\"center\" data-id=".$livelihood_program->livelihood_program_id." data-program=\"".$livelihood_program->livelihood_description."\" data-organization=\"37\"><i class=\"icon-share-alt\"></i>request</a>
+                    </td></tr>";
+        } ?>  
+        </table>
+    </div>
+</div>
+
 <!--</div>-->
 </div>
 <div id="modal-delete" class="modal hide fade">
@@ -111,8 +171,55 @@
         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button></center>
     </div></div>
 </div>
+<div id="modalChooseDeploymentType" class="modal hide">
+    <div class="modal-body">
+        <div name="message">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="Livelihood/deployLivelihoodProgramFromMap" data-dismiss="modal" id="btnChooseFromList" class="btn danger">Choose from List</a>
+        <a href="Livelihood/deployLivelihoodProgramFromList" data-dismiss="modal" id="btnChooseFromMap" aria-hidden="true" class="btn secondary">Choose from Map</a>
+    </div>
+</div>
+<div id="modalSendLivelihoodRequest" class="modal hide">
+    <div class="modal-body">
+        <div name="message">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="btn" id="confirmRequest">Send Request</a>
+        <a href="javascript:$('#modalSendLivelihoodRequest').modal('hide')" class="btn secondary">Cancel</a>
+    </div>
+</div>
+<div id="modalSendLivelihoodRequestSuccess" class="modal hide">
+    <div class="modal-body">
+        <div name="message">
+            Request Successfully Sent
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:$('#modalSendLivelihoodRequestSuccess').modal('hide')" class="btn secondary">Okay</a>
+    </div>
+</div>
+<div id="modalCancelLivelihoodRequest" class="modal hide">
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+        <a class="btn" id="cancelRequest">Yes</a>
+        <a href="javascript:$('#modalCancelLivelihoodRequest').modal('hide')" class="btn secondary">No</a>
+    </div>
+</div>
 
-
+<div id="cancelLivelihoodRequestSuccess" class="modal hide">
+    <div class="modal-body">
+        <div name="message">
+            Request Successfully Cancelled
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:$('#cancelLivelihoodRequestSuccess').modal('hide')" class="btn secondary">Okay</a>
+    </div>
+</div>
 
 <!--
 

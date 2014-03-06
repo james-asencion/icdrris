@@ -174,7 +174,7 @@ $('.send-request').on('click', function(e){
 	console.log('send request to livelihood program button clicked');
 	var programId = $(this).data('id');
 	var urlString = window.location.pathname.split('/');
-	var organizationId = urlString[4];
+	var organizationId = urlString[5];
 	var livelihoodProgramName = $(this).data('program');
 	console.log("program id on click: "+programId+"  organization id on click: "+organizationId);
 	$("#modalSendLivelihoodRequest").data('programId', programId);
@@ -215,6 +215,48 @@ $("#confirmRequest").click(function(){
 		
 });
 
+$('.cancel-request').on('click', function(e){
+	e.preventDefault();
+	console.log('cancel request button clicked');
+	var requestId = $(this).data('id');
+	var orgId = $(this).data('org');
+	var livelihoodProgramName = $(this).data('program');
+	console.log("cancel request id on click: "+requestId);
+	$("#modalCancelLivelihoodRequest").data('request_id', requestId);
+	$("#modalCancelLivelihoodRequest").data('org_id', orgId);
+	$('#modalCancelLivelihoodRequest .modal-body').html("<h2 class=\"text-center\">Are you sure you want to cancel request to: </h2><h4>"+livelihoodProgramName+"<h4><br>");
+	$("#modalCancelLivelihoodRequest").modal('show');
+
+
+});
+
+$("#cancelRequest").click(function(){
+
+	var request_id = $('#modalCancelLivelihoodRequest').data('request_id');
+	var org_id = $('#modalCancelLivelihoodRequest').data('org_id');
+
+	request = $.ajax({
+		url: "http://localhost/icdrris/Livelihood/cancelLivelihoodRequest",
+		type: "POST",
+		data: {request_id:request_id, org_id:org_id},
+		success: function(msg){
+			console.log("request successfully cancelled");
+			console.log(msg);
+			$("#requestsHistoryTable").html('');
+			$("#requestsHistoryTable").html(msg);
+			$("#modalCancelLivelihoodRequest").modal('hide');
+			$("#cancelLivelihoodRequestSuccess").modal('show');
+
+			
+		},
+		error: function(){
+			console.log("cancel request failed");
+			console.log(msg);
+		}
+	});	
+		
+});
+
 
 
 $('#btnChooseFromMap').click(function(){
@@ -238,6 +280,65 @@ $('.showRecipients').click(function(){
 	$("#grantedLivelihoodOrganizations").toggle();
 });
 
+$('.showExternalOrganizationsList').click(function(){
+	console.log("show external organizations clicked");
+	$('#externalOrganizationsList').toggle();
+});
+$('.showResourcesPanel').click(function(){
+	console.log("show resources panel clicked");
+	$('#deploymentHistory').hide();
+	$('#deploymentPanel').hide();
+	$('#resourcesPanel').show();
+
+});
+$('.showDeploymentPanel').click(function(){
+	console.log("show deployment panel clicked");
+	$('#deploymentHistory').hide();
+	$('#resourcesPanel').hide();
+	$('#deploymentPanel').show();
+
+});
+$('.showDeploymentHistory').click(function(){
+	console.log("show deployment panel clicked");
+	$('#resourcesPanel').hide();
+	$('#deploymentPanel').hide();
+	$('#deploymentHistory').show();
+
+});
+
+$('.sendLivelihoodProgramRequest').click(function(){
+	console.log("show deployment panel clicked");
+	$('#livelihoodOrgMembersPanel').hide();
+	$('#livelihoodOrganizationRequestsPanel').hide();
+	$('#livelihoodOrganizationGrantsPanel').hide();
+	$('#availableProgramsPanel').show();
+
+});
+$('.showLivelihoodOrganizationMembers').click(function(){
+	console.log("show deployment panel clicked");
+	$('#availableProgramsPanel').hide();
+	$('#livelihoodOrganizationRequestsPanel').hide();
+	$('#livelihoodOrganizationGrantsPanel').hide();
+	$('#livelihoodOrgMembersPanel').show();
+
+});
+$('.showRequestHistory').click(function(){
+	console.log("show deployment panel clicked");
+	$('#availableProgramsPanel').hide();
+	$('#livelihoodOrgMembersPanel').hide();
+	$('#livelihoodOrganizationGrantsPanel').hide();
+	$('#livelihoodOrganizationRequestsPanel').show();
+
+
+});
+$('.showGrantsHistory').click(function(){
+	console.log("show deployment panel clicked");
+	$('#availableProgramsPanel').hide();
+	$('#livelihoodOrgMembersPanel').hide();
+	$('#livelihoodOrganizationRequestsPanel').hide();
+	$('#livelihoodOrganizationGrantsPanel').show();
+
+});
 $("#btnSubmitNewResource").click(function(){
 	
 	var resource_quantity = $("#resource_quantity").val();

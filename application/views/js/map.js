@@ -117,16 +117,18 @@ function bindInfoWindow(marker, map, infoWindow, html) {
 }
 
 function bindPolygonToSidePanel(polygon) {
-    var incidentId = polygon.id;
+    var incidentReportId = polygon.id;
+    var incidentLocationId = polygon.incidentLocationId;
     google.maps.event.addListener(polygon, 'click', function() {
+        displayIncidentDetailsFromMap(incidentReportId, incidentLocationId);
         map.setCenter(polygon.center);
-        displayIncidentDetailsFromMap(incidentId);
     });
 }
 function bindMarkerToSidePanel(marker) {
-    var incidentId = marker.id;
+    var incidentReportId = marker.id;
+    var incidentLocationId = marker.incidentLocationId;
     google.maps.event.addListener(marker, 'click', function() {
-        displayIncidentDetailsFromMap(incidentId);
+        displayIncidentDetailsFromMap(incidentReportId, incidentLocationId);
         map.setCenter(marker.center);
     });
 }
@@ -473,8 +475,7 @@ function appendToRespondentList(mapElement) {
     listItem += "<div class=\"accordion-heading\">";
     listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\">" + mapElement.response_organization_name + "</a>";
     //place icon-links here [show details]
-    listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayDetails("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Open </a> "; // show details icon
-     listItem += "| <a href=\"#\" id=\"confirm-incident\" role=\"button\" data-toggle=\"modal\" class= \"label label-important\"  data-id=\"" + mapElement.id + "\" onclick=\"confirmIncident("+mapElement.id+","+inciDesc+");\"><i class= \"icon-ok icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"confirm-btn\" title= \"Confirm Report\" > </i> Confirm Report </a> "; // confirm icon
+    listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayRespondentDetails("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Open </a> "; // show details icon
     //end div
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
@@ -540,7 +541,7 @@ function backToRequestList() {
 
 function displayIncidentDetails(incidentReportId, elementId, incident_location_id) {
 
-    console.log('sdb-clicked');
+    console.log('display Incident details clicked with incident_report_id ->'+incidentReportId);
     $("#incidentList").hide("fast");
     $("#table-rows-victims").removeData("fast");
     openSideBar();
@@ -640,7 +641,7 @@ function openSideBar() {
     $(".trigger").addClass("active");
 }
 
-function displayIncidentDetailsFromMap(incidentReportId)
+function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
 {
 
     console.log('displayDetails invoked with id'+incidentReportId);
@@ -652,14 +653,11 @@ function displayIncidentDetailsFromMap(incidentReportId)
 
     console.log(incidentReportId);
 
-    var dataStr = 'id=' + incidentReportId;
-
-
      /* Send the data using post and put results to the members table */
     request = $.ajax({
         url: "http://localhost/icdrris/Incident/incidentTitle",
         type: "POST",
-        data: dataStr,
+        data: {incident_report_id:incidentReportId},
         success: function(msg) {
             console.log("success -TITLE");
             //console.log(msg);
@@ -686,7 +684,7 @@ function displayIncidentDetailsFromMap(incidentReportId)
     request = $.ajax({
         url: "http://localhost/icdrris/Incident/incidentDetails",
         type: "POST",
-        data: dataStr,
+        data: {incident_location_id:incidentLocationId},
         success: function(msg) {
             console.log("success");
             //console.log(msg);
@@ -712,7 +710,7 @@ function displayIncidentDetailsFromMap(incidentReportId)
     request = $.ajax({
         url: "http://localhost/icdrris/Victim/viewAllVictims",
         type: "POST",
-        data: dataStr,
+        data: {id:incidentReportId},
         success: function(msg) {
             console.log("success");
             //console.log(msg);

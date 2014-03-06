@@ -9,7 +9,7 @@
 
         <br>
         <button id="showDeployments" class="btn btn-small btn-inverse showRecipients">Show/Hide Deployments</button>
-    <div id="grantedLivelihoodOrganizations" style="display:none;">
+<div id="grantedLivelihoodOrganizations" style="display:none;">
         <h5>Deployment Recipients: </h5>
         
         <table class="table table-striped">

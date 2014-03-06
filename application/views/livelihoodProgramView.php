@@ -2,11 +2,11 @@
 </div>
  <div class="well offset5 span 6">
  <h3>Livelihood Program</h3> 
-	 &nbsp;&nbsp; 
         Livelihood Program Type: <?php echo $livelihood_program->livelihood_type; ?><br>Description: &nbsp;&nbsp;<?php echo $livelihood_program->livelihood_description; ?>
         <br>Cost: &nbsp;&nbsp;<?php echo $livelihood_program->livelihood_program_cost; ?>&nbsp;&nbsp;&nbsp;&nbsp;<br>Target Recipients: &nbsp;&nbsp;<?php echo $livelihood_program->target_recipients;?>
         <br>Livelihood Program Status: &nbsp;&nbsp;<?php echo $livelihood_program->livelihood_program_status; ?>
-        
+        <br><br>
+<a class="confirm-deploy btn btn-success" align="center" data-id="<?php echo $livelihood_program->livelihood_program_id; ?>"><i class="icon-share"></i>deploy</a>
 <h5>External Organization Provider/s: </h5>
         <?php foreach($external_organizations as $organization){ ?>
         <?php echo $organization->agency_name; ?>
@@ -39,6 +39,7 @@
     } ?>  
     </table>
 </div>
+</div>
 
 <div class = "well offset1 span11">
 <div id="membersTable">
@@ -69,6 +70,17 @@
     <div class="modal-footer">
         <a href="deleteLivelihoodOrg?id=" class="btn danger">Yes</a>
         <a href="javascript:$('modal-delete').modal('hide')" class="btn secondary">No</a>
+    </div>
+</div>
+
+<div id="modalChooseDeploymentType" class="modal hide">
+    <div class="modal-body">
+        <div name="message">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="Livelihood/deployLivelihoodProgramFromMap" data-dismiss="modal" id="btnChooseFromList" class="btn danger">Choose from List</a>
+        <a href="Livelihood/deployLivelihoodProgramFromList" data-dismiss="modal" id="btnChooseFromMap" aria-hidden="true" class="btn secondary">Choose from Map</a>
     </div>
 </div>
 

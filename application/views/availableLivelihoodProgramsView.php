@@ -2,6 +2,7 @@
 </div>
 <div></div>
 <br></br>
+<div class="well span7">
 <div id="membersTable" class="container" >
     <h4>Livelihood Programs</h4>
     <table class="table table-striped">
@@ -17,7 +18,7 @@
     } ?>  
     </table>
 </div>
-
+</div>
 <div id="modalDelete" class="modal hide">
     <div class="modal-body">
         <div name="message">

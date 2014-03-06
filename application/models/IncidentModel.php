@@ -38,14 +38,9 @@ class IncidentModel extends CI_Model
                     ON i.incident_report_id = l.incident_report_id
                     WHERE l.incident_report_id= '$id';";
             
-            $query= $this->db->query($sql);
+            $query = $this->db->query($sql);
             
-			if($query){
-				return $query;
-			}
-			else{
-				return false;
-			}
+			return $query->row();
         }
 		
         function getIncidentDetails($id){
@@ -57,12 +52,7 @@ class IncidentModel extends CI_Model
             
             $query= $this->db->query($sql);
             
-			if($query){
-				return $query;
-			}
-			else{
-				return false;
-			}
+			return $query->row();
         }
         
         function deleteIncident($id){
