@@ -1,29 +1,5 @@
 $(document).ready(function(){
-
-// $("#confirmNewResource").click(function(){
-
-// 	var programId = $('#addNewProgramResourceModal').data('programId');
-// 	var resourceDescription = $('#resource_description').val();
-
-// 	request = $.ajax({
-// 		url: "http://localhost/icdrris/Livelihood/addNewProgramResource",
-// 		type: "POST",
-// 		data: {program_id:programId, resource_description:resourceDescription},
-// 		success: function(msg){
-// 			console.log("new resource successfully saved");
-// 			console.log(msg);
-// 			$("#resourceDropdown").html(msg);
-// 			$('#resource_description').val('');
-// 			$("#addNewProgramResourceModal").modal('hide');
-			
-// 		},
-// 		error: function(){
-// 			console.log("submit new resource fail");
-// 			console.log(msg);
-// 		}
-// 	});	
-		
-// });
+//alert("response organization.js loaded!");
 
 $("#btnAddNewSkillTrigger").click(function(){
 	console.log("btn add new skill trigger clicked");
@@ -44,6 +20,7 @@ $("#cancelNewSkill").click(function(){
 	$('#skillsList').show();
 });
 $(".skillsetDropdown").click(function(event){
+	console.log("dropdown button clicked");
 	event.stopPropagation();
 });
 $("#btnSubmitNewSkill").click(function(){

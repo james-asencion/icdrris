@@ -60,23 +60,26 @@ function sendProps(props){
 function createPropertiesArray(mapElement){
     var disasterType = mapElement.getAttribute("disaster_type");
     var elementType = mapElement.getAttribute("elementType");
-    var propArray = new Array(8);
+    var confirmed = mapElement.getAttribute("flag_confirmed");
+    var propArray = new Array(10);
     
     //console.log(propArray[6]);
-    (elementType === "1")?propArray[7]=1:propArray[7]=0;
+    (elementType === "1")?propArray[9]=1:propArray[9]=0;
     //console.log(propArray[6]);
-    (elementType === "2")?propArray[6]=1:propArray[6]=0;
+    (elementType === "2")?propArray[8]=1:propArray[8]=0;
     //console.log(propArray[5]);
-    (disasterType === "Flashflood")?propArray[5]=1:propArray[5]=0;
+    (disasterType === "Flashflood")?propArray[7]=1:propArray[7]=0;
     //console.log(propArray[4]);
-    (disasterType === "Tsunami")?propArray[4]=1:propArray[4]=0;
+    (disasterType === "Tsunami")?propArray[6]=1:propArray[6]=0;
     //console.log(propArray[3]);
-    (disasterType === "Landslide")?propArray[3]=1:propArray[3]=0;
+    (disasterType === "Landslide")?propArray[5]=1:propArray[5]=0;
     //console.log(propArray[2]);
-    (disasterType === "Mudslide")?propArray[2]=1:propArray[2]=0;
+    (disasterType === "Mudslide")?propArray[4]=1:propArray[4]=0;
     //console.log(propArray[1]);
-    (disasterType === "Infrastructure Damage")?propArray[1]=1:propArray[1]=0;
+    (disasterType === "Infrastructure Damage")?propArray[3]=1:propArray[3]=0;
     //console.log(propArray[0]);
+    (confirmed === "1")?propArray[2]=1:propArray[2]=0;
+    (confirmed === "0")?propArray[1]=1:propArray[1]=0;
     (elementType === "3")?propArray[0]=1:propArray[0]=0;
 
     return propArray;
