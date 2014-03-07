@@ -13,7 +13,7 @@ var opened_info = new google.maps.InfoWindow();
 var vertices;
 $(document).ready(function(){
     initialize();
-    $('#instructionModal').modal('show');
+    $('#polygonInstructionModal').modal('show');
 });
 function initialize() {
 
@@ -38,7 +38,7 @@ function initialize() {
     });
 
     var clearButton = document.createElement('clearButton');
-    clearButton.innerHTML = "<button type='button' onclick='clearPolygon()' class='btn btn-default'><i class='icon-repeat'></i>Clear Selection</button>";
+    clearButton.innerHTML = "<button type='button' onclick='clearPolygon()' class='btn btn-default'><i class='icon-repeat'></i>Clear Selection</button>&nbsp;&nbsp;<button type='button' onclick='cancelReport()' class='btn btn-danger'><i class='icon-repeat'></i>Cancel</button>";
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(clearButton);
 
     var html = "<table>" +
@@ -56,7 +56,7 @@ function initialize() {
             "<tr><td>Houses Destroyed:</td> <td><input type='number' min='0' id='housesDestroyed'/></td> </tr>" +
             "<tr><td>Damage Cost:</td> <td><input type='number' min='0' id='damageCost'/></td> </tr>" +
             "<tr><td>Source:</td> <td><input type='text' id='source'/></td> </tr>" +
-            "<tr><td></td><td><input type='button' class='btn btn-success' value='Report Incident' onclick='saveData()'/></td></tr>";
+            "<tr><td></td><td><input type='button' class='btn btn-success' value='Report Incident' onclick='savePolygonData()'/></td></tr>";
 
     shape.infowindow = new google.maps.InfoWindow(
             {
@@ -80,6 +80,9 @@ function clearPolygon(){
     vertices=[];
     initialize();
 }
+function cancelReport(){
+    window.location.replace("http://localhost/icdrris");
+}
 function showInfo(event) {
     opened_info.close();
     //if (opened_info.name !== this.infowindow.name) {
@@ -88,7 +91,7 @@ function showInfo(event) {
         opened_info = this.infowindow;
     //}
 }
-function saveData(){
+function savePolygonData(){
     var polyString = "";
     var start = "";
     

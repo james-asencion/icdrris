@@ -13,7 +13,7 @@
               <div id="map_canvas" style="width:100%; height:570px;"></div>   
  </div>
 
-<div class = "modal hide fade" id="instructionModal">
+<div class = "modal hide fade" id="polygonInstructionModal">
   	<div class = "modal-header">
   		<a class="close" data-dismiss="modal">x</a>
   		<h3>Click points on the map to form a polygon</h3>

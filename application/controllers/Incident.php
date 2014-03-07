@@ -19,7 +19,9 @@ class Incident extends  CI_Controller
 		$this->load->view('includes/footer');
 	}
 	public function reportIncidentMarker(){
+		$this->load->view('includes/mapReportingHeader');
 		$this->load->view('markerView');
+		$this->load->view('includes/footer');
 	}
 	function savePolygon(){
 		$incident_data = array(
@@ -50,7 +52,37 @@ class Incident extends  CI_Controller
 			echo "failed";
 		}
 	}
-	 public function incidentTitle(){
+	function saveMarker(){
+		$incident_data = array(
+						'incident_description' => $this->input->post('description'),
+						'disaster_type' => $this->input->post('disaster_type'),
+						'incident_date' => $this->input->post('date')
+						);
+
+		$incident_report_id = $this->IncidentModel->addIncident($incident_data);
+		$incident_location_data = array(
+									'incident_report_id' => $incident_report_id, 
+									'location_id' => '1',
+									'incident_intensity' =>'3',
+									'lat'=> $this->input->post('lat'),
+									'lng'=> $this->input->post('lng'),
+									'death_toll' => $this->input->post('deaths'),
+									'no_of_injuries' => $this->input->post('injured'),
+									'no_of_people_missing' => $this->input->post('missing'),
+									'no_of_families_affected' => $this->input->post('families_affected'),
+									'no_of_houses_destroyed' => $this->input->post('houses_destroyed'),
+									'estimated_damage_cost' => $this->input->post('damage_cost'),
+									'incident_info_source' => $this->input->post('source')
+								);
+
+		$result = $this->IncidentModel->saveIncidentMarker($incident_location_data);
+		if($result){
+			echo "success";
+		}else{
+			echo "failed";
+		}
+	}
+	public function incidentTitle(){
 			$incident_report_id = $this->input->post("incident_report_id");
 			//$incident_location_id = $this->input->post("incident_location_id");
             $incident = $this->IncidentModel->getIncidentTitle($incident_report_id);

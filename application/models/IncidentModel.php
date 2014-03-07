@@ -23,6 +23,16 @@ class IncidentModel extends CI_Model
                 return false;
             }
         }
+
+        function saveIncidentMarker($data){
+            $result = $this->db->insert('incident_location',$data);
+            if($result){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
         function confirmThisIncident($id, $userid){
 			$sql = "UPDATE icdrris.incident_location SET flag_confirmed = 1, user_id = ? WHERE incident_location_id = ?";
 			$query= $this->db->query($sql, array($userid, $id));
