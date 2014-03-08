@@ -89,6 +89,30 @@
                 </form>
             </div>
           <div class="toppanel">
+                <form class = "navbar-form pull-left" name="filterForm1">
+                    <div class="center" align="center"><p>Filter Reports by:</p>   
+                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                              Filter Reports
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Confirmed
+                                  </label>
+                              </li>
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Not Confirmed
+                                  </label>
+                              </li>                                                                                                                      
+                          </ul>
+                      </div> 
+                </form>
+            </div>
+          <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm0">
                     <div class="center" align="center"><p>Response Organizations:</p>   
                           <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
