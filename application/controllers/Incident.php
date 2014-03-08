@@ -272,8 +272,8 @@ class Incident extends  CI_Controller
         }
 
         function deleteIncident(){
-            $incident_report_id = $this->input->post("incident_report_id");
-            $query_results = $this->IncidentModel->deleteIncident($incident_report_id);
+            $incident_location_id = $this->input->post("incident_location_id");
+            $query_results = $this->IncidentModel->deleteIncident($incident_location_id);
             if($query_results){
                 echo 'success';
             }

@@ -15,15 +15,14 @@
 	<h4 class="text-center">Register Members</h4>
         <input type="hidden" name="org_id" id="org_id"  value="<?php echo $org_id; ?>" />
         <div class="row"><div class="span3"><label for="name">First Name: </label></div><div class="span9">
-        <input type="text" name="first_name" id="first_name"  /></div></div>
-        <div class="row"><div class="span3"><label for="name">Last Name: </label></div><div class="span9"><input type="text" name="last_name" id="last_name"  /></div></div>
+        <input type="text" name="first_name" id="first_name"  required/></div></div>
+        <div class="row"><div class="span3"><label for="name" >Last Name: </label></div><div class="span9"><input type="text" name="last_name" id="last_name"  required/></div></div>
         <div class="row"><div class="span3"><label for="name">Middle Name: </label></div><div class="span9"><input type="text" name="middle_name" id="middle_name"  /></div></div>
-        <div class="row"><div class="span3"><label for="name">Sex: </label></div><div class="span9"><input type="text" name="sex" id="sex"  /></div></div>
-        <div class="row"><div class="span3"><label for="name">Birthday: </label></div><div class="span9"><input type="date" name="birthday" id="birthday"  /></div></div>
-        <div class="row"><div class="span3"><label for="name">Age: </label></div><div class="span9"><input type="text" name="age" id="age"  /></div></div>
-        <div class="row"><div class="span3"><label for="name">Monthly Income: </label></div><div class="span9"><input type="text" name="monthly_income" id="monthly_income" /></div></div>
-        <div class="row"><div class="span3"><label for="name">Source of Income: </label></div><div class="span9"><input type="text" name="source_of_income" id="source_of_income" /></div></div>
-        <div class="row"><div class="span3"><label for="name">Civil Status: </label></div><div class="span9"><input type="text" name="civil_status" id="civil_status"  /></div></div>
+        <div class="row"><div class="span3"><label for="name" >Sex: </label></div><div class="span9"><input type="text" name="sex" id="sex" required /></div></div>
+        <div class="row"><div class="span3"><label for="name" >Birthday: </label></div><div class="span9"><input type="date" name="birthday" id="birthday"  required/></div></div>
+        <div class="row"><div class="span3"><label for="name" >Monthly Income: </label></div><div class="span9"><input type="number"  min="0" name="monthly_income" id="monthly_income" required/></div></div>
+        <div class="row"><div class="span3"><label for="name" >Source of Income: </label></div><div class="span9"><input type="number" min="0" name="source_of_income" id="source_of_income" required/></div></div>
+        <div class="row"><div class="span3"><label for="name" >Civil Status: </label></div><div class="span9"><input type="text" name="civil_status" id="civil_status"  required/></div></div>
         
 </form>
 <div class="btn btn-small btn-primary" id="addMemberButton" align="center">Add Member</div>

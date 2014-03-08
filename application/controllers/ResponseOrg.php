@@ -194,7 +194,7 @@ class ResponseOrg extends CI_Controller
     function addOrgMembers($data){
 
             $this->load->view('includes/header');
-            $this->load->view('addResOrgMembersView',$data);
+            $this->load->view('ResOrgView',$data);
             $this->load->view('includes/footer');
     }
     function submitMember(){

@@ -35,6 +35,12 @@ class MapModel extends CI_Model
 									ORDER BY activity_start_date desc");
 		return $query->result();
 	}
+	
+		function getAllRequests($dateFrom, $dateTo){
+		$query = $this->db->query("	SELECT * from item_requests WHERE(request_date BETWEEN '$dateFrom' AND '$dateTo') ORDER BY request_date desc");
+		return $query->result();
+	}
+	
 	function getAllMembersDeployed($id){
 		$query = $this->db->get_where('member_deployments',array('response_organization_location_id'=>$id));
 		return $query->result();

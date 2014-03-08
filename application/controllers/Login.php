@@ -34,7 +34,7 @@ class Login extends CI_Controller{
 	    if($this->form_validation-> run() == false){
 			//$this->load->view('login');
 			echo '<div class= "alert alert-error">
-					   <strong> <span class="label label-important"> <i class= "icon-white icon-exclamation-sign"> </i> Error </span></strong>
+					   <strong> <span> <i class= "icon icon-exclamation-sign"> </i> Error </span></strong>
 					   <br />
 					   <center><font size= "2">
 						  <!-- found in system/libraries/Form_validation.php-->'.

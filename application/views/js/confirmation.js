@@ -302,7 +302,7 @@ $(document).ready(function(){
 
 		var incidentid = $('#modalDeleteIncident').data('incidentid');
 		console.log('this is the incidentid->' + incidentid);
-		var dataStr = 'incident_report_id='+incidentid;
+		var dataStr = 'incident_location_id='+incidentid;
 		$.ajax({
 				url: "http://localhost/icdrris/Incident/deleteIncident",
 				type: "POST",

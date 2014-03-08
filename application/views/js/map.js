@@ -317,6 +317,14 @@ function bindRespondentToSidePanel(marker) {
     });
 }
 
+function bindRequestToSidePanel(marker) {
+    var requestId = marker.id;
+    google.maps.event.addListener(marker, 'click', function() {
+        displayRequestDetailsFromMap(requestId, marker.request_info_source);
+        map.setCenter(marker.center);
+    });
+}
+
 function stopAnimation(marker) {
     setTimeout(function () {
         marker.setAnimation(null);
@@ -401,16 +409,19 @@ function getAllMapElements() {
     };
 
     var customIcons = {
+        ResponseOrg: {
+            icon: 'icons/health/sozialeeinrichtung.png'
+        },
         Flashflood: {
-            icon: 'icons/flood.png',
+            icon: 'icons/naturaldisaster/flood1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
         },
         Mudslide: {
-            icon: 'icons/earthquake.png',
+            icon: 'icons/nd/flood.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
         },
         Landslide: {
-            icon: 'icons/earthquake.png',
+            icon: 'icons/nd/avalanche1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
         },
         Default: {
@@ -432,6 +443,7 @@ function getAllMapElements() {
         var polygons = xml.documentElement.getElementsByTagName("polygons")[0].getElementsByTagName("polygon");
         var markers = xml.documentElement.getElementsByTagName("markers")[0].getElementsByTagName("marker");
         var respondents = xml.documentElement.getElementsByTagName("responseOrganizations")[0].getElementsByTagName("responseOrganization");
+        var requests = xml.documentElement.getElementsByTagName("requests")[0].getElementsByTagName("request");
 
         //empty the Polygon array first
         //emptyArray(polygonsArray1);
@@ -612,7 +624,7 @@ function getAllMapElements() {
             var location_address = respondents[j].getAttribute("location_address");
 
 
-            var icon = customIcons['Default'] || {};
+            var icon = customIcons['ResponseOrg'] || {};
             var point = new google.maps.LatLng(
                     parseFloat(respondents[j].getAttribute("deployment_lat")),
                     parseFloat(respondents[j].getAttribute("deployment_lng")));
@@ -649,6 +661,61 @@ function getAllMapElements() {
             marker.setMap(map);
 
         }
+		
+		  var j=0;
+        for (j = 0; j < requests.length; j++) {
+            var arr = createPropertiesArray(requests[j]);
+            var int = parseInt(arr.join(''),2);
+            console.log("Integer Equivalent -->>"+int+"<<<---");
+
+            var request_id = requests[j].getAttribute("request_id");
+            var location_id = requests[j].getAttribute("location_id");
+            var tweet_id = requests[j].getAttribute("tweet_id");
+            var request_date = requests[j].getAttribute("request_date");
+            var request_status = requests[j].getAttribute("request_status");
+            var request_comments = requests[j].getAttribute("request_comments");
+            var flag_request_granted = requests[j].getAttribute("flag_request_granted");
+            var tweet_user_id = requests[j].getAttribute("tweet_user_id");
+            var request_url = requests[j].getAttribute("request_url");
+            var geo_place_name = requests[j].getAttribute("geo_place_name");
+
+
+            var icon = customIcons['Default'] || {};
+            var point = new google.maps.LatLng(
+                    parseFloat(requests[j].getAttribute("geo_lat")),
+                    parseFloat(requests[j].getAttribute("geo_lng")));
+
+            
+            var markerOptions = {
+                position: point,
+                visible:false,
+                icon: icon.icon,
+                shadow: icon.shadow,
+                center: point,
+                arrId: (polygonIndex+i+j),
+                id: request_id,
+                tweet_id: tweet_id,
+                request_date: request_date,
+                request_status: request_status,
+                request_comments: request_comments,
+                flag_request_granted:flag_request_granted,
+                tweet_user_id:tweet_user_id,
+                request_url:request_url,
+                geo_place_name:geo_place_name,
+                elementType: 3,
+                props: int
+            }
+            var marker = new google.maps.Marker(markerOptions);
+            mapElements.push(marker);
+            appendToRequestList(marker);
+
+            //console.log("marker loop reached here");
+            bindRespondentToSidePanel(marker);
+            //appendToList(marker, id, point, markers[i]);
+            marker.setMap(map);
+
+        }
+  
     });
 
 }
@@ -668,7 +735,7 @@ function appendToIncidentList(mapElement) {
     //place icon-links here [show details]
     listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+","+mapElement.incidentLocationId+");\">Open</a>"; // show details icon
    var sess_user = get_session();
-    if(mapElement.flagConfirmed == 0 && sess_user == 'icdrrmo'){
+    if(mapElement.flagConfirmed == 0 && (sess_user == 'cdrrmo' || sess_user == 'bdrrmo')){
     //if(mapElement.flagConfirmed == 0){
       listItem += "| <a href=\"#\" id=\"confirm-incident\" role=\"button\" data-toggle=\"modal\"   data-id=\"" + mapElement.id + "\" onclick=\"confirmIncident("+mapElement.incidentLocationId+", '"+mapElement.incidentDescription+"');\"> Confirm Report </a>"; // confirm icon
     }
@@ -736,6 +803,36 @@ function appendToRespondentList(mapElement) {
 
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
 }
+
+function appendToRequestList(mapElement) {
+
+    //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
+    //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
+    //console.log("append to list started here with id");
+
+    
+    var listItem="";
+    listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
+    listItem += "<div class=\"accordion-group\">";
+    listItem += "<div class=\"accordion-heading\">";
+    listItem += "<a href=\""+mapElement.request_url+"\"> "+ mapElement.request_info_source + "</a><a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\"></a>";
+    //place icon-links here [show details]
+    listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayRequestDetails("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Open </a> "; // show details icon
+    //end div
+    listItem += "</div>";
+    listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
+    listItem += "<div class=\"accordion-inner\">";
+    listItem += "<p class=\"list-group-item-text\">Tweet :" + mapElement.request_comments + "<br> Request Date:" + mapElement.request_date + "<br> Tweet Location: " + mapElement.geo_place_name + "</p>";
+    listItem += "</div></div></div>";
+
+    //append to the list
+    var div = document.getElementById('requestList');
+    //console.log(div);
+    div.innerHTML = div.innerHTML + listItem;
+
+    //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
+}
+
 function backToHome(){
     $("#incidentList").hide();
     $(".incidentTabbable").hide();
@@ -748,8 +845,10 @@ function backToHome(){
     $("#subBreadCrumb1").remove();
 }
 function incidentList(){
+    
     $("#homeView").hide();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToIncidentList()" class="subBreadCrumb1" >Incidents List</a><span class="divider">/</span></li>');
+    openSideBar();
     $("#incidentList").show("fast");
 
 }
@@ -1131,6 +1230,8 @@ function displayRespondentDetails(deployment_id,elementId)
     stopAnimation(mapElements[elementId]);
 
 }
+
+
 //================================================================================================================================
 //================================================================================================================================
 

@@ -164,8 +164,8 @@
           <!-- HOME VIEW -->
           <div class="span12" id="homeView">
               <a onclick="incidentList()" id="a-ListofIncidents"> Incidents</a><br>
-              <a onclick="respondentList()" id="a-ListofIncidents"> Response Organizations</a><br>
-              <a onclick="requestList()" id="a-ListofIncidents"> List of Requests</a><br>
+              <a onclick="respondentList()" id="a-ListofRespOrg"> Response Organizations</a><br>
+              <a onclick="requestList()" id="a-ListofRequest"> List of Requests</a><br>
           </div>
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
@@ -201,7 +201,7 @@
                                          <li>
                                              <a href="#" id="disapprove-li" class="disapprove-li" data-incidentid="" onclick="rateIncident(0)" style="color:whitesmoke"> <span id="span-disapprove-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-down"></i> Disapprove</a>
                                          </li>
-                                        <?php if($this->session->userdata('user_type') == 'icdrrmo'){?>
+                                        <?php if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){?>
                                             <li>
                                               <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
                                             </li>
@@ -266,7 +266,7 @@
                  <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
             <div id= "map_canvass">
-              <div id="map_canvas" style="width:100%; height:570px;"></div>   
+              <div id="map_canvas" style="top:40px; width:100%; height:585px;"></div>   
             </div>
 			
 	<!-- MODALS: confirmVictim, confirmIncident, detailsVictim, reportVictim, deleteIncident, deleteVictim, updateVictim>

@@ -25,6 +25,7 @@ class MapController extends  CI_Controller
 
 		$data['elements']  = $this->MapModel->getMapElements1($dateFrom, $dateTo);
 		$data['respondents'] = $this->MapModel->getAllDeployedResponseOrganizations($dateFrom, $dateTo);
+		$data['requests'] = $this->MapModel->getAllRequests($dateFrom, $dateTo);
 		//echo count($data['responseOrganizations']);
 		$this->load->view('getAllMapElements',$data);
 
