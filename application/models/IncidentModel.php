@@ -118,7 +118,7 @@ class IncidentModel extends CI_Model
 
 
         function deleteIncident($id){
-            $this->db->where('incident_report_id', $id);
+            $this->db->where('incident_location_id', $id);
             $query= $this->db->delete('incidents'); 
             
             if($query){

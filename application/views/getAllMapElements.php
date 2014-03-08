@@ -9,6 +9,10 @@ $markersNode = $mapElementsNode->appendChild($markers);
 $responseOrganizations = $dom->createElement("responseOrganizations");
 $responseOrgNode = $mapElementsNode->appendChild($responseOrganizations);
 
+
+$requestItems = $dom->createElement("requests");
+$requestNode = $mapElementsNode->appendChild($requestItems);
+
 header("Content-type: text/xml"); 
 
 
@@ -102,6 +106,24 @@ foreach($respondents as $org){
     $responseOrganization->setAttribute("elementType", "3");
 
     $newRespondentOrg = $responseOrganizations->appendChild($responseOrganization);
+        
+}
+
+foreach($requests as $req){
+    $request = $dom->createElement("request");
+    $request->setAttribute("request_id",$req->request_id);
+    $request->setAttribute("location_id",$req->location_id);
+    $request->setAttribute("tweet_id",$req->tweet_id);
+    $request->setAttribute("request_date",$req->request_date);
+    $request->setAttribute("request_status",$req->request_status);
+    $request->setAttribute("request_comments",$req->request_comments);
+    $request->setAttribute("flag_request_granted",$req->flag_request_granted);
+    $request->setAttribute("tweet_user_id",$req->tweet_user_id);
+    $request->setAttribute("request_info_source",$req->request_info_source);
+    $request->setAttribute("request_url",$req->request_url);
+    $request->setAttribute("elementType", "4");
+
+    $newRequest = $requestItems->appendChild($request);
         
 }
 /**

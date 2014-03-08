@@ -164,8 +164,8 @@
           <!-- HOME VIEW -->
           <div class="span12" id="homeView">
               <a onclick="incidentList()" id="a-ListofIncidents"> Incidents</a><br>
-              <a onclick="respondentList()" id="a-ListofIncidents"> Response Organizations</a><br>
-              <a onclick="requestList()" id="a-ListofIncidents"> List of Requests</a><br>
+              <a onclick="respondentList()" id="a-ListofRespOrg"> Response Organizations</a><br>
+              <a onclick="requestList()" id="a-ListofRequest"> List of Requests</a><br>
           </div>
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
