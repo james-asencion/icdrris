@@ -239,7 +239,7 @@ function getAllMapElements() {
             icon: 'icons/health/sozialeeinrichtung.png'
         },
         Flashflood: {
-            icon: 'icons/flood1.png',
+            icon: 'icons/naturaldisaster/flood1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
         },
         Mudslide: {
@@ -415,7 +415,7 @@ function getAllMapElements() {
             var location_address = respondents[j].getAttribute("location_address");
 
 
-            var icon = customIcons['Default'] || {};
+            var icon = customIcons['ResponseOrg'] || {};
             var point = new google.maps.LatLng(
                     parseFloat(respondents[j].getAttribute("deployment_lat")),
                     parseFloat(respondents[j].getAttribute("deployment_lng")));
