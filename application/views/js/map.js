@@ -235,16 +235,19 @@ function getAllMapElements() {
     };
 
     var customIcons = {
+        ResponseOrg: {
+            icon: 'icons/health/sozialeeinrichtung.png'
+        },
         Flashflood: {
-            icon: 'icons/flood.png',
+            icon: 'icons/flood1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
         },
         Mudslide: {
-            icon: 'icons/earthquake.png',
+            icon: 'icons/nd/flood.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
         },
         Landslide: {
-            icon: 'icons/earthquake.png',
+            icon: 'icons/nd/avalanche1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
         },
         Default: {

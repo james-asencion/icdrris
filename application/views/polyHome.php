@@ -266,7 +266,7 @@
                  <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
             <div id= "map_canvass">
-              <div id="map_canvas" style="width:100%; height:570px;"></div>   
+              <div id="map_canvas" style="top:40px; width:100%; height:585px;"></div>   
             </div>
 			
 	<!-- MODALS: confirmVictim, confirmIncident, detailsVictim, reportVictim, deleteIncident, deleteVictim, updateVictim>
