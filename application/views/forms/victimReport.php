@@ -58,7 +58,7 @@
 		<div class = "row-fluid">
 		<strong>Address</strong><br>
 		<?php 
-			$addressProperties=array('type'=>'text','class'=>'span8','id'=>'address', 'name'=>'address', 'value'=>set_value('address'));
+			$addressProperties=array('type'=>'text','class'=>'span8','id'=>'addressvictim', 'name'=>'addressvictim', 'value'=>set_value('addressvictim'));
 			echo form_input($addressProperties);?>
 		</div>
                 <div class = "row-fluid">

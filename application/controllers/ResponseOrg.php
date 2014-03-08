@@ -25,8 +25,7 @@ class ResponseOrg extends CI_Controller
             $this->load->view('addResOrgView.php');
             $this->load->view('includes/footer'); 
     }
-    function addResOrg()
-    {
+    function addResOrg(){
     	$this->load->library('form_validation');
     	$this->form_validation->set_rules('ro_name', 'Response Organization Name', 'trim|required');
     	$this->form_validation->set_rules('ro_phone_num', 'Phone Number', 'trim|required');
@@ -41,12 +40,21 @@ class ResponseOrg extends CI_Controller
             //$this->registerLivelihoodOrg();
     	}
         else{
-            $dataArray = $this->ResOrgModel->createResOrg();
+            $id = $this->ResOrgModel->createResOrg();
+            //http://localhost/icdrris/ResponseOrg/ViewResOrg/id/2
+            $this->viewNewResOrg($id);
+           // $url = 
+            redirect('/ResponseOrg/viewNewResOrg/id/'.$id);
             //echo $response['org_id'];
-            $this->addOrgMembers($dataArray);
-         //   $this->viewResOrg();
+            //$this->addOrgMembers($dataArray);
     	}
 
+    }
+    function addNewMemberSkillset(){
+        $skillset_description = $this->input->post('skillset_description');
+        $this->ResOrgModel->addNewMemberSkillset($skillset_description);
+
+        return $this->getAllSkillsCheckboxList();
     }
     function addResponseOrgModal(){
         $this->ResOrgModel->createResOrgModal();
@@ -54,7 +62,7 @@ class ResponseOrg extends CI_Controller
     }
 
     function getAllResponseOrgTable(){
-        $organizations = $this->ResOrgModel->getAllResOrgs();
+        $organizations = $this->ResOrgModel->getUserResponseOrganizations();
         echo "<tr><th>Response Organization Name</th><th>Phone Number</th><th>Email</th><th>Address</th><th>Contact Person</th><th>Members Count</th><th>Members Available</th><th>Actions</th></tr>";
         foreach ($organizations as $organization) {
                 echo "<tr><td><span href=\"#\" id=\"response_organization_name\" data-name\"response_organization_name\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Name\">".$organization->response_organization_name.
@@ -93,14 +101,11 @@ class ResponseOrg extends CI_Controller
         echo "<tr><th>First Name</th><th>Last Name</th><th>Sex</th><th>Birthday</th><th>Civil Status</th><th>Availability</th><th>Skills</th><th>Actions</th></tr>";
        foreach ($members as $member) {
 
-        $skills = $this->ResOrgModel->getSkillsByMember($member);
-        echo $member;
-        $string = "";
-        if($skills){
-            foreach ($skills as $s) {
-            echo $s->skillset_description;
-            }      
-        }
+        $skills = $this->ResOrgModel->getSkillsByMember($member->member_id);
+        $skillsString = "";
+        foreach ($skills as $s) {
+            $skillsString .= $s->skillset_description.", ";
+        } 
            
                 echo "<tr>
                 <td><span href=\"#\" id=\"response_organization_member_first_name\" data-name\"response_organization_member_first_name\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter First Name\">".$member->member_first_name."</span></td>
@@ -109,23 +114,29 @@ class ResponseOrg extends CI_Controller
                 <td><span href=\"#\" id=\"response_organization_member_birthday\" data-name\"response_organization_member_birthday\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Birthday\">".$member->member_birthday."</a></td>
                 <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Civil Status\">".$member->member_civil_status."</a></td>
                 <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Member Status\">".$member->member_status."</a></td>
-                <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Skills\">".$string."</a></td>
+                <td><span href=\"#\" id=\"response_organization_member_civil_status\" data-name\"response_organization_member_civil_status\" data-type=\"text\" data-pk=\"".$member->member_id."\" data-title=\"Enter Skills\">".$skillsString."</a></td>
                 <td><a href=\"#\" class=\"confirm-deleteResOrgMember\" data-lastname=\"".$member->member_last_name."\" data-id=".$member->member_id."><i class=\"icon-trash\"></i></a></td></tr>";
         }
     }
 
     function getAllResOrgCheckboxList(){
-        $members = $this->ResOrgModel->getAllDeployableResOrgMembers($this->input->post('org_id'));
+        $members = $this->ResOrgModel->getAllDeployableResOrgMembers(intval($this->input->post('org_id'),36));
 
        foreach ($members as $member) {
                 echo "<label class='checkbox'><input type='checkbox' data-id=".$member->member_id.">".$member->member_first_name."</input></label>";
+        }
+    }
+    function getAllSkillsCheckboxList(){
+        $skills = $this->ResOrgModel->getAllSkillset();
+        foreach ($skills as $skill) {
+            echo "<li><label class = \"checkbox\"><input type = \"checkbox\" data-id =".$skill->skillset_id.">".$skill->skillset_description."</input></label></li>";
         }
     }
     function deployMembers(){
         $members = json_decode($_POST['membersToDeploy']);
 
         $orgDeploymentData = array(
-                                'response_organization_id' => $this->input->post('org_id'),
+                                'response_organization_id' => intval($this->input->post('org_id'),36),
                                 'location_id' => $this->input->post('location_id'),
                                 'activity_description' => $this->input->post('response_activity_description'),
                                 'activity_start_date' => $this->input->post('activity_start_date'),
@@ -147,7 +158,7 @@ class ResponseOrg extends CI_Controller
             $this->ResOrgModel->updateMemberStatus($member);
         }
 
-        //$this->getAllResOrgCheckboxList($org_id);
+        return $this->getAllResOrgCheckboxList(intval($this->input->post('org_id'),36));
     }
 
     function registerResOrg()
@@ -214,7 +225,7 @@ class ResponseOrg extends CI_Controller
         }
     }
 
-      function viewDeploy(){
+    function deployResponseOrganization(){
         $this->load->view('includes/deploylivelihoodheader');
         $this->load->view('deployResOrg');
         $this->load->view('includes/footer');
@@ -226,7 +237,21 @@ class ResponseOrg extends CI_Controller
         //echo $get['id'];
         $data['org'] = $this->ResOrgModel->getResOrg($get['id']);
         $data['members'] = $this->ResOrgModel->getAllResOrgMembers($get['id']);
-        $data['skills']=$this->ResOrgModel->getAllSkills();
+        $data['skills'] = $this->ResOrgModel->getAllSkillset();
+          
+        //echo count($data['livelihood_org']);
+        //pass the query results to the view
+        $this->load->view('includes/header');
+        $this->load->view('ResOrgView',$data);
+        $this->load->view('includes/footer');       
+    }
+    function viewNewResOrg(){
+        //query for the data
+        $get = $this->uri->uri_to_assoc();
+        $id = $get['id'];
+        $data['org'] = $this->ResOrgModel->getResOrg($id);
+        $data['members'] = $this->ResOrgModel->getAllResOrgMembers($id);
+        $data['skills'] = $this->ResOrgModel->getAllSkillset();
           
         //echo count($data['livelihood_org']);
         //pass the query results to the view
@@ -237,6 +262,14 @@ class ResponseOrg extends CI_Controller
 
     function viewAllResOrgs(){
         $data['organizations'] = $this->ResOrgModel->getAllResOrgs();
+        $this->load->view('includes/header');
+        $this->load->view('ViewAllResOrg',$data);
+        $this->load->view('includes/footer');
+
+    }
+
+    function viewAllUserResOrgs(){
+        $data['organizations'] = $this->ResOrgModel->getUserResponseOrganizations();
         $this->load->view('includes/header');
         $this->load->view('ViewAllResOrg',$data);
         $this->load->view('includes/footer');
@@ -283,21 +316,92 @@ class ResponseOrg extends CI_Controller
             header('HTTP 400 Bad Request', true, 400);
             echo "error encountered";
          }
-         //else{
-            //echo "error encountered";
-            //$a = array("username"=>"username already exist");
-            //$arr = array("errors"=>$a);
-            //$responseData = json_encode($arr);
-            //echo $responseData;
-            //header('HTTP 400 Bad Request', true, 400);
-            //echo "error encountered";
-            //{"errors": {"username": "username already exist"} }
-            //$responseData = json_encode("{success:false, message:'server error'}");
-            
-            //echo "Error in Query".$this->input->post('pk');
-         //}
+         
         
     }
+    function getDeployedOrganizationName(){
+        $org = $this->ResOrgModel->getDeployedOrganization($this->input->post('id'));
+        echo $org->response_organization_name;
+
+    }
+    function getDeployedOrganizationDetails(){
+
+        $org = $this->ResOrgModel->getDeployedOrganization($this->input->post('id'));
+
+        echo '<h4><div id="incident-title" class="span8" style="color:darkorange">'.$org->response_organization_name.'</div></h4>
+              
+                      <div class="details" style="margin-left: 15px; margin-top: 10px">
+                          <div class="row-fluid">
+                              <div class="span12">
+                                <div id="activityDescriptionLabel" class="span4">Deployment Activity:  </div>
+                                <div id="activityDescriptionField" class="span8">'.$org->activity_description.'</div>
+                              </div>
+                          </div>
+                          <div class="row-fluid">
+                              <div class="span12">
+                                <div id="activityDescriptionLabel" class="span4">Deployment Location:  </div>
+                                <div id="activityDescriptionField" class="span8">'.$org->location_address.'</div>
+                              </div>
+                          </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                              <div id="activityStartDateLabel" class="span4">Activity Start Date:  </div>
+                              <div id="activityStartDateField" class="span8">'.$org->activity_start_date.'</div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                              <div id="activityEndDateLabel" class="span4">Activity End Date:  </div>
+                              <div id="activityEndDateField" class="span8">'.$org->activity_end_date.'</div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                              <div id="deploymentStatusLabel" class="span4">Deployment Status:  </div>
+                              <div id="deploymentStatusField" class="span8">'.$org->activity_status.'</div>
+                            </div>
+                        </div>
+                    </div>';
+    }
+    function getAllDeployedMembers(){
+
+        $orgId = $this->input->post("orgId");
+        $query = $this->ResOrgModel->getAllDeployedMembers($orgId);
+        $members = $query->result(); 
+
+                if($query-> num_rows() == 0){
+                    echo '<center><font style="color: red;"><b>No members deployed.</b></font></center>';
+                }
+                else{
+                    echo '<table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Skills</th>
+                                    </tr>
+                                </thead>
+                                <tbody>';
+                                                    
+                    foreach($members as $member){
+                        $skills = $this->ResOrgModel->getMemberSkills($member->member_id);
+                        echo        '<tr>
+                                        <td>'.$member->member_first_name." ".$member->member_last_name.'</td>
+                                        <td>'.$member->member_status.'</td>
+                                        <td>';
+                                            foreach($skills as $skill){
+                                                echo $skill->skillset_description.', ';
+                                        }
+                        echo        '</td>
+                                    </tr>';
+
+                    }
+                            echo '</tbody>
+                            </table>';
+                }
+                    
+    }          
+        
 
     function test(){
         $this->load->view('includes/header');

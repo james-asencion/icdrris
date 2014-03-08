@@ -13,27 +13,14 @@ class VictimModel extends CI_Model{
        $sql= 'select iv.incident_report_id, v.victim_id, v.first_name, v.middle_name, v.last_name, v.address, iv.victim_status, iv.flag_confirmed, iv.report_rating_false, iv.report_rating_true from incident_victim iv right outer join victims v on v.victim_id = iv.victim_id where iv.incident_report_id="'.$incident_report_id.'" ORDER BY v.first_name ASC';
        $query= $this->db->query($sql);
        
-       if($query){ //victim in a specific incident is unique
+       if($query){ 
             return $query; 
         }
-       else{ //victim in the specific incident already exists
+       else{ 
             return false;
        }
     }
 	
-	// GET VICTIM DETAILS | SELECT VICTIM
-	function selectVictim($victim_id){
-		/**$sql = '';
-		$query= 
-		
-		if($query){
-		   return $query; 
-		}
-		else{
-			echo 'Problem with the query.';
-		}
-       */
-	}
 	
 	// CHECK IF VICTIM NAME CHANGED
 	function isVictimNameChanged($victim_id, $first_name, $middle_name, $last_name){
@@ -58,10 +45,10 @@ class VictimModel extends CI_Model{
        $sql= 'SELECT v.victim_id,v.first_name, v.last_name,v.middle_name, iv.incident_report_id FROM icdrris.incident_victim iv LEFT OUTER JOIN icdrris.victims v  on v.victim_id = iv.victim_id WHERE iv.incident_report_id = "'.$reportNo.'" and v.last_name = "'.$lname.'" and v.middle_name = "'.$mname.'" and v.first_name= "'.$fname.'"';
        $query= $this->db->query($sql);
        
-       if($query->num_rows() <1){ //victim in a specific incident is unique
+       if($query->num_rows() <1){ 
             return true; 
        }
-       else{ //victim in the specific incident already exists
+       else{ 
             return false;
        }
     }
@@ -97,8 +84,7 @@ class VictimModel extends CI_Model{
       $isVictimUnique= $this->db->query($sql_isVictimUnique);
      
       if($isVictimUnique->num_rows() >0){
-          //naa sa victim table
-          //get victimNo and insert victim to incident_victim table
+          
           foreach($isVictimUnique->result() as $row_victim){
           $id= $row_victim->victim_id;}
           
@@ -107,8 +93,7 @@ class VictimModel extends CI_Model{
           return true;
       }
       else{
-          //wala sa victim table
-          //insert victim to victim table then get the id to insert to incident_victim table with the reportNo
+        
             $sql_insertVictim= 'INSERT INTO `icdrris`.`victims` (`victim_id`, `first_name`, `last_name`,`middle_name`, `address`) VALUES (default,"'.$fname.'", "'.$lname.'",  "'.$mname.'", "'.$address.'")';
             $query_insertVictim= $this->db->query($sql_insertVictim);
 
@@ -135,24 +120,7 @@ class VictimModel extends CI_Model{
 		}else{
 			return log_message();
 		}
-		// FOR VICTIMS TABLE
-		/**$data_victims = array(
-               'first_name' => $first_name,
-               'middle_name' => $middle_name,
-               'last_name' => $last_name,
-               'address' => $address
-            );
-		$this->db->where('victim_id', $victim_id);
-		$this->db->update('victims', $data_victims); 
-		*/
-		// FOR INCIDENT_VICTIM TABLE
-		/**$data_iv = array(
-               'victim_status' => $victim_status
-            );
-		$this->db->where('victim_id', $victim_id);
-		$this->db->where('incident_report_id', $incident_report_id);
-		$this->db->update('incident_victim', $data_iv); 
-		*/
+		
 	}
     
     function deleteVictim($incident_report_id, $victim_id){
@@ -161,16 +129,27 @@ class VictimModel extends CI_Model{
 		$query= $this->db->delete('incident_victim');
         
         if($query){
-           // echo 'success frm victimmodel';
+          
             return true;
         }else{
-            //echo 'db query error';
+           
             echo $this->db->_error_message();
         }
 
 
     }
 	
+	function confirmThisVictim($incident_report_id, $victim_id, $userid){
+		$sql = "UPDATE icdrris.incident_victim SET flag_confirmed = 1, user_id = ? WHERE incident_report_id = ? and victim_id= ?";
+		$query= $this->db->query($sql, array($userid, $incident_report_id, $victim_id));
+		if($query){
+			return true;
+		}
+		else{ 
+			return $query;
+		}
+	}
+		
 	//Rate Victim
 	function updateRate($incident_report_id, $victim_id, $upOrDown, $actionType){
 		$sql= "";
@@ -200,19 +179,6 @@ class VictimModel extends CI_Model{
 	}
 		$this->db->query($sql, array($incident_report_id, $victim_id));
 		return $this->db->affected_rows();
-	}	
+	}
+}	
 	
-    /** NOTE!
-     * ADDRESS issue...
-     * 1. Address of the victim? or Location address of the victim?
-     * 2. Changeable? or Not?
-     * SOLUTION:
-     * 1. If changeable && Location address, how about the past incident records? it will also change.
-     *       Remedy: transfer address in incident_location
-     * 2. If changeable && Address of the victim, not needed in REPORT VICTIM form
-     *       Remedy: remove the Address field from the form.
-     * 
-     * NOTICE: $address var is not used if the victim already exists in victim table.
-     */
-    
-}

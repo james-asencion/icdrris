@@ -1,13 +1,12 @@
-	<?php $this->load->view('includes/header');?>
-	<?php $this->load->view('forms/login_form'); ?>
+
 	</div>
 </div>
-<!-- A SIGNUP FORM PAGE (logged in)-->
-	<?php if(!$this->session->userdata('is_logged_in')){ 
+<!-- A SIGNUP FORM PAGE (not logged in)-->
+	<?php if(!$this->session->userdata('is_logged_in')){
 		 $this->load->view('forms/signup_form'); 
 	}?>
 	
-<!-- A SIGNUP FORM PAGE (not logged in)-->
+<!-- A SIGNUP FORM PAGE (logged in)-->
 	<?php if($this->session->userdata('is_logged_in')){ ?>
 	<div class = "row-fluid">
 		<div class = "span1"></div>
@@ -29,4 +28,3 @@
 	<?php }?>	
 	
 	
-<?php $this->load->view('includes/footer');?>

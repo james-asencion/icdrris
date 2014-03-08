@@ -15,11 +15,13 @@ class Signup extends CI_Controller{
 	}
 	function index()
 	{   //initialize signup page
+		$this->load->view('includes/header');
 		$this->load->view('signup');
+		$this->load->view('includes/footer');
 	}   
 	
 	function success(){
-		$data['succ_message']= 'New account has been created. <br /> Please wait until being verified by the admin.';
+		$data['succ_message']= 'New account has been created. ';
 		$this->load->view('signup', $data);
 		
 	}

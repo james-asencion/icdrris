@@ -20,10 +20,11 @@ class LivelihoodModel extends CI_Model{
 		
 		$query = $this->db->insert('livelihood_organizations',$data);
 		$orgId = $this->db->insert_id();
+		$userId = $this->session->userdata('user_id');
+		$this->db->insert('user_livelihood_organizations', array('user_id'=>$userId, 'livelihood_organization_id'=>$orgId));
 		$data['org_id'] = $orgId;
-
 		if($query){
-			return $data;
+			return $orgId;
 		}else{
 			return $this->db->_error_message();
 		}
@@ -93,6 +94,17 @@ class LivelihoodModel extends CI_Model{
 	function getAllLivelihoodOrgs(){
 		$query = $this->db->get('livelihood_organizations');
 		return $query->result();
+	}
+
+	function getUserLivelihoodOrganizations(){
+		$user_id = $this->session->userdata('user_id');
+
+		$query = $this->db->query("	SELECT l.livelihood_organization_name, l.livelihood_organization_address, l.no_of_members, l.initial_income, l.livelihood_organization_status, l.date_established, l.business_activity_type, 
+									FROM user_livelihood_organizations u
+									LEFT JOIN livelihood_organizations l
+									ON l.livelihood_organization_id = u.livelihood_organization_id
+									WHERE u.user_id='$user_id'");
+		return $query->result();
 	} 
 	function getAllLivelihoodOrgsNotRequested($programId){
 		$query = $this->db->query("	SELECT *
@@ -123,9 +135,17 @@ class LivelihoodModel extends CI_Model{
 		return $query->result();
 	}
 
-	function getAllAvailableLivelihoodPrograms(){
-		$this->db->where('livelihood_program_status', 'available');
-		$query = $this->db->get('livelihood_programs');
+	// function getAllAvailableLivelihoodPrograms(){
+	// 	$this->db->where('livelihood_program_status', 'available');
+	// 	$query = $this->db->get('livelihood_programs');
+	// 	return $query->result();
+	// }
+	function getAllAvailableLivelihoodPrograms($org_id){
+		$query  = $this->db->query("SELECT livelihood_program_id, livelihood_type, livelihood_description, livelihood_program_cost, target_recipients, livelihood_program_status
+									FROM livelihood_programs
+									WHERE livelihood_program_id 
+									NOT IN(SELECT livelihood_program_id FROM livelihood_organization_program_requests WHERE livelihood_organization_id='$org_id')
+									AND livelihood_program_status='available';");
 		return $query->result();
 	}
 	function getLivelihoodProgram($id){
@@ -149,7 +169,7 @@ class LivelihoodModel extends CI_Model{
 									FROM livelihood_program_resource r
 									LEFT JOIN livelihood_resources l 
 									ON l.livelihood_resource_id=r.livelihood_resource_id
-									WHERE livelihood_program_id='$id';");
+									WHERE livelihood_program_id='$id' AND r.quantity_available>0;");
 		return $query->result();
 	}
 	function getDeployableLivelihoodProgramResources($id){
@@ -172,7 +192,19 @@ class LivelihoodModel extends CI_Model{
 		$this->updateLivelihoodResourceCount($quantity,$program_resource_id);
 		//return $this->db->insert_id();
 	}
-	function approveLivelihoodOrgRequest($request_id,$resource_id,$quantity,$program_resource_id){
+	function approveLivelihoodProgramRequest($request_id, $grant_date){
+		$values = 	array(
+						'request_status' => 'granted',
+						'date_granted' => $grant_date
+					);
+		$this->db->where('livelihood_organization_program_request_id', $request_id);
+		$this->db->update('livelihood_organization_program_requests', $values);
+	}
+	function cancelLivelihoodRequest($request_id){
+		$this->db->where('livelihood_organization_program_request_id', $request_id);
+		$this->db->delete('livelihood_organization_program_requests');
+	}
+	function grantResourceToRequest($request_id,$resource_id,$quantity,$program_resource_id){
 		$values = 	array(
 						'livelihood_organization_program_request_id' => $request_id,
 						'livelihood_resource_id' => $resource_id,
@@ -233,6 +265,43 @@ class LivelihoodModel extends CI_Model{
 									LEFT JOIN livelihood_organization_program_requests r
 									ON l.livelihood_organization_id = r.livelihood_organization_id
 									WHERE r.livelihood_program_id = '$programId' AND r.request_status = 'pending';");
+		return $query->result();
+	}
+
+	function getAllOrganizationPendingRequest($orgId){
+		$query = $this->db->query("	SELECT r.request_status, r.request_description, r.date_requested, p.livelihood_description, p.livelihood_type
+									FROM livelihood_programs p
+									LEFT JOIN livelihood_organization_program_requests r
+									ON r.livelihood_program_id = p.livelihood_program_id;
+									WHERE r.request_status = 'pending' AND r.livelihood_organization_id='$orgId';");
+		return $query->result();
+	}
+	function getAllOrganizationRequests($orgId){
+		$query = $this->db->query("	SELECT r.livelihood_organization_program_request_id, r.request_status, r.request_description, DATE_FORMAT( r.date_requested,'%W, %M %e, %Y') as date_requested, DATE_FORMAT( r.date_granted,'%W, %M %e, %Y') as date_granted, p.livelihood_description, p.livelihood_type
+									FROM livelihood_programs p
+									LEFT JOIN livelihood_organization_program_requests r
+									ON r.livelihood_program_id = p.livelihood_program_id
+									WHERE r.livelihood_organization_id='$orgId';");
+
+		return $query->result();
+	}
+	function getAllOrganizationApprovedRequest($orgId){
+		$query = $this->db->query("	SELECT r.request_status, r.request_description, r.date_requested, r.date_granted, p.livelihood_description, p.livelihood_type
+									FROM livelihood_programs p
+									LEFT JOIN livelihood_organization_program_requests r
+									ON r.livelihood_program_id = p.livelihood_program_id;
+									WHERE r.request_status = 'approved' AND r.livelihood_organization_id='$orgId';");
+		return $query->result();
+	}
+	function addNewProgramResource($resource_description){
+		$this->db->insert('livelihood_resources', array('livelihood_resource_description'=>$resource_description));
+	}
+	function getAllOrganizationProgramGrants($orgId){
+		$query = $this->db->query("	SELECT g.date_granted, l.livelihood_type, l.livelihood_description, l.livelihood_program_cost 
+									FROM livelihood_organization_program_grants g
+									LEFT JOIN livelihood_programs l
+									ON l.livelihood_program_id = g.livelihood_program_id
+									WHERE g.livelihood_organization_id = '$orgId';");
 		return $query->result();
 	}
 	function getAllApprovedRequests($programId){
@@ -315,9 +384,6 @@ class LivelihoodModel extends CI_Model{
 	function deleteOrganization($id){
 		$this->db->where("livelihood_organization_id",$id);
 		$query = $this->db->delete("livelihood_organizations");
-
-		return $query->result();
-
 	}
 	function updateMemberEditable($id, $name, $value){
 		$data = array(

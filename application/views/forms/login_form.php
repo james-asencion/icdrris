@@ -12,7 +12,7 @@
 					<?php //error message inside here ?>
 				</div>
 				<center>
-				<form method = "post" action = "<?php echo base_url();?>Login/validate_credentials" id= "loginForm" style = "margin:10px">
+				<form method = "post" action = "<?php echo base_url();?>Login/validate_credentials" id= "loginForm" class="loginForm" style = "margin:10px">
 				   <?php 
 				   $username_property = array( 'type' => 'text', 'name' => 'username', 'id' => 'username', 'placeholder' => 'Username','value'=>set_value('username'));
 						   echo form_input($username_property); 
@@ -23,7 +23,7 @@
 						   echo form_input($password_property); 
 					?> 
 					<br />
-				   <?php $submit_property = array( 'type' => 'submit', 'class' => 'btn btn-primary', 'style' => 'width:50%', 'name' => 'login', 'value' =>'Login');
+				   <?php $submit_property = array( 'type' => 'submit', 'class' => 'btn btn-primary', 'style' => 'width:50%', 'name' => 'login', 'value' =>'Login', 'onclick' => 'loginUser()');
 						   echo form_submit($submit_property);
 				   ?>
 				</form>

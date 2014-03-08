@@ -29,7 +29,8 @@ $('#btnYes').click(function(){
 		type: "POST",
 		data: dataStr,
 		success: function(msg){
-			$('#modalDelete').modal('hide');		
+			$('#modalDelete').modal('hide');
+			console.log("livelihood organization successfully deleted with message->"+msg);		
 		},
 		error: function(msg){
 			console.log("something went wrong");
@@ -71,7 +72,7 @@ $('#btnYesDeleteResOrg').click(function(){
 		data: dataStr,
 		success: function(msg){
 			$('#modalDeleteResOrg').modal('hide');
-			window.location = "http://localhost/icdrris/ResponseOrg/viewAllResOrgs";		
+			window.location = "http://localhost/icdrris/ResponseOrg/viewAllUserResOrgs";		
 		},
 		error: function(msg){
 			console.log("something went wrong");
@@ -188,6 +189,94 @@ $('#btnYesDeleteVictim').click(function(){
                 });
 });
   
+}
+
+
+// CONFIRM INCIDENT
+function confirmIncident(incident_location_id, inciName){
+
+	console.log('confirm incident clicked: '+ incident_location_id + ' ' +inciName);
+	$('#modalConfirmIncident').data('incident_location_id' , incident_location_id);
+	$('#modalConfirmIncident .modal-body').html("<p> You are going to confirm the incident <b>'"+inciName+"'</b>.<br> Click 'Confirm' button to continue. Click 'Cancel' button to return to the page.")
+	$('#modalConfirmIncident').modal('show');
+	
+
+}
+
+// CONFIRM INCIDENT: CONFIRM BUTTON
+function btnYesConfirmIncident(){
+
+            var incident_location_id = $('#modalConfirmIncident').data('incident_location_id');
+            console.log('btnYesConfirmIncident -> this is the incidentid->' + incident_location_id);
+       
+            $.ajax({
+                    url: "http://localhost/icdrris/Incident/confirmIncident",
+                    type: "POST",
+                    data: {incident_location_id:incident_location_id},
+                    success: function(msg){
+                        if(msg == 'success'){
+                            $('#modalConfirmIncident').modal('hide');	
+                            console.log('success: '+msg );
+                        }
+                        else{
+                            console.log('Results: '+msg)
+                            $("#modalConfirmIncident .modal-body").before('<p>Query failed.</p>');
+                        }
+                    },
+                    error: function(msg){
+                            console.log("something went wrong");
+                            $('#modalConfirmIncident .modal-body').html("<p>Opss..Sorry, something went wrong</p>");
+                            $('#modalConfirmIncident').modal('show');
+                    }
+
+                });
+
+}
+
+// CONFIRM VICTIM
+function confirmVictim(incident_report_id, victim_id){
+	$('.confirmtrue-victim').on('click', function(e){
+		e.preventDefault();
+		console.log('confirm-victim clicked');
+		var victimName = $(this).data('victimname');
+		console.log(victimName + incident_report_id + victim_id);
+		$('#modalConfirmVictim').data('victim_id',victim_id);
+		$('#modalConfirmVictim').data('incident_report_id',incident_report_id);
+		$('#modalConfirmVictim .modal-body').html("<p> You are going to confirm the victim <b>'"+victimName+"'</b>.<br> Click 'Confirm' button to continue. Click 'Cancel' button to return to the page.");
+		$('#modalConfirmVictim').modal('show');	
+	});
+
+}
+
+// CONFIRM VICTIM: CONFIRM BUTTON
+function btnYesConfirmVictim(){
+
+	   var incident_report_id = $('#modalConfirmVictim').data('incident_report_id');
+           var victim_id = $('#modalConfirmVictim').data('victim_id');
+           console.log('btnYesConfirmVictim -> this is the incidentid->' + incident_report_id);
+       
+            $.ajax({
+                    url: "http://localhost/icdrris/Victim/confirmVictim",
+                    type: "POST",
+                    data: {incident_report_id:incident_report_id, victim_id:victim_id},
+                    success: function(msg){
+                        if(msg == 'success'){
+                            $('#modalConfirmVictim').modal('hide');	
+                            console.log('success: '+msg );
+                        }
+                        else{
+                            console.log('Results: '+msg)
+                            $("#modalConfirmVictim .modal-body").before('<p>Query failed.</p>');
+                        }
+                    },
+                    error: function(msg){
+                            console.log("something went wrong");
+                            $('#modalConfirmVictim .modal-body').html("<p>Opss..Sorry, something went wrong</p>");
+                            $('#modalConfirmVictim').modal('show');
+                    }
+
+                });
+
 }
 
 //DELETE INCIDENT
@@ -343,61 +432,103 @@ $(document).ready(function(){
 	};
 // end  RATE
 
-			
-			
-// CHECK IF RATED: SAMPLE
-/**
-function rateVictim()
-{
-
-	$(document).ready(function(){
-			if(typeof(Storage)!=="undefined"){
-			
-				//get set var in localStorage
-				var rateClick= localStorage.getItem("rateClickMe");
-				if (rateClick == "disapproved"){
-					$("#iThumbsDown").css("background-color", "red");
-				}
-			  if(rateClick == "approved"){
-				$("#iThumbsUp").css("background-color", "green");
-			  }
-				
+//  RATING ON REPORTED INCIDENT
+	function rateIncident(rateType){
+           var incident_location_id;
+            var upOrDown= "";
+			if(rateType == 0){
+				upOrDown = "rateFalse";
+                                incident_location_id = $('.disapprove-li').data('incidentid');
 			}
 			else{
-			  alert("Sorry, your browser does not support web storage...");
+				upOrDown = "rateTrue";
+                                 incident_location_id = $('.approve-li').data('incidentid');
 			}
-		});
-/**	//IF CLICKED APPROVED
-	
-		if(typeof(Storage)!=="undefined") {
-		$("#btn-clickme").click(function(){
-		
-		
-			localStorage.removeItem("rateClickMe");
-			localStorage.setItem("rateClickMe", "approved");
-		
-		});
-		
-		$("#btn-clickme2").click(function(){
-		
-		
-			localStorage.removeItem("rateClickMe");
-			localStorage.setItem("rateClickMe", "disapproved");
-		
-		});
-				if (localStorage.clickcount){
-					localStorage.clickcount=Number(localStorage.clickcount)+1;
-				}
-				else{
-					localStorage.clickcount=1;
-				}
-			document.getElementById("result").innerHTML="You have clicked the button clickme " + localStorage.clickcount + " time(s).";
-		}
-		else{
-		  document.getElementById("result").innerHTML="Sorry, your browser does not support web storage...";
-		}
-		
+			var lastUpOrDown = localStorage.getItem("i"+incident_location_id+"");
+			
+			console.log("incident_location_id: "+incident_location_id+ "last upOrDown: "+ lastUpOrDown+ ", Recent upOrDown: "+upOrDown);
+			
+			var actionType;
+			if(upOrDown == lastUpOrDown){ //if the user wants to take back the vote
+				actionType = "off";
+			}
+			if(lastUpOrDown != null && lastUpOrDown != upOrDown){	//if the user already rated before
+				actionType = "onOff";
+			}
+			if(lastUpOrDown == null){ // if the user rated for the first time
+				actionType = "on";
+			}
 
-}*/
-// END ON CHECK IF RATED
-
+			//dataStr = "incident_location_id="+incident_location_id+ "&upOrDown="+upOrDown+"&actionType="+actionType;
+			//console.log('data passed to rate: '+ dataStr);
+			
+			$.ajax({
+				type: "POST",
+				url: "http://localhost/icdrris/Incident/rateUpOrDown",
+				cache: false,
+				data: {incident_location_id:incident_location_id, upOrDown:upOrDown, actionType:actionType},
+				success: function(msg){
+					try{
+						if(msg == 'true'){
+						
+							console.log('success :' + upOrDown);
+							
+							
+							
+							
+							if(actionType == "off"){
+								
+								
+								console.log("after removed: "+incident_location_id +"");
+								for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+									var name = localStorage.key(i);             // Get the name of pair i
+									var val = localStorage.getItem(name);
+									if(name == "i"+incident_location_id +""){
+										localStorage.removeItem(name);
+										console.log("removed: in off");
+									}
+									console.log("localstorage names: "+ name + " value: "+ val);    // Get the value of that pair
+								}
+									$("#approve-li"+incident_location_id+"").css("background-color", "");
+									$("#disapprove-li"+incident_location_id+"").css("background-color", "");
+									
+							
+							}
+							if(actionType == "on" || actionType == "onOff"){
+									if(upOrDown == "rateTrue"){
+										$("#approve-li"+incident_location_id+"").css("background-color", "green");
+										$("#disapprove-li"+incident_location_id+"").css("background-color", "");
+									}
+									if(upOrDown == "rateFalse"){
+										$("#approve-li"+incident_location_id+"").css("background-color", "");
+										$("#disapprove-li"+incident_location_id+"").css("background-color", "red");
+									}
+								//localStorage.removeItem(incident_report_id+victim_id);
+								localStorage.setItem("i"+incident_location_id+"", upOrDown);
+							
+								console.log("i"+incident_location_id+"");
+								for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+									var name = localStorage.key(i);             // Get the name of pair i
+									var val = localStorage.getItem(name);
+									console.log("localstorage names: "+ name + " value: "+ val);    // Get the value of that pair
+								}
+							
+							}
+							
+							
+						}else{
+						
+							console.log('failed');
+							
+							alert('Sorry. Unable to update..' + msg);
+						}
+					}catch(e){
+						alert('Exception while request..' + msg);
+					}
+				},
+				error: function(){
+					alert('Error while request..');
+				}
+			});
+	};
+// end  RATE

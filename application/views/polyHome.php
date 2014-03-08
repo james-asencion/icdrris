@@ -2,6 +2,24 @@
         
         <div id="controls" style="display:block">
             <div id="elementBoxes">
+              <!-- <div class="toppanel">
+                <form class = "navbar-form pull-left" name="filterForm0">
+                    <div class="center" align="center"><p>View Respondents:</p>   
+                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                              View Respondents
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      View Respondents
+                                  </label>
+                              </li>                                                                                                                     
+                          </ul>
+                      </div> 
+                </form>
+            </div> -->
             <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm1">
                     <div class="center" align="center"><p>View Incidents by:</p>   
@@ -70,18 +88,60 @@
                     </div>
                 </form>
             </div>
-          </div>
+          <div class="toppanel">
+                <form class = "navbar-form pull-left" name="filterForm1">
+                    <div class="center" align="center"><p>Filter Reports by:</p>   
+                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                              Filter Reports
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Confirmed
+                                  </label>
+                              </li>
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Not Confirmed
+                                  </label>
+                              </li>                                                                                                                      
+                          </ul>
+                      </div> 
+                </form>
+            </div>
+          <div class="toppanel">
+                <form class = "navbar-form pull-left" name="filterForm0">
+                    <div class="center" align="center"><p>Response Organizations:</p>   
+                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                              View Respondents
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      View Deployed Respondents
+                                  </label>
+                              </li>                                                                                                                     
+                          </ul>
+                      </div> 
+                </form>
+            </div>
+            </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm3">
                     <div class="center" align="center"><p>Date To:</p>   
-                        <input id="dateTo" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMarkersPolygons()"/>
+                        <input id="dateTo" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMapElements()"/>
                     </div>
                 </form>
             </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm4">
                     <div class="center" align="center"><p>Date From:</p>   
-                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMarkersPolygons()"/>
+                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMapElements()"/>
                     </div>
                 </form>
             </div>
@@ -98,17 +158,25 @@
 
 					<!-- BREADCRUMBS -->
 						<ul class="breadcrumb" style="padding: 2px 15px;">
-								<li id="li0" onclick = "backToList()" ><a id="a-ListofIncidents"> List of Incidents</a> <span class="divider">/</span></li>
+                <li id="homeBreadCrumb" onclick = "backToHome()" ><a id="a-ListofIncidents"> Home </a> <span class="divider">/</span></li>
 						</ul>
+
+          <!-- HOME VIEW -->
+          <div class="span12" id="homeView">
+              <a onclick="incidentList()" id="a-ListofIncidents"> Incidents</a><br>
+              <a onclick="respondentList()" id="a-ListofIncidents"> Response Organizations</a><br>
+              <a onclick="requestList()" id="a-ListofIncidents"> List of Requests</a><br>
+          </div>
+
+       <!--  <div id="mapElementsDetails" style="display:none"> -->
 					<!-- LIST OF INCIDENTS -->
-						<div class = "span12" id="incidentList"></div>
+						<div class = "span12" id="incidentList" style="display:none"></div>
 					<!-- end LIST OF INCIDENTS -->
 
 					
 					
-					<!-- DISPLAY DETAILS DIV -->
-                   
-                       <div id="tabbable" class="tabbable" style="display:none">
+					<!-- DISPLAY INCIDENT DETAILS DIV -->
+          <div id="incidentTabbable" class="incidentTabbable" style="display:none">
                            
 						   <ul class="nav nav-tabs" style="margin-bottom:10px;">
 								<li class="span8" style="color:darkorange">
@@ -127,15 +195,21 @@
                                         <li class="active">
                                           <a href="#" id="overview-li" data-incidentid="" onclick="displayDetails()"><i class="icon-white icon-info-sign"></i> Overview</a>
                                         </li>
-                                        <li>
-                                          <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
-                                        </li>
-                                        <li>
-                                          <a href="#" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
-                                        </li>
-                                        <li >
-                                          <a href="#" id="displaychart-li" data-incidentid=""><i class="icon-white icon-globe"></i> Display Chart</a>
-                                        </li>
+                                         <li>
+                                             <a href="#" id="approve-li" class="approve-li" data-incidentid="" onclick="rateIncident(1)" style="color:whitesmoke"> <span id="span-approve-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-up"></i> Approve</a>
+                                         </li>
+                                         <li>
+                                             <a href="#" id="disapprove-li" class="disapprove-li" data-incidentid="" onclick="rateIncident(0)" style="color:whitesmoke"> <span id="span-disapprove-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-down"></i> Disapprove</a>
+                                         </li>
+                                        <?php if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){?>
+                                            <li>
+                                              <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
+                                            </li>
+                                            <li>
+                                              <a href="#" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
+                                            </li>
+                                        <?php }?>
+                                         
                                     </ul> 
 								    <div id="incident-information" style="font-size: 12px; line-height:normal"></div>
                                      
@@ -164,9 +238,27 @@
                                 
                             </div>
                </div>
-					<!-- end DISPLAY DETAILS -->
+					<!-- end DISPLAY INCIDENT DETAILS -->
+
+
+
+        <!-- LIST OF RESPONDENTS -->
+        <div class = "span12" id="respondentList" style="display:none"></div>
+
+            <!--  DISPLAY RESPONDENT DETAILS -->
+            <div id="respondentTabbable" class="respondentTabbable" style="display:none">
+              <div id="respondent-information" ></div>
+              <div id="respondent-membersTable" class="table table-condensed " style="color:#cccccc;"></div>
+            </div>
+
+        <!-- LIST OF REQUESTS -->
+        <div class = "span12" id="requestList" style="display:none"></div>
+          <!-- DISPLAY REQUEST DETAILS  -->
+          <div id="requestTabbable" class="requestTabbable" style="display:none">
+          </div>
+
 					
-					
+				<!-- </div>  end of map elements details div  -->
 				</div>	<!-- end #PANEL .PANEL 	-->
                    
               <a  id= "trigger" class="trigger" href="#">
@@ -177,8 +269,43 @@
               <div id="map_canvas" style="top:40px; width:100%; height:585px;"></div>   
             </div>
 			
-	<!-- MODALS: detailsVictim, reportVictim, deleteIncident, deleteVictim, updateVictim>
+	<!-- MODALS: confirmVictim, confirmIncident, detailsVictim, reportVictim, deleteIncident, deleteVictim, updateVictim>
 			
+ 	<!-- modalConfirmVictim -->
+            <div id="modalConfirmVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Confirm Victim</h3>
+                </div>
+                 <div class="modal-body">
+                    <div name="message">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="btnYesConfirmVictim" class="btn btn-primary" onclick="btnYesConfirmVictim()">Confirm</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+                </div>
+            </div> 
+			<!-- end modalConfirmVictim -->
+			
+			<!-- modalConfirmIncident -->
+			 <div id="modalConfirmIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Confirm Incident</h3>
+                </div>
+                 <div class="modal-body">
+                    <div name="message">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="btnYesConfirmIncident" class="btn btn-primary" onclick="btnYesConfirmIncident()">Confirm</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+                </div>
+            </div> 
+			<!-- end modalConfirmIncident -->
+			
+ 
 			<!-- modalDetailsVictim -->
 			  <div id="modalDetailsVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
@@ -272,7 +399,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
                 </div>
-                 <div class="modal-body">
+                     <div class="modal-body">
                     <div name="message">
                     </div>
                 </div>
