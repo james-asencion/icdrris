@@ -64,16 +64,19 @@ $("#addLivelihoodMemberButton").click(function(event)	{
 
 
 //LOGIN FORM
-$(document).ready(function(){
+function loginUser(){
 
-    $('#login-btn').on('click', function(e){
+$(document).ready(function(){
+/**
+    $('.login-btn').on('click', function(e){
             e.preventDefault();
             console.log('clicked');
 
             $('#modalLogin').modal('show');
     });
+*/
 
-    $('#loginForm').submit(function(event){
+    $('.loginForm').submit(function(event){
         // Stop form from submitting normally
         event.preventDefault();
         
@@ -107,7 +110,7 @@ $(document).ready(function(){
     });
 });
 // --end
-
+}
 // UPDATE VICTIM
 function editVictim(element){
 	$('.edit-victim').on('click', function(e){

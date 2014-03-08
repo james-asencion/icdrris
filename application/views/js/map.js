@@ -453,7 +453,7 @@ function appendToIncidentList(mapElement) {
     //place icon-links here [show details]
     listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+","+mapElement.incidentLocationId+");\">Open</a>"; // show details icon
    var sess_user = get_session();
-    if(mapElement.flagConfirmed == 0 && sess_user == 'icdrrmo'){
+    if(mapElement.flagConfirmed == 0 && (sess_user == 'cdrrmo' || sess_user == 'bdrrmo')){
     //if(mapElement.flagConfirmed == 0){
       listItem += "| <a href=\"#\" id=\"confirm-incident\" role=\"button\" data-toggle=\"modal\"   data-id=\"" + mapElement.id + "\" onclick=\"confirmIncident("+mapElement.incidentLocationId+", '"+mapElement.incidentDescription+"');\"> Confirm Report </a>"; // confirm icon
     }
@@ -533,8 +533,10 @@ function backToHome(){
     $("#subBreadCrumb1").remove();
 }
 function incidentList(){
+    
     $("#homeView").hide();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToIncidentList()" class="subBreadCrumb1" >Incidents List</a><span class="divider">/</span></li>');
+    openSideBar();
     $("#incidentList").show("fast");
 
 }

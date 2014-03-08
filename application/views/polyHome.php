@@ -177,7 +177,7 @@
                                          <li>
                                              <a href="#" id="disapprove-li" class="disapprove-li" data-incidentid="" onclick="rateIncident(0)" style="color:whitesmoke"> <span id="span-disapprove-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-down"></i> Disapprove</a>
                                          </li>
-                                        <?php if($this->session->userdata('user_type') == 'icdrrmo'){?>
+                                        <?php if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){?>
                                             <li>
                                               <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
                                             </li>

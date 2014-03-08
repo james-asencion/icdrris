@@ -231,7 +231,7 @@
 		<?php if(!$this->session->userdata('is_logged_in')){ ?>
 			<ul class="nav pull-right">
 				<li>
-                    <a href="#" id="login-btn">Log-in</a>
+                    <a href="#modalLogin" id="login-btn" class="login-btn" role="button" data-toggle="modal">Log-in</a>
 				</li>
 			</ul>
 		<?php  

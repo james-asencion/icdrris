@@ -4,7 +4,7 @@
 			<div class = "span4" style="float:right">
 				<div class="alert alert-success" >  
                     <a class="close" data-dismiss="alert">&times;</a>  
-                    <strong><span class="label label-success"> <i class= "icon-white icon-thumbs-up"> </i> Success! </span></strong>	<br /><br />
+                    <strong><span > <i class= "icon icon-thumbs-up"> </i> Success! </span></strong>	<br /><br />
                     <?php 
                             echo $succ_message;  
                     ?>
@@ -66,7 +66,8 @@
 		<?php 
                     $usertype= array(
                             ' '     => '-Select-',
-                            'icdrrmo'  => 'ICDRRMO',
+                            'bdrrmo'  => 'BDRRMO (Brgy.)',
+                            'cdrrmo'  => 'CDRRMO (City)',
                             'cswd'    => 'CSWD',
                             'cdlo'   => 'CDLO',
                             'response organization' => 'Response Organization',
