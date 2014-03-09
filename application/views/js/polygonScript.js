@@ -44,9 +44,12 @@ function initialize() {
     var html = "<table>" +
             "<tr><td>Disaster Description:</td> <td><input type='text' id='description'/></td> </tr>" +
             "<tr><td>Disaster Type:</td> <td><select id='disasterType'>" +
-            "<option value=Flash Flood SELECTED>Flash Flood</option>" +
+            "<option value='' SELECTED></option>" +
+            "<option value=Flashflood >Flash Flood</option>" +
+            "<option value=Tsunami>Tsunami</option>" +
             "<option value=Landslide>Landslide</option>" +
-            "<option value=Storm Surge>Storm Surge</option>" +
+            "<option value=Mudslide>Mudslide</option>" +
+            "<option value=Infrastructure Damage>Infrastructure Damage</option>" +
             "</select> </td></tr>" +
             "<tr><td>Date:</td> <td><input type='date' id='date'/></td> </tr>" +
             "<tr><td>Deaths:</td> <td><input type='number' min='0' id='death'/></td> </tr>" +

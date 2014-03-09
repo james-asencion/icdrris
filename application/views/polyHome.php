@@ -114,9 +114,9 @@
             </div>
           <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm0">
-                    <div class="center" align="center"><p>Response Organizations:</p>   
+                    <div class="center" align="center"><p>Response Operations:</p>   
                           <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
-                              View Respondents
+                              Response operations
                               <b class="caret"></b>
                           </a>
                           <ul class="dropdown-menu dropdown-menu-form" role="menu">
@@ -125,7 +125,13 @@
                                       <input type="checkbox">
                                       View Deployed Respondents
                                   </label>
-                              </li>                                                                                                                     
+                              </li>
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Reported Requests
+                                  </label>
+                              </li>                                                                                                                      
                           </ul>
                       </div> 
                 </form>

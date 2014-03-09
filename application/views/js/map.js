@@ -33,58 +33,239 @@ $(document).ready(function() {
     $("#incidentList").html("");
     $("#respondentList").html("");
     $("#requestList").html("");
-
     for(var i=0;i<mapElements.length;i++){
-        console.log("props="+props+" mapElements.props="+mapElements[i].props);
-        console.log("props & mapElements[i].props="+(props & mapElements[i].props));
-        console.log(props & mapElements[i].props);
-        mapElements[i].setVisible((props & mapElements[i].props)?((props)?true:false):false);
-        if(props & mapElements[i].props) 
-        {
-            if(mapElements[i].elementType===3){
-                appendToRespondentList(mapElements[i]);
-            }
-            else{
-                appendToIncidentList(mapElements[i]);
-            }
 
+        console.log("current props ->"+props);
+        console.log("map elements props 4 ->"+mapElements[i].props4);
+        console.log("mapElements element Type->"+mapElements[i].elementType)
+        var filterPropBinary = props.toString(2);
+        var length = filterPropBinary.length;
+
+
+        filterProp1 = parseInt(filterPropBinary.substring(length-2), 2);
+        filterProp2 = parseInt(filterPropBinary.substring(length-7, length-2), 2);
+        filterProp3 = parseInt(filterPropBinary.substring(length-9, length-7), 2);
+
+        if(!props){
+            //do nothing
+            console.log("nothing to do here");
+            mapElements[i].setVisible(false);
+        }
+        //if the selected filter is only the map elements filter
+        else if(!(props & 384) && !(props & 124)){
+            console.log("disregard filter for confirmed/unconfirmed AND disaster type");
+            
+            var evaluation = ((filterProp1 & mapElements[i].props1)|(props & mapElements[i].props4));
+            //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
+            //console.log("evaluation is "+evaluation);
+            mapElements[i].setVisible((evaluation)?((props)?true:false):false);
+            if(evaluation) 
+            {
+                if(mapElements[i].elementType===3){
+                    appendToRespondentList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===4){
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
+                }
+                else{
+                    appendToIncidentList(mapElements[i]);
+                }
+
+            }
+        }
+        //if the selected filter is only the disaster type filter
+        else if(!(props & 384) && !(props & 3)){
+            console.log("disregard filter for markers/polygons AND confirmed/unconfirmed");
+            //console.log("element no."+i+" , props2="+mapElements[i].props2);
+            //console.log("element no."+i+" , props4="+mapElements[i].props4);
+            mapElements[i].setVisible((filterProp2 & mapElements[i].props2)|(props & mapElements[i].props4)?((props)?true:false):false);
+            if((filterProp2 & mapElements[i].props2)|(props & mapElements[i].props4)) 
+            {
+                if(mapElements[i].elementType===3){
+                    appendToRespondentList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===4){
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
+                }
+                else{
+                    appendToIncidentList(mapElements[i]);
+                }
+
+            }
+        }
+        //if the selected filter is the confirmed/unconfirmed filter
+        else if(!(props & 3) && !(props & 124)){
+            console.log("disregard filter for marrker/polygon AND disaster type");
+            
+            var evaluation = ((filterProp3 & mapElements[i].props3)|(props & mapElements[i].props4));
+            //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
+            //console.log("evaluation is "+evaluation);
+            mapElements[i].setVisible((evaluation)?((props)?true:false):false);
+            if(evaluation) 
+            {
+                if(mapElements[i].elementType===3){
+                    appendToRespondentList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===4){
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
+                }
+                else{
+                    appendToIncidentList(mapElements[i]);
+                }
+
+            }
+        }
+        //when the filters selected are the element type and and disaster type filters
+        else if(!(props & 384)){
+            console.log("disregard filter for confirmed/unconfirmed");
+            
+            var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp2 & mapElements[i].props2))|(props & mapElements[i].props4);
+            console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
+            console.log("evaluation is "+evaluation);
+            mapElements[i].setVisible((evaluation)?((props)?true:false):false);
+            if(evaluation) 
+            {
+                if(mapElements[i].elementType===3){
+                    appendToRespondentList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===4){
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
+                }
+                else{
+                    appendToIncidentList(mapElements[i]);
+                }
+
+            }
+        }
+        //when the selected filters are the element type and confirmation 
+        else if(!(props & 124)){
+            console.log("disregard filter for disaster type");
+            
+            var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
+            //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
+            //console.log("evaluation is "+evaluation);
+            mapElements[i].setVisible((evaluation)?((props)?true:false):false);
+            if(evaluation) 
+            {
+                if(mapElements[i].elementType===3){
+                    appendToRespondentList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===4){
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
+                }
+                else{
+                    appendToIncidentList(mapElements[i]);
+                }
+
+            }
+        }
+        //when the selected filters are the disaster type and confirmation
+        else if(!(props & 3)){
+            console.log("disregard filter for element type");
+            
+            var evaluation = ((filterProp2 & mapElements[i].props2) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
+            //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
+            //console.log("evaluation is "+evaluation);
+            mapElements[i].setVisible((evaluation)?((props)?true:false):false);
+            if(evaluation) 
+            {
+                if(mapElements[i].elementType===3){
+                    appendToRespondentList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===4){
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
+                }
+                else{
+                    appendToIncidentList(mapElements[i]);
+                }
+
+            }
+        }
+        //when all the filters are selected
+        else{
+            console.log("APPLY ALL FILTERS");
+            
+            var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp2 & mapElements[i].props2) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
+            //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
+            //console.log("evaluation is "+evaluation);
+            mapElements[i].setVisible((evaluation)?((props)?true:false):false);
+            if(evaluation) 
+            {
+                if(mapElements[i].elementType===3){
+                    appendToRespondentList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===4){
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
+                }
+                else{
+                    appendToIncidentList(mapElements[i]);
+                }
+
+            }
         }
     }
+
+console.log("=================================================================================================================================");
     });
 //------------------------------------------------------------------------------
 
 });
-function sendProps(props){
-    //alert(props);
-}
-function createPropertiesArray(mapElement){
-    var disasterType = mapElement.getAttribute("disaster_type");
+
+function createPropertiesArray1(mapElement){
+
     var elementType = mapElement.getAttribute("elementType");
-    var confirmed = mapElement.getAttribute("flag_confirmed");
-    var propArray = new Array(10);
+    var propArray = new Array(2);
     
     //console.log(propArray[6]);
-    (elementType === "1")?propArray[9]=1:propArray[9]=0;
+    (elementType === "1")?propArray[1]=1:propArray[1]=0;
     //console.log(propArray[6]);
-    (elementType === "2")?propArray[8]=1:propArray[8]=0;
-    //console.log(propArray[5]);
-    (disasterType === "Flashflood")?propArray[7]=1:propArray[7]=0;
-    //console.log(propArray[4]);
-    (disasterType === "Tsunami")?propArray[6]=1:propArray[6]=0;
-    //console.log(propArray[3]);
-    (disasterType === "Landslide")?propArray[5]=1:propArray[5]=0;
-    //console.log(propArray[2]);
-    (disasterType === "Mudslide")?propArray[4]=1:propArray[4]=0;
-    //console.log(propArray[1]);
-    (disasterType === "Infrastructure Damage")?propArray[3]=1:propArray[3]=0;
-    //console.log(propArray[0]);
-    (confirmed === "1")?propArray[2]=1:propArray[2]=0;
-    (confirmed === "0")?propArray[1]=1:propArray[1]=0;
-    (elementType === "3")?propArray[0]=1:propArray[0]=0;
+    (elementType === "2")?propArray[0]=1:propArray[0]=0;
 
     return propArray;
 }
+function createPropertiesArray2(mapElement){
+    var disasterType = mapElement.getAttribute("disaster_type");
+    var propArray = new Array(5);
+    
+    (disasterType === "Flashflood")?propArray[4]=1:propArray[4]=0;
+    //console.log(propArray[4]);
+    (disasterType === "Tsunami")?propArray[3]=1:propArray[3]=0;
+    //console.log(propArray[3]);
+    (disasterType === "Landslide")?propArray[2]=1:propArray[2]=0;
+    //console.log(propArray[2]);
+    (disasterType === "Mudslide")?propArray[1]=1:propArray[1]=0;
+    //console.log(propArray[1]);
+    (disasterType === "Infrastructure Damage")?propArray[0]=1:propArray[0]=0;
 
+    return propArray;
+}
+function createPropertiesArray3(mapElement){
+
+    var confirmed = mapElement.getAttribute("flag_confirmed");
+    var propArray = new Array(2);
+    
+    (confirmed === "1")?propArray[1]=1:propArray[1]=0;
+    (confirmed === "0")?propArray[0]=1:propArray[0]=0;
+
+    return propArray;
+}
+function createPropertiesArray4(mapElement){
+    var elementType = mapElement.getAttribute("elementType");
+    var prop = 0;
+
+    prop += (elementType === "3")?Math.pow(2,9):0;
+    prop += (elementType === "4")?Math.pow(2,10):0;
+    
+
+    return prop;
+}
 function initializeMap() {
     var latlng = new google.maps.LatLng(8.228021, 124.245242);
     directionsDisplay = new google.maps.DirectionsRenderer();
@@ -123,6 +304,7 @@ function bindPolygonToSidePanel(polygon) {
     var incidentReportId = polygon.id;
     var incidentLocationId = polygon.incidentLocationId;
     google.maps.event.addListener(polygon, 'click', function() {
+        //alert("element props: "+polygon.elementProps+ " disaster type props: "+polygon.disasterTypeProps+" confirmation props"+polygon.statusProps+" respondent props: "+polygon.respondentProps);
         displayIncidentDetailsFromMap(incidentReportId, incidentLocationId);
         map.setCenter(polygon.center);
     });
@@ -131,6 +313,7 @@ function bindMarkerToSidePanel(marker) {
     var incidentReportId = marker.id;
     var incidentLocationId = marker.incidentLocationId;
     google.maps.event.addListener(marker, 'click', function() {
+        //alert("element props: "+marker.elementProps+ " disaster type props: "+marker.disasterTypeProps+" confirmation props"+marker.statusProps+" respondent props: "+marker.respondentProps);
         displayIncidentDetailsFromMap(incidentReportId, incidentLocationId);
         map.setCenter(marker.center);
     });
@@ -138,6 +321,7 @@ function bindMarkerToSidePanel(marker) {
 function bindRespondentToSidePanel(marker) {
     var respondentId = marker.id;
     google.maps.event.addListener(marker, 'click', function() {
+        //alert("element props: "+marker.elementProps+ " disaster type props: "+marker.disasterTypeProps+" confirmation props"+marker.statusProps+" respondent props: "+marker.respondentProps);
         displayRespondentDetailsFromMap(respondentId, marker.response_organization_name);
         map.setCenter(marker.center);
     });
@@ -161,7 +345,7 @@ function downloadUrl(url, callback) {
     var request = window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest;
 
     request.onreadystatechange = function() {
-        if (request.readyState == 4) {
+        if (request.readyState === 4) {
             request.onreadystatechange = doNothing;
             callback(request, request.status);
         }
@@ -278,9 +462,19 @@ function getAllMapElements() {
         //and empty the output string to fill with fresh values
         var polygonIndex = 0;
         for (polygonIndex = 0; polygonIndex < polygons.length; polygonIndex++) {
-            var arr = createPropertiesArray(polygons[polygonIndex]);
-            var int = parseInt(arr.join(''),2);
-            console.log("Integer Equivalent -->>"+int+"<<<---");
+
+            var arr1 = createPropertiesArray1(polygons[polygonIndex]);
+            var int1 = parseInt(arr1.join(''),2);
+
+            var arr2 = createPropertiesArray2(polygons[polygonIndex]);
+            var int2 = parseInt(arr2.join(''),2);
+
+            var arr3 = createPropertiesArray3(polygons[polygonIndex]);
+            var int3 = parseInt(arr3.join(''),2);
+
+            var int4 = createPropertiesArray4(polygons[polygonIndex]);
+
+            //console.log("Integer Equivalent -->>"+int+"<<<---");
             //Extract all the elements needed for the sidebar(incident details)
             var incident_report_id = polygons[polygonIndex].getAttribute("incident_report_id");
             var incident_location_id = polygons[polygonIndex].getAttribute("incident_location_id");
@@ -333,7 +527,10 @@ function getAllMapElements() {
                 flagFalseRating: flagFalseRating,
                 center: center,
                 elementType: 2,
-                props: int
+                props1: int1,
+                props2: int2, 
+                props3: int3,
+                props4: int4
             }
 
             myPolygon = new google.maps.Polygon(polyOptions);
@@ -352,9 +549,18 @@ function getAllMapElements() {
         var markerIndex=polygonIndex+1;
         var i=0;
         for (i = 0; i < markers.length; i++) {
-            var arr = createPropertiesArray(markers[i]);
-            var int = parseInt(arr.join(''),2);
-            console.log("Integer Equivalent -->>"+int+"<<<---");
+            var arr1 = createPropertiesArray1(markers[i]);
+            var int1 = parseInt(arr1.join(''),2);
+
+            var arr2 = createPropertiesArray2(markers[i]);
+            var int2 = parseInt(arr2.join(''),2);
+
+            var arr3 = createPropertiesArray3(markers[i]);
+            var int3 = parseInt(arr3.join(''),2);
+
+            var int4 = createPropertiesArray4(markers[i]);
+            //console.log("Integer Equivalent -->>"+int+"<<<---");
+
             var incident_report_id = markers[i].getAttribute("incident_report_id");
             var incident_location_id = markers[i].getAttribute("incident_location_id");
             var disasterType = markers[i].getAttribute("disaster_type");
@@ -387,7 +593,10 @@ function getAllMapElements() {
                 flagTrueRating: flagTrueRating,
                 flagFalseRating: flagFalseRating,
                 elementType:1,
-                props: int
+                props1: int1,
+                props2: int2, 
+                props3: int3,
+                props4: int4
             }
             var marker = new google.maps.Marker(markerOptions);
             mapElements.push(marker);
@@ -402,9 +611,19 @@ function getAllMapElements() {
 
         var j=0;
         for (j = 0; j < respondents.length; j++) {
-            var arr = createPropertiesArray(respondents[j]);
-            var int = parseInt(arr.join(''),2);
-            console.log("Integer Equivalent -->>"+int+"<<<---");
+
+            var arr1 = createPropertiesArray1(respondents[j]);
+            var int1 = parseInt(arr1.join(''),2);
+
+            var arr2 = createPropertiesArray2(respondents[j]);
+            var int2 = parseInt(arr2.join(''),2);
+
+            var arr3 = createPropertiesArray3(respondents[j]);
+            var int3 = parseInt(arr3.join(''),2);
+
+            var int4 = createPropertiesArray4(respondents[j]);
+
+            //console.log("Integer Equivalent -->>"+int+"<<<---");
 
             var response_organization_location_id = respondents[j].getAttribute("response_organization_location_id");
             var response_organization_name = respondents[j].getAttribute("response_organization_name");
@@ -437,7 +656,10 @@ function getAllMapElements() {
                 activity_description:activity_description,
                 location_address:location_address,
                 elementType: 3,
-                props: int
+                props1: int1,
+                props2: int2, 
+                props3: int3,
+                props4: int4
             }
             var marker = new google.maps.Marker(markerOptions);
             mapElements.push(marker);
@@ -450,28 +672,36 @@ function getAllMapElements() {
 
         }
 		
-		  var j=0;
-        for (j = 0; j < requests.length; j++) {
-            var arr = createPropertiesArray(requests[j]);
-            var int = parseInt(arr.join(''),2);
-            console.log("Integer Equivalent -->>"+int+"<<<---");
+		var r=0;
+        for (r = 0; r < requests.length; r++) {
 
-            var request_id = requests[j].getAttribute("request_id");
-            var location_id = requests[j].getAttribute("location_id");
-            var tweet_id = requests[j].getAttribute("tweet_id");
-            var request_date = requests[j].getAttribute("request_date");
-            var request_status = requests[j].getAttribute("request_status");
-            var request_comments = requests[j].getAttribute("request_comments");
-            var flag_request_granted = requests[j].getAttribute("flag_request_granted");
-            var tweet_user_id = requests[j].getAttribute("tweet_user_id");
-            var request_url = requests[j].getAttribute("request_url");
-            var geo_place_name = requests[j].getAttribute("geo_place_name");
+            var arr1 = createPropertiesArray1(requests[r]);
+            var int1 = parseInt(arr1.join(''),2);
+
+            var arr2 = createPropertiesArray2(requests[r]);
+            var int2 = parseInt(arr2.join(''),2);
+
+            var arr3 = createPropertiesArray3(requests[r]);
+            var int3 = parseInt(arr3.join(''),2);
+
+            var int4 = createPropertiesArray4(requests[r]);
+
+            var request_id = requests[r].getAttribute("request_id");
+            var location_id = requests[r].getAttribute("location_id");
+            var tweet_id = requests[r].getAttribute("tweet_id");
+            var request_date = requests[r].getAttribute("request_date");
+            var request_status = requests[r].getAttribute("request_status");
+            var request_comments = requests[r].getAttribute("request_comments");
+            var flag_request_granted = requests[r].getAttribute("flag_request_granted");
+            var tweet_user_id = requests[r].getAttribute("tweet_user_id");
+            var request_url = requests[r].getAttribute("request_url");
+            var geo_place_name = requests[r].getAttribute("geo_place_name");
 
 
             var icon = customIcons['Default'] || {};
             var point = new google.maps.LatLng(
-                    parseFloat(requests[j].getAttribute("geo_lat")),
-                    parseFloat(requests[j].getAttribute("geo_lng")));
+                    parseFloat(requests[r].getAttribute("geo_lat")),
+                    parseFloat(requests[r].getAttribute("geo_lng")));
 
             
             var markerOptions = {
@@ -480,7 +710,7 @@ function getAllMapElements() {
                 icon: icon.icon,
                 shadow: icon.shadow,
                 center: point,
-                arrId: (polygonIndex+i+j),
+                arrId: (polygonIndex+i+j+r),
                 id: request_id,
                 tweet_id: tweet_id,
                 request_date: request_date,
@@ -490,24 +720,30 @@ function getAllMapElements() {
                 tweet_user_id:tweet_user_id,
                 request_url:request_url,
                 geo_place_name:geo_place_name,
-                elementType: 3,
-                props: int
+                elementType: 4,
+                props1: int1,
+                props2: int2, 
+                props3: int3,
+                props4: int4
             }
             var marker = new google.maps.Marker(markerOptions);
             mapElements.push(marker);
             appendToRequestList(marker);
 
             //console.log("marker loop reached here");
-            bindRespondentToSidePanel(marker);
+            bindRequestToSidePanel(marker);
             //appendToList(marker, id, point, markers[i]);
             marker.setMap(map);
 
         }
-  
+        
+        triggerFilters();
     });
 
 }
-
+function triggerFilters(){
+    $('#elementBoxes input:checkbox').trigger("change");
+}
 function appendToIncidentList(mapElement) {
 
     //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
@@ -564,11 +800,6 @@ function get_session(){
 
 
 function appendToRespondentList(mapElement) {
-
-    //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
-    //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
-    //console.log("append to list started here with id");
-
     
     var listItem="";
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
@@ -594,10 +825,7 @@ function appendToRespondentList(mapElement) {
 
 function appendToRequestList(mapElement) {
 
-    //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
-    //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
-    //console.log("append to list started here with id");
-
+    console.log("append to request list invoked");
     
     var listItem="";
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
@@ -1027,7 +1255,7 @@ function displayRespondentDetails(deployment_id,elementId)
 
 //================================== EDIT HERE ===================================================================================
 //================================================================================================================================
-function displayRequestDetailsFromMap(request_id)
+function displayRequestDetailsFromMap(request_id, request_info_source)
 {
 
     console.log('displayRequest invoked with id->'+request_id);
@@ -1035,9 +1263,7 @@ function displayRequestDetailsFromMap(request_id)
     $("#requestList").hide("fast");
     openSideBar();
 
-    alert("request id ->"+request_id);
-
-     /*retrieve the response organization name to be used in the breadcrumbs*/
+     /*retrieve the request name to be used in the breadcrumbs*/
     request = $.ajax({
         url: "http://localhost/icdrris/Request/getRequestHeader",
         type: "POST",
@@ -1052,11 +1278,11 @@ function displayRequestDetailsFromMap(request_id)
         }
     });
 
-    /* retrieve the response organization details */
+    /* retrieve the request details */
     request = $.ajax({
         url: "http://localhost/icdrris/Request/getRequestDetails",
         type: "POST",
-        data: {id:deployment_id},
+        data: {id:request_id},
         success: function(details) {
             $("#request-information").html(details);
         },
