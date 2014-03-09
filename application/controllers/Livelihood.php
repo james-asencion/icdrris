@@ -49,12 +49,18 @@ class Livelihood extends CI_Controller
 
     }
 
-    function registerLivelihoodOrg()
-    {
-            $this->load->view('includes/header');
-            $this->load->view('addOrgView');
-            $this->load->view('includes/footer'); 
+    // function registerLivelihoodOrg()
+    // {
+    //         $this->load->view('includes/header');
+    //         $this->load->view('addOrgView');
+    //         $this->load->view('includes/footer'); 
+    // }
+    function registerLivelihoodOrg(){
+        $this->load->view('includes/mapLivelihoodOrgHeader');
+        $this->load->view('registerLivelihood');
+        $this->load->view('includes/footer');
     }
+
     function success(){
             $data['message'] = 'SUCCESS';
             $this->load->view('includes/header');
@@ -222,6 +228,7 @@ class Livelihood extends CI_Controller
                 'livelihood_program_id'=> $this->input->post('program_id'),
                 'livelihood_resource_id'=>$this->input->post('resource_id'),
                 'quantity_available'=>$this->input->post('resource_quantity'));
+        
         $this->LivelihoodModel->addLivelihoodProgramResource($data);
 
         return $this->getProgramResourcesTable($this->input->post('program_id'));

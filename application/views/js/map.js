@@ -35,6 +35,9 @@ $(document).ready(function() {
     $("#requestList").html("");
     for(var i=0;i<mapElements.length;i++){
 
+        console.log("current props ->"+props);
+        console.log("map elements props 4 ->"+mapElements[i].props4);
+        console.log("mapElements element Type->"+mapElements[i].elementType)
         var filterPropBinary = props.toString(2);
         var length = filterPropBinary.length;
 
@@ -62,7 +65,8 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    //appendToRequestList(mapElements[i]);
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -82,7 +86,8 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    //appendToRequestList(mapElements[i]);
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -104,7 +109,8 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    //appendToRequestList(mapElements[i]);
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -126,7 +132,8 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    //appendToRequestList(mapElements[i]);
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -148,7 +155,8 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    //appendToRequestList(mapElements[i]);
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -170,7 +178,8 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    //appendToRequestList(mapElements[i]);
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -192,7 +201,8 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    //appendToRequestList(mapElements[i]);
+                    console.log("********PASSED THE FILTER********");
+                    appendToRequestList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -710,7 +720,7 @@ function getAllMapElements() {
                 tweet_user_id:tweet_user_id,
                 request_url:request_url,
                 geo_place_name:geo_place_name,
-                elementType: 3,
+                elementType: 4,
                 props1: int1,
                 props2: int2, 
                 props3: int3,
@@ -790,11 +800,6 @@ function get_session(){
 
 
 function appendToRespondentList(mapElement) {
-
-    //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
-    //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
-    //console.log("append to list started here with id");
-
     
     var listItem="";
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
@@ -820,11 +825,7 @@ function appendToRespondentList(mapElement) {
 
 function appendToRequestList(mapElement) {
 
-    //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
-    //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
-    //console.log("append to list started here with id");
     console.log("append to request list invoked");
-
     
     var listItem="";
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";

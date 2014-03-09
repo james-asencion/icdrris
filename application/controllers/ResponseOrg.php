@@ -226,8 +226,8 @@ class ResponseOrg extends CI_Controller
     }
 
     function deployResponseOrganization(){
-        $this->load->view('includes/deploylivelihoodheader');
-        $this->load->view('deployResOrg');
+        $this->load->view('includes/deployResOrgheader');
+        $this->load->view('registerLivelihood');
         $this->load->view('includes/footer');
     }
 
