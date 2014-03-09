@@ -208,7 +208,8 @@ public function searchterms($result=false)
 			// if we are not caching or if our cache has run out
 			if( $cachetime == null || ! $content = $this->CI->cache->get('twitter-api-search') )
 			{
-				$query=implode('+OR+',$this->terms);
+				//$query=implode('+OR+',$this->terms);
+				$query= "TeamDasig";
 				$query_data = array('q' => $query, 'result_type' => 'recent', 'include_entities' => 'true','rpp' => 1,'result_type'=>'mixed');
 				$url = 'https://api.twitter.com/1.1/search/tweets.json';
 				$content=$connection->get($url,$query_data);

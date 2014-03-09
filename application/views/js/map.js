@@ -335,7 +335,7 @@ function downloadUrl(url, callback) {
     var request = window.ActiveXObject ? new ActiveXObject('Microsoft.XMLHTTP') : new XMLHttpRequest;
 
     request.onreadystatechange = function() {
-        if (request.readyState == 4) {
+        if (request.readyState === 4) {
             request.onreadystatechange = doNothing;
             callback(request, request.status);
         }
@@ -662,28 +662,36 @@ function getAllMapElements() {
 
         }
 		
-		  var j=0;
-        for (j = 0; j < requests.length; j++) {
-            var arr = createPropertiesArray(requests[j]);
-            var int = parseInt(arr.join(''),2);
-            console.log("Integer Equivalent -->>"+int+"<<<---");
+		var r=0;
+        for (r = 0; r < requests.length; r++) {
 
-            var request_id = requests[j].getAttribute("request_id");
-            var location_id = requests[j].getAttribute("location_id");
-            var tweet_id = requests[j].getAttribute("tweet_id");
-            var request_date = requests[j].getAttribute("request_date");
-            var request_status = requests[j].getAttribute("request_status");
-            var request_comments = requests[j].getAttribute("request_comments");
-            var flag_request_granted = requests[j].getAttribute("flag_request_granted");
-            var tweet_user_id = requests[j].getAttribute("tweet_user_id");
-            var request_url = requests[j].getAttribute("request_url");
-            var geo_place_name = requests[j].getAttribute("geo_place_name");
+            var arr1 = createPropertiesArray1(requests[r]);
+            var int1 = parseInt(arr1.join(''),2);
+
+            var arr2 = createPropertiesArray2(requests[r]);
+            var int2 = parseInt(arr2.join(''),2);
+
+            var arr3 = createPropertiesArray3(requests[r]);
+            var int3 = parseInt(arr3.join(''),2);
+
+            var int4 = createPropertiesArray4(requests[r]);
+
+            var request_id = requests[r].getAttribute("request_id");
+            var location_id = requests[r].getAttribute("location_id");
+            var tweet_id = requests[r].getAttribute("tweet_id");
+            var request_date = requests[r].getAttribute("request_date");
+            var request_status = requests[r].getAttribute("request_status");
+            var request_comments = requests[r].getAttribute("request_comments");
+            var flag_request_granted = requests[r].getAttribute("flag_request_granted");
+            var tweet_user_id = requests[r].getAttribute("tweet_user_id");
+            var request_url = requests[r].getAttribute("request_url");
+            var geo_place_name = requests[r].getAttribute("geo_place_name");
 
 
             var icon = customIcons['Default'] || {};
             var point = new google.maps.LatLng(
-                    parseFloat(requests[j].getAttribute("geo_lat")),
-                    parseFloat(requests[j].getAttribute("geo_lng")));
+                    parseFloat(requests[r].getAttribute("geo_lat")),
+                    parseFloat(requests[r].getAttribute("geo_lng")));
 
             
             var markerOptions = {
@@ -692,7 +700,7 @@ function getAllMapElements() {
                 icon: icon.icon,
                 shadow: icon.shadow,
                 center: point,
-                arrId: (polygonIndex+i+j),
+                arrId: (polygonIndex+i+j+r),
                 id: request_id,
                 tweet_id: tweet_id,
                 request_date: request_date,
@@ -703,23 +711,29 @@ function getAllMapElements() {
                 request_url:request_url,
                 geo_place_name:geo_place_name,
                 elementType: 3,
-                props: int
+                props1: int1,
+                props2: int2, 
+                props3: int3,
+                props4: int4
             }
             var marker = new google.maps.Marker(markerOptions);
             mapElements.push(marker);
             appendToRequestList(marker);
 
             //console.log("marker loop reached here");
-            bindRespondentToSidePanel(marker);
+            bindRequestToSidePanel(marker);
             //appendToList(marker, id, point, markers[i]);
             marker.setMap(map);
 
         }
-  
+        
+        triggerFilters();
     });
 
 }
-
+function triggerFilters(){
+    $('#elementBoxes input:checkbox').trigger("change");
+}
 function appendToIncidentList(mapElement) {
 
     //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
@@ -809,6 +823,7 @@ function appendToRequestList(mapElement) {
     //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
     //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
     //console.log("append to list started here with id");
+    console.log("append to request list invoked");
 
     
     var listItem="";
@@ -1237,7 +1252,7 @@ function displayRespondentDetails(deployment_id,elementId)
 
 //================================== EDIT HERE ===================================================================================
 //================================================================================================================================
-function displayRequestDetailsFromMap(request_id)
+function displayRequestDetailsFromMap(request_id, request_info_source)
 {
 
     console.log('displayRequest invoked with id->'+request_id);
@@ -1245,9 +1260,7 @@ function displayRequestDetailsFromMap(request_id)
     $("#requestList").hide("fast");
     openSideBar();
 
-    alert("request id ->"+request_id);
-
-     /*retrieve the response organization name to be used in the breadcrumbs*/
+     /*retrieve the request name to be used in the breadcrumbs*/
     request = $.ajax({
         url: "http://localhost/icdrris/Request/getRequestHeader",
         type: "POST",
@@ -1262,11 +1275,11 @@ function displayRequestDetailsFromMap(request_id)
         }
     });
 
-    /* retrieve the response organization details */
+    /* retrieve the request details */
     request = $.ajax({
         url: "http://localhost/icdrris/Request/getRequestDetails",
         type: "POST",
-        data: {id:deployment_id},
+        data: {id:request_id},
         success: function(details) {
             $("#request-information").html(details);
         },
