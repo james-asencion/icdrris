@@ -55,6 +55,7 @@ min-width: 760px;
 .panel .details{
 color: #cccccc;
 margin-left: 15px;
+
 }
 
 #fieldlabel{
@@ -214,6 +215,7 @@ filter: alpha(opacity=85);
 opacity: .85;
 z-index: 30;
 overflow: scroll;
+width:31.2%;
 }
 
 
@@ -287,7 +289,7 @@ display: block;
 a.active.trigger {
 background:#333333 url(http://localhost/icdrris/img/glyphicons-halflings-white.png) 85% 55% no-repeat;
 background-position: -423px -64px;
-left: 51.1%;
+left: 34.1%;
 top: 103px;
 z-index: 50;
 }

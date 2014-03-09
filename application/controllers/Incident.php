@@ -95,49 +95,48 @@ class Incident extends  CI_Controller
             $details = $this->IncidentModel->getIncidentDetails($incident_location_id);
 
 				echo '<script type="text/javascript">
-                                  $(document).ready(function(){
-                                     $("#span-approve-li").html('.$details->flag_true_rating.');
-                                     $("#span-disapprove-li").html('.$details->flag_false_rating.');
-                                });
+                     	$(document).ready(function(){
+                        	$("#span-approve-li").html('.$details->flag_true_rating.');
+                        	$("#span-disapprove-li").html('.$details->flag_false_rating.');
+                        });
 
-                                 $(document).ready(function(){
-                                                          if(typeof(Storage)!=="undefined"){
+                        $(document).ready(function(){
+                            if(typeof(Storage)!=="undefined"){
 
-                                                                  //get set var in localStorage
-                                                                  var rateClick= localStorage.getItem("i'.$incident_location_id.'");
-                                                                  console.log("incident rate: "+ rateClick+ " i'.$incident_location_id.'.");
-                                                                if(rateClick == null){
-                                                                 $("#approve-li'.$incident_location_id.'").css("background-color", "");
-                                                                  $("#diapprove-li'.$incident_location_id.'").css("background-color", "");
-                                                                   console.log("incident rate color: none since null");
-                                                            }                                                                  
+                            //get set var in localStorage
+                            var rateClick= localStorage.getItem("i'.$incident_location_id.'");
+                            console.log("incident rate: "+ rateClick+ " i'.$incident_location_id.'.");
+                            	if(rateClick == null){
+                                	$("#approve-li'.$incident_location_id.'").css("background-color", "");
+                                	$("#diapprove-li'.$incident_location_id.'").css("background-color", "");
+                                	console.log("incident rate color: none since null");
+                            	}                                                                  
 
-                                                                    if (rateClick == "rateFalse"){
-                                                                          //if disapproved, retain thumbsdown color
-                                                                          $("#disapprove-li'.$incident_location_id.'").css("background-color", "red");
-                                                                          $("#approve-li'.$incident_location_id.'").css("background-color", "");
-                                                                          console.log("incident Thumbs Down color red");
-                                                                  }
-                                                            if(rateClick == "rateTrue"){
-                                                                          //if approved,  retain thumbsup color
-                                                                          $("#approve-li'.$incident_location_id.'").css("background-color", "green");
-                                                                          $("#diapprove-li'.$incident_location_id.'").css("background-color", "");
-                                                                          console.log("incident Thumbs up color green");
-                                                            }
+                            	if (rateClick == "rateFalse"){
+                        	   		//if disapproved, retain thumbsdown color
+                                	$("#disapprove-li'.$incident_location_id.'").css("background-color", "red");
+                                	$("#approve-li'.$incident_location_id.'").css("background-color", "");
+                                	console.log("incident Thumbs Down color red");
+                            	}
+                            	if(rateClick == "rateTrue"){
+                                	//if approved,  retain thumbsup color
+                                	$("#approve-li'.$incident_location_id.'").css("background-color", "green");
+                                	$("#diapprove-li'.$incident_location_id.'").css("background-color", "");
+                                	console.log("incident Thumbs up color green");
+                            	}
                                                            
-
-                                                          }
-                                                          else{
-                                                            alert("Sorry, your browser does not support web storage...");
-                                                          }
-                                                  });  
-                                    </script>
+                        	}
+                            else{
+                                alert("Sorry, your browser does not support web storage...");
+                            }
+                        });  
+                       	</script>
                                     
-                                        <div class="details" style="margin-left: 15px; margin-top: 10px">
+                        <div class="details" style="margin-left: 15px; margin-top: 10px">
 							<div class="row-fluid">
-									<div class="span12">
-										<div id="fieldlabel" class="span4">Disaster Name:  </div>
-										<div id="fieldvalue" class="span8"> '.$details->incident_description.'</div>
+								<div class="span12">
+									<div id="fieldlabel" class="span4">Disaster Name:  </div>
+									<div id="fieldvalue" class="span8"> '.$details->incident_description.'</div>
 									</div>
 							</div>
 							<div class="row-fluid">

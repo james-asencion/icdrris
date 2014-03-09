@@ -102,6 +102,7 @@ function saveMarkerData() {
         data: {description:description, disaster_type:disasterType, date:date, deaths:deaths, injured:injured, missing:missing, families_affected:familiesAffected, houses_destroyed:housesDestroyed, damage_cost:damageCost, source:source, lat:latlng.lat(), lng:latlng.lng()},
         success: function(msg){
             if(msg==='success'){
+                alert("succes");
                 $('#modalSuccessReportMarker').modal('show');
             }
                 

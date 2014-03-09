@@ -154,7 +154,7 @@
           <div class = "row-fluid">
             <div class = "span12">
              
-				<div id= "panel" class="panel" style="height: 95%;">
+				<div id= "panel" class="panel" style="height: 77.5%;">
 
 					<!-- BREADCRUMBS -->
 						<ul class="breadcrumb" style="padding: 2px 15px;">
@@ -170,25 +170,21 @@
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
 					<!-- LIST OF INCIDENTS -->
-						<div class = "span12" id="incidentList" style="display:none"></div>
+					<div class = "span12" id="incidentList" style="display:none"></div>
 					<!-- end LIST OF INCIDENTS -->
 
 					
 					
 					<!-- DISPLAY INCIDENT DETAILS DIV -->
-          <div id="incidentTabbable" class="incidentTabbable" style="display:none">
-                           
-						   <ul class="nav nav-tabs" style="margin-bottom:10px;">
-								<li class="span8" style="color:darkorange">
-									<h4><div id="incident-title"> <!-- INCIDENT TITLE--></div></h4>
-								</li>
-								<li class="active"><a  id="details-tab" href="#tab1" data-incidentid="" data-toggle="tab"> Details </a></li>
+          <div id="incidentTabbable" class="incidentTabbable" style="display:none;">
+              <h5><div id="incident-title" style="color:darkorange;"> <!-- INCIDENT TITLE--></div></h5>
+              
+            <ul class="nav nav-tabs">
+						  
+								<li class="active"><a id="details-tab" href="#tab1" data-incidentid="" data-toggle="tab"> Details </a></li>
 								<li onclick="victimsTab()"><a href="#tab2" id="victims-tab" class="victims-tab" data-incidentid="" data-toggle="tab"> Victims </a></li>
-							</ul> 
-							
-							
-                           
-                           <div id="tab-content" class="tab-content">
+							</ul>
+							<div id="tab-content" class="tab-content">
                               
                                 <div class="tab-pane active" id="tab1">
                                     <ul class="nav nav-pills">
