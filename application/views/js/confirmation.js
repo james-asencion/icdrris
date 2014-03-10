@@ -164,16 +164,16 @@ $('#btnYesDeleteVictim').click(function(){
             var incidentid = $('#modalDeleteVictim').data('incidentid');
             var victimname= $('#modalDeleteVictim').data('victimname');
             console.log('this is the victimid->'+victimid + ' \n this is the incidentid->' + incidentid+ '\n this is the victim name-> '+victimname);
-            var dataStr = 'incident_report_id='+incidentid+'&victim_id='+victimid;
+          
             $.ajax({
                     url: "http://localhost/icdrris/Victim/deleteVictim",
                     type: "POST",
-                    data: dataStr,
+                    data: {incident_report_id:incidentid,victim_id:victimid},
                     success: function(msg){
                         if(msg == 'success'){
                             $('#modalDeleteVictim').modal('hide');	
                             console.log('success: '+victimname);
-                           // $('#success-delete-victim').html('');
+							victimsTab();
                         }
                         else{
                             console.log('Results: '+msg)
@@ -217,6 +217,8 @@ function btnYesConfirmIncident(){
                         if(msg == 'success'){
                             $('#modalConfirmIncident').modal('hide');	
                             console.log('success: '+msg );
+							getAllMapElements();
+                            console.log("getallMapElements again");
                         }
                         else{
                             console.log('Results: '+msg)
@@ -263,6 +265,7 @@ function btnYesConfirmVictim(){
                         if(msg == 'success'){
                             $('#modalConfirmVictim').modal('hide');	
                             console.log('success: '+msg );
+							victimsTab();
                         }
                         else{
                             console.log('Results: '+msg)
@@ -311,7 +314,8 @@ $(document).ready(function(){
 					if(msg == 'success'){
 						$('#modalDeleteIncident').modal('hide');	
 						console.log('success: '+incidentid);
-					   // $('#success-delete-victim').html('');
+						getAllMapElements();
+					    backToIncidentList();
 					}
 					else{
 						console.log('Results: '+msg)
@@ -413,7 +417,7 @@ $(document).ready(function(){
 								}
 							
 							}
-							
+							victimsTab();
 							
 						}else{
 						
@@ -435,14 +439,22 @@ $(document).ready(function(){
 //  RATING ON REPORTED INCIDENT
 	function rateIncident(rateType){
            var incident_location_id;
+		   var incident_report_id;
+           var element_id;
+           
             var upOrDown= "";
 			if(rateType == 0){
 				upOrDown = "rateFalse";
-                                incident_location_id = $('.disapprove-li').data('incidentid');
+				incident_location_id = $('.disapprove-li').data('incidentid');
+				incident_report_id = $('.disapprove-li').data('incidentreportid');
+				element_id = $('.disapprove-li').data('elementid');
+                                
 			}
 			else{
 				upOrDown = "rateTrue";
-                                 incident_location_id = $('.approve-li').data('incidentid');
+				incident_location_id = $('.approve-li').data('incidentid');
+				incident_report_id = $('.approve-li').data('incidentreportid');
+				element_id = $('.approve-li').data('elementid');
 			}
 			var lastUpOrDown = localStorage.getItem("i"+incident_location_id+"");
 			
@@ -468,7 +480,6 @@ $(document).ready(function(){
 				cache: false,
 				data: {incident_location_id:incident_location_id, upOrDown:upOrDown, actionType:actionType},
 				success: function(msg){
-					try{
 						if(msg == 'true'){
 						
 							console.log('success :' + upOrDown);
@@ -514,7 +525,7 @@ $(document).ready(function(){
 								}
 							
 							}
-							
+							displayIncidentDetails(incident_report_id, element_id, incident_location_id)	
 							
 						}else{
 						
@@ -522,9 +533,7 @@ $(document).ready(function(){
 							
 							alert('Sorry. Unable to update..' + msg);
 						}
-					}catch(e){
-						alert('Exception while request..' + msg);
-					}
+					
 				},
 				error: function(){
 					alert('Error while request..');
@@ -532,3 +541,11 @@ $(document).ready(function(){
 			});
 	};
 // end  RATE
+
+
+//Respond Request
+function respondRequest(request_id){
+       console.log("respondRequest function clicked.");
+       getAllMapElements();
+       console.log("getallMapElements again");
+}

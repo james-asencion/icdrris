@@ -183,6 +183,7 @@ function editVictim(element){
 				if(msg == 'success'){
 					console.log('naedit na bai. check the database');
 					$('#modalUpdateVictim').modal('hide');
+					victimsTab();
 				}else{
 					console.log('naay mali sa controller or model. recheck the code.')
 					$(".modal-body").innerHTML(msg);
@@ -241,6 +242,7 @@ $(document).ready(function(){
 				if(msg == 'success'){
 					console.log('naadd na bai. check the database');
 					$('#modalReportVictim').modal('hide');
+					victimsTab();
 				}else{
 					console.log('naay mali sa controller or model. recheck the code.')
 					$("#modalReportVictim.modal-body").html(msg);

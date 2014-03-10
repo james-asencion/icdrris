@@ -4,6 +4,7 @@
  
   <head>
 	<title>Iligan City Disaster Response and Recovery Information System</title>
+	<link rel="icon" href="<?php echo base_url(); ?>img/Tsunami-256.png" type="image/gif">	
 		
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
@@ -105,7 +106,7 @@
                     <li class="dropdown-submenu">
                        
                             <li> <a href="#modalReportIncident" role="button" data-toggle="modal"><i class = "icon-bell"></i> Report New Incident </a></li>
-                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Incidents</a></li>
+                            <li><a href = "javascript:incidentList()"><i class = "icon-briefcase"></i> List of Incidents</a></li>
 
 				</ul>
 					</li>

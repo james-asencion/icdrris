@@ -694,9 +694,12 @@ function getAllMapElements() {
             var request_comments = requests[r].getAttribute("request_comments");
             var flag_request_granted = requests[r].getAttribute("flag_request_granted");
             var tweet_user_id = requests[r].getAttribute("tweet_user_id");
-            var request_url = requests[r].getAttribute("request_url");
+			var request_info_source = requests[r].getAttribute("request_info_source");
+			var request_url = requests[r].getAttribute("request_url");
             var geo_place_name = requests[r].getAttribute("geo_place_name");
-
+			if(geo_place_name == null){
+                geo_place_name= "<i>No location tracked.</i>";
+            }
 
             var icon = customIcons['Default'] || {};
             var point = new google.maps.LatLng(
@@ -718,6 +721,7 @@ function getAllMapElements() {
                 request_comments: request_comments,
                 flag_request_granted:flag_request_granted,
                 tweet_user_id:tweet_user_id,
+                request_info_source:request_info_source,
                 request_url:request_url,
                 geo_place_name:geo_place_name,
                 elementType: 4,
@@ -755,7 +759,7 @@ function appendToIncidentList(mapElement) {
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
-    listItem += "<label class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 200px; color: white;\">" + mapElement.disasterType + "</label>";
+    listItem += "<label class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 200px; color: white;\">" + mapElement.disasterType + " </label> ";
     //place icon-links here [show details]
     listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+","+mapElement.incidentLocationId+");\">Open</a>"; // show details icon
    var sess_user = get_session();
@@ -831,9 +835,9 @@ function appendToRequestList(mapElement) {
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
-    listItem += "<a href=\""+mapElement.request_url+"\"> "+ mapElement.request_info_source + "</a><a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\"></a>";
-    //place icon-links here [show details]
-    listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayRequestDetails("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Open </a> "; // show details icon
+    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 230px; color: white;\">"+mapElement.request_info_source+"</a>";
+    //place icon-links here [granted]
+    listItem += "| <a  data-id=\"" + mapElement.id + "\" onclick=\"respondRequest("+mapElement.id+");\"><i class= \"icon-ok icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"respond-btn\" title= \"Respond Needs\"> </i> Respond Needs </a> "; // respond icon
     //end div
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
@@ -951,6 +955,8 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
                 $("#incidentTabbable").show("slow");
             } else {
                 $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
+                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId)
+                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId)
                 $("#incident-information").html(msg);
                 $("#incidentTabbable").show("slow");
             }
@@ -1351,19 +1357,16 @@ function displayRequestDetails(request_id, elementId)
 
 function victimsTab() {
 
-    $(".victims-tab, #victims-tab").click(function(event) {
-        event.preventDefault();
-        console.log('victims-tab-clicked');
-
-        var incident_report_id = $(this).data('incidentid');
-        console.log(incident_report_id);
-        var dataStr = 'id=' + incident_report_id;
+		var incident_report_id = $(".victims-tab, #victims-tab").data('incidentid');
+       
+	   console.log(incident_report_id);
+      //  var dataStr = 'id=' + incident_report_id;
 
         /* Send the data using post and put results to the members table */
         request = $.ajax({
             url: "http://localhost/icdrris/Victim/viewAllVictims",
             type: "POST",
-            data: dataStr,
+            data: {id:incident_report_id},
             success: function(msg) {
                 console.log("success");
                 //console.log(msg);
@@ -1384,6 +1387,5 @@ function victimsTab() {
                 $("#table-rows-victims").html("Sorry, system error.");
             }
         });
-    });
 }
 

@@ -156,7 +156,7 @@
 </div>
         
 	
-	<div class = "container-fluid">
+	<div class = "container-fluid" style="padding:0px">
           <div class = "row-fluid">
             <div class = "span12">
              

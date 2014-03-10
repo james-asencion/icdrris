@@ -36,8 +36,8 @@ class MapModel extends CI_Model
 		return $query->result();
 	}
 	
-		function getAllRequests($dateFrom, $dateTo){
-		$query = $this->db->query("	SELECT * from item_requests WHERE(request_date BETWEEN '$dateFrom' AND '$dateTo') ORDER BY request_date desc");
+	function getAllRequests($dateFrom, $dateTo){
+		$query = $this->db->query("SELECT request_id, location_id, tweet_id, DATE_FORMAT(request_date, '%W, %M %e, %Y') as request_date, request_status, request_comments, flag_request_granted, tweet_user_id, request_info_source, request_url, geo_lat, geo_lng, geo_place_name  from item_requests WHERE(request_date BETWEEN '$dateFrom' AND '$dateTo') ORDER BY request_date desc");
 		return $query->result();
 	}
 	
