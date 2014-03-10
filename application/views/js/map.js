@@ -422,6 +422,9 @@ function getAllMapElements() {
         ResponseOrg: {
             icon: 'icons/health/sozialeeinrichtung.png'
         },
+        Needs: {
+            icon: 'icons/flag.png'
+        },
         Flashflood: {
             icon: 'icons/naturaldisaster/flood1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
@@ -700,7 +703,7 @@ function getAllMapElements() {
 			var request_url = requests[r].getAttribute("request_url");
             var geo_place_name = requests[r].getAttribute("geo_place_name");
 
-            var icon = customIcons['Default'] || {};
+            var icon = customIcons['Needs'] || {};
             var point = new google.maps.LatLng(
                     parseFloat(requests[r].getAttribute("geo_lat")),
                     parseFloat(requests[r].getAttribute("geo_lng")));
@@ -709,7 +712,7 @@ function getAllMapElements() {
 				geo_place_name = "<font color=\"deeppink\">Can't find location.</font>";
 			}
 			if(geo_lat != '' && geo_lng != ''){
-                geo_place_name= "<a href=\"#\" >Locate in map address "+geo_place_name+"</a>";
+                geo_place_name= "<a onclick=\"viewRequestOnMap("+(polygonIndex+i+j+r)+","+request_id+");\" >Locate in map address "+geo_place_name+"</a>";
 			}
             
             var markerOptions = {
@@ -847,7 +850,7 @@ function appendToRequestList(mapElement) {
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
     listItem += "<div class=\"accordion-inner\">";
-    listItem += "<p class=\"list-group-item-text\">Tweet :" + mapElement.request_comments + "<br> Request Date:" + mapElement.request_date + "<br> Tweet Location: " + mapElement.geo_place_name +"<br> Tweet url: <a href=\""+ mapElement.request_url + "\" target=\"_blank\"> Go to the tweet... </a></p>";
+    listItem += "<p class=\"list-group-item-text\">Tweet :" + mapElement.request_comments + "<br> Request Date:" + mapElement.request_date + "<br> Tweet Location: <a>" + mapElement.geo_place_name +"<br> Tweet url: <a href=\""+ mapElement.request_url + "\" target=\"_blank\"> Go to the tweet... </a></p>";
     listItem += "</div></div></div>";
 
     //append to the list
@@ -1007,6 +1010,11 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
     stopAnimation(mapElements[elementId]);
 
 
+}
+function viewRequestOnMap(elementId, requestId){
+    map.setCenter(mapElements[elementId].center);
+    mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
+    stopAnimation(mapElements[elementId]);
 }
 
 //---------------------------------------------- SECOND FUNCTION FOR THE MAP BINDING ------------------------------------------------------------
