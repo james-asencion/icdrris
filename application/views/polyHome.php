@@ -413,7 +413,7 @@
                     <a href="#" id="btnYesDeleteIncident" class="btn danger">Yes</a>
                     <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
                 </div>
-            </div> 
+      </div> 
 			<!-- end modalDeleteIncident -->
 			
 			<!-- modalDeleteVictim -->
@@ -430,8 +430,17 @@
                     <a href="#" id="btnYesDeleteVictim" class="btn danger">Yes</a>
                     <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
                 </div>
-            </div> 
+      </div> 
 			<!-- end modalDeleteVictim -->
+      <div class = "modal hide fade" id="modalSuccessResponseOrgUndeploy">
+          <div class = "modal-header">
+            <a class="close" data-dismiss="modal">x</a>
+            <h3>Response Organization successfully undeployed</h3>
+          </div>
+          <div class="modal-footer">
+            <a href="http://localhost/icdrris/" class="btn btn-primary">Okay</a>
+          </div>
+      </div>
 			
 			<div id="directionsPanel"></div>
                         

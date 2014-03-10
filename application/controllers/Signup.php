@@ -22,7 +22,9 @@ class Signup extends CI_Controller{
 	
 	function success(){
 		$data['succ_message']= 'New account has been created. ';
+		$this->load->view('includes/header');
 		$this->load->view('signup', $data);
+		$this->load->view('includes/footer');
 		
 	}
 	

@@ -5,29 +5,29 @@ error_reporting(E_ALL);
 
 class LivelihoodModel extends CI_Model{
 	
-	function createLivelihoodOrg(){
+	function createLivelihoodOrg($data){
 
-		$data = array(
-					'livelihood_organization_name' => $this->input->post('name'),
-					'livelihood_organization_address' => $this->input->post('address'),
-					'no_of_members' => $this->input->post('members'),
-					'initial_income' => $this->input->post('initial_income'),
-					'livelihood_organization_status' => $this->input->post('status'),
-					'date_established' => $this->input->post('date_formed'),
-					'business_activity_type' => $this->input->post('business_type'),
-					'location_id' => 1
-					);
+		// $data = array(
+		// 			'livelihood_organization_name' => $this->input->post('name'),
+		// 			'livelihood_organization_address' => $this->input->post('address'),
+		// 			'no_of_members' => $this->input->post('members'),
+		// 			'initial_income' => $this->input->post('initial_income'),
+		// 			'livelihood_organization_status' => $this->input->post('status'),
+		// 			'date_established' => $this->input->post('date_formed'),
+		// 			'business_activity_type' => $this->input->post('business_type'),
+		// 			'location_id' => 1
+		// 			);
 		
 		$query = $this->db->insert('livelihood_organizations',$data);
-		$orgId = $this->db->insert_id();
-		$userId = $this->session->userdata('user_id');
-		$this->db->insert('user_livelihood_organizations', array('user_id'=>$userId, 'livelihood_organization_id'=>$orgId));
-		$data['org_id'] = $orgId;
-		if($query){
-			return $orgId;
-		}else{
-			return $this->db->_error_message();
-		}
+		// $orgId = $this->db->insert_id();
+		// $userId = $this->session->userdata('user_id');
+		// $this->db->insert('user_livelihood_organizations', array('user_id'=>$userId, 'livelihood_organization_id'=>$orgId));
+		// $data['org_id'] = $orgId;
+		// if($query){
+		// 	return $orgId;
+		// }else{
+		// 	return $this->db->_error_message();
+		// }
 	}
 	
 	function addMember($data){

@@ -1153,14 +1153,24 @@ function displayRespondentDetailsFromMap(deployment_id,element)
     $("#respondent-membersTable").show("slow");
 
      /*retrieve the response organization name to be used in the breadcrumbs*/
+     request = $.ajax({
+        url: "http://localhost/icdrris/ResponseOrg/getDeployedOrganizationName",
+        type: "POST",
+        data: {id:deployment_id},
+        success: function(name) {
+            $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToRespondentList()" class="subBreadCrumb1" id="subBreadCrumb1">Respondents List</a><span class="divider">/</span></li>');
+            $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + name + '</a></li>');
+        },
+        error: function() {
+            console.log("error retrieving response organization name");
+            console.log(name);
+        }
+    });
     request = $.ajax({
         url: "http://localhost/icdrris/ResponseOrg/getDeployedOrganizationDetails",
         type: "POST",
         data: {id:deployment_id},
         success: function(msg) {
-                $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToRespondentList()" class="subBreadCrumb1" id="subBreadCrumb1">Respondents List</a><span class="divider">/</span></li>');
-                $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + element.response_organization_name + '</a></li>');
-                $(".respondentTabbable").show("slow");
                  $("#respondent-information").html(msg);
         },
         error: function() {

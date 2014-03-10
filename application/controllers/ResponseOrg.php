@@ -72,7 +72,9 @@ class ResponseOrg extends CI_Controller
                 <td><span href=\"#\" id=\"response_organization_contact_person\" data-name\"response_organization_contact_person\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Contact Person\">".$organization->response_organization_contact_person."</span></td>
                 <td><span href=\"#\" id=\"response_organization_members_count\" data-name\"response_organization_members_count\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Members Count\">".$organization->response_organization_members_count."</span></td>
                 <td><span href=\"#\" id=\"response_organization_members_available\" data-name\"response_organization_members_available\" data-type=\"text\" data-pk=\"".$organization->response_organization_id."\" data-title=\"Enter Members Available\">".$organization->response_organization_members_available."</span></td>
-                <td><a href=\"#\" class=\"confirm-deleteResOrgMember\" data-orgid=".$org->response_organization_id." data-lastname=\"".$member->response_organization_member_last_name."\" data-id=".$member->response_organization_member_id."><i class=\"icon-trash\"></i></a></td></tr>";
+                <td><a href=\"#\" class=\"confirm-deleteResOrgMember\" data-orgid=".$org->response_organization_id." data-lastname=\"".$member->response_organization_member_last_name."\" data-id=".$member->response_organization_member_id."><i class=\"icon-trash\"></i></a></td></tr><a class=\"confirm-edit\" align=\"center\" href=ViewResOrg/id/\"".$organization->response_organization_id."\"><i class=\"icon-search\"></i></a><a align=\"center\" href=deployResponseOrganization/\"".base_convert($organization->response_organization_id,10,36)."\"><i class=\"icon-share-alt\"></i></a></td></tr>";
+                
+
         }
     }
 
@@ -155,10 +157,24 @@ class ResponseOrg extends CI_Controller
                                 );
 
             $this->ResOrgModel->deployResponseOrgMember($deploymentData);
-            $this->ResOrgModel->updateMemberStatus($member);
+            $this->ResOrgModel->updateMemberStatus($member,'deployed');
         }
 
         return $this->getAllResOrgCheckboxList(intval($this->input->post('org_id'),36));
+    }
+    function undeployResponseOrg(){
+        //undeploy members first
+        $members = $this->ResOrgModel->getAllDeployedMembers($this->input->post('response_organization_location_id'));
+        $this->undeployMembers($members->result(),$this->input->post('response_organization_location_id'));
+
+        //then undeploy the response organization on that location
+        $this->ResOrgModel->undeployResponseOrg($this->input->post('response_organization_location_id'));
+    }
+    function undeployMembers($members, $response_organization_location_id){
+        foreach ($members as $member) {
+            $this->ResOrgModel->undeployMember($member->member_id, $response_organization_location_id);
+            $this->ResOrgModel->updateMemberStatus($member->member_id, 'available');
+        }
     }
 
     function registerResOrg()
@@ -227,7 +243,7 @@ class ResponseOrg extends CI_Controller
 
     function deployResponseOrganization(){
         $this->load->view('includes/deployResOrgheader');
-        $this->load->view('registerLivelihood');
+        $this->load->view('deployResOrg');
         $this->load->view('includes/footer');
     }
 
@@ -328,9 +344,19 @@ class ResponseOrg extends CI_Controller
 
         $org = $this->ResOrgModel->getDeployedOrganization($this->input->post('id'));
 
-        echo '<h4><div id="incident-title" class="span8" style="color:darkorange">'.$org->response_organization_name.'</div></h4>
-              
-                      <div class="details" style="margin-left: 15px; margin-top: 10px">
+
+        echo '<h4><div id="incident-title" class="span8" style="color:darkorange">'.$org->response_organization_name.'</div></h4>';
+        if(($this->session->userdata('user_type') === 'response organization') & ($this->session->userdata('is_logged_in'))){
+            $isOwned = $this->ResOrgModel->isOrganizationOwnedByUser($org->response_organization_id,$this->session->userdata('user_id'));
+            if($isOwned){
+                echo '<a class= "label label-info"  data-id='.$org->response_organization_location_id.' onclick="undeployRespondent('.$org->response_organization_location_id.')" ><i class= "icon-eye-open icon-white" title="Undeploy"> </i> Undeploy </a>'; 
+            }
+            else{
+                echo '<h5>'.$isOwned.'</h5>';
+            }
+        }              
+
+                    echo '<div class="details" style="margin-left: 15px; margin-top: 10px">
                           <div class="row-fluid">
                               <div class="span12">
                                 <div id="activityDescriptionLabel" class="span4">Deployment Activity:  </div>

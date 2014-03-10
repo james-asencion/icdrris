@@ -50,3 +50,21 @@ $("#btnSubmitNewSkill").click(function(){
 });
 
 });
+
+function undeployRespondent(response_organization_location_id){
+	
+	request = $.ajax({
+		url: "http://localhost/icdrris/ResponseOrg/undeployResponseOrg",
+		type: "POST",
+		data: {response_organization_location_id:response_organization_location_id},
+		success: function(msg){
+			//alert("undeploy operation successfully performed");
+            $('#modalSuccessResponseOrgUndeploy').modal('show');
+			console.log(msg);
+		},
+		error: function(){
+			alert("undeploy failed");
+			console.log(msg);
+		}
+	});
+}

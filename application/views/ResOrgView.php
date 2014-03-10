@@ -11,6 +11,8 @@
         <br>Members Count: <?php echo $org->response_organization_members_count; ?>
         <br>Members Available: <?php echo $org->response_organization_members_available; ?>
         <br><br>
+        
+<a class="button btn-success" align="center" href="http://localhost/icdrris/ResponseOrg/deployResponseOrganization/<?php echo base_convert($org->response_organization_id,10,36); ?>" ><i class="icon-share"></i>deploy</a>
 </div>
 
 <div></div>
@@ -82,8 +84,8 @@
     <div class="control-group">
     
     <div id="addNewSkillField" style="display:none;" class="control-group"><label class = "control-label" for="ro_first_name">New Skill: </label><div class="controls"><input type="text" name="newSkill" id="newSkill"  />
-    <button type="button" id="btnSubmitNewSkill" class="btn btn-small btn-success btn-submitNewSkill" style="display:none;"><i class="icon-plus" ></i></button>
-<button type="button" id="cancelNewSkill" class="btn btn-small btn-danger btn-submitNewSkill" style="display:none;"><i class="icon-plus" ></i></button></div></div>
+    <button type="button" id="btnSubmitNewSkill" class="btn btn-small btn-success btn-submitNewSkill" style="display:none;"><i class="icon-ok" ></i></button>
+<button type="button" id="cancelNewSkill" class="btn btn-small btn-danger btn-cancelNewSkill" style="display:none;"><i class="icon-remove" ></i></button></div></div>
 </div>
 </form></div>
     <div class = "modal-footer">
@@ -92,23 +94,6 @@
     </div></div>
 </div>
 
-<!--
-<div class = "row-fluid">
-    <div class = "well span4">
-    <legend>Add Members</legend>
-    <label>First Name</label>
-    <input type='text' class = 'span12' placeholder='Type something..' id='activity_description'><br>
-    <label>Last Name</label>
-    <input type='text' class = 'span12' placeholder='Type something..' id='activity_description'><br>
-    <label>Sex</label>
-    <input type='text' class = 'span12' placeholder='Type something..' id='activity_description'><br>
-    <label>Birthday</label>
-    <input type='text' class = 'span12' placeholder='Type something..' id='activity_description'><br>
-    <label>Civil Status</label>
-    <input type='text' class = 'span12' placeholder='Type something..' id='activity_description'><br>
-</div>
-    
-</div>-->
   
 <div id="modalDeleteResOrgMember" class="modal hide fade">
     <div class="modal-body">

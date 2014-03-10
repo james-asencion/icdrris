@@ -67,6 +67,9 @@ function initializeMap2() {
 
         var deployedMembersArray = new Array();
 
+        if(!marker){
+            alert("please specify a location");
+        }
         var boxes = $('#deployMembersList input:checkbox');
         
         $.each(boxes, function(i,b){
@@ -83,7 +86,7 @@ function initializeMap2() {
         var lat = position.lat();
         var lng = position.lng();
 
-        alert("lat ->"+lat+"  lng ->"+lng+" start date->"+startDate+"  end date->"+endDate+"  Description->"+activityDescription);
+        //alert("lat ->"+lat+"  lng ->"+lng+" start date->"+startDate+"  end date->"+endDate+"  Description->"+activityDescription);
     request = $.ajax({
         url: "http://localhost/icdrris/ResponseOrg/deployMembers",
         type: "POST",
@@ -92,6 +95,7 @@ function initializeMap2() {
             $("#deployMembersList").html(msg);
             console.log(msg);
             console.log("deployment success!");
+            $('#modalSuccessResponseOrgDeploy').modal('show');
         },
         error: function(){
             console.log("fail");
@@ -113,7 +117,7 @@ function initializeMap2() {
 
 function testAjax(handleData) {
     var urlString = window.location.pathname.split('/');
-    alert(urlString[4]);
+    //alert(urlString[4]);
 
     $.ajax({
         url: "http://localhost/icdrris/ResponseOrg/getAllResOrgCheckboxList",

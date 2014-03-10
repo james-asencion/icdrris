@@ -172,9 +172,9 @@ class ResOrgModel extends CI_Model{
 									WHERE r.response_organization_id='$id' AND m.member_status='available';");
 		return $query->result();
 	}
-	function updateMemberStatus($member_id){
+	function updateMemberStatus($member_id,$string){
 		$data = array(
-               'member_status' => 'deployed'
+               'member_status' => $string
             );
 
 		$this->db->where('member_id', $member_id);
@@ -208,6 +208,12 @@ class ResOrgModel extends CI_Model{
 	function deployResponseOrgMember($values){
 		$this->db->insert('member_deployments',$values);
 	}
+	function undeployMember($member_id, $response_organization_location_id){
+		$this->db->delete('member_deployments', array('member_id' => $member_id, 'response_organization_location_id'=> $response_organization_location_id)); 
+	}
+	function undeployResponseOrg($response_organization_location_id){
+		$this->db->delete('response_organization_locations', array('response_organization_location_id'=>$response_organization_location_id));
+	}
 	function deleteOrganization($id){
 		$this->db->where("response_organization_id",$id);
 		$query = $this->db->delete("response_organization");
@@ -222,7 +228,7 @@ class ResOrgModel extends CI_Model{
 	//	return $query->result();
 	}
 	function getDeployedOrganization($id){
-		$query = $this->db->query("	SELECT o.response_organization_location_id, r.response_organization_name,DATE_FORMAT( o.activity_start_date,'%W, %M %e, %Y') as activity_start_date,DATE_FORMAT( o.activity_end_date,'%W, %M %e, %Y') as activity_end_date, o.activity_status, o.activity_description, l.location_address
+		$query = $this->db->query("	SELECT o.response_organization_location_id, r.response_organization_id, r.response_organization_name,DATE_FORMAT( o.activity_start_date,'%W, %M %e, %Y') as activity_start_date,DATE_FORMAT( o.activity_end_date,'%W, %M %e, %Y') as activity_end_date, o.activity_status, o.activity_description, l.location_address
 									FROM response_organization r
 									INNER JOIN response_organization_locations o 
 									ON r.response_organization_id = o.response_organization_id
@@ -230,6 +236,18 @@ class ResOrgModel extends CI_Model{
 									ON l.location_id = o.location_id
 									WHERE o.response_organization_location_id='$id';");
 		return $query->row();
+	}
+	function isOrganizationOwnedByUser($id, $user_id){
+		$query = $this->db->query("	SELECT l.response_organization_id
+									FROM response_organization_locations l
+									WHERE l.response_organization_id = '$id'
+									AND l.response_organization_id 
+									IN (SELECT response_organization_id FROM user_response_organizations WHERE user_id='$user_id');");
+		if($query->num_rows()>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	function getAllDeployedMembers($id){
 		$query = $this->db->query("	SELECT m.member_id, m.member_first_name, m.member_last_name, m.member_status

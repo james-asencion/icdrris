@@ -68,39 +68,30 @@ function initializeMap3() {
 
     var onClick = function() {
         console.log("on click function invoked");
-    //     var deployedMembersArray = new Array();
+    
 
-    //     var boxes = $('#deployMembersList input:checkbox');
-        
-    //     $.each(boxes, function(i,b){
-    //         ($(b).is(':checked'))?deployedMembersArray.push($(b).data('id')):console.log('not checked');
-    //     });
+    var name = $("#name").val();
+    var address = $("#address").val();
+    var members = $("#members").val();
+    var initial_income = $("#initial_income").val();
+    var status = $("#status").val();
+    var date_formed = $("#date_formed").val();
+    var business_type = $("#business_type").val();
+    var position = marker.getPosition();
+    var lat = position.lat();
+    var lng = position.lng();
 
-    //     var membersSelected = JSON.stringify(deployedMembersArray);
-    //     var url_org_id = urlString[4];
-    //     var locationId = '1';
-    //     var activityDescription = $("#activity_description").val();
-    //     var startDate = $("#startDate").val();
-    //     var endDate = $("#endDate").val();
-    //     var position = marker.getPosition();
-    //     var lat = position.lat();
-    //     var lng = position.lng();
-
-    //     alert("lat ->"+lat+"  lng ->"+lng+" start date->"+startDate+"  end date->"+endDate+"  Description->"+activityDescription);
-    // request = $.ajax({
-    //     url: "http://localhost/icdrris/ResponseOrg/deployMembers",
-    //     type: "POST",
-    //     data: {membersToDeploy:membersSelected, org_id:url_org_id, location_id:locationId, response_activity_description:activityDescription , activity_start_date:startDate , activity_end_date:endDate , deployment_lat:lat , deployment_lng:lng },
-    //     success: function(msg){
-    //         $("#deployMembersList").html(msg);
-    //         console.log(msg);
-    //         console.log("deployment success!");
-    //     },
-    //     error: function(){
-    //         console.log("fail");
-    //         console.log(msg);
-    //     }
-    // });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/addLivelihoodOrg",
+        type: "POST",
+        data: {name:name, address:address, members:members, initial_income:initial_income , status:status , date_formed:date_formed , business_type:business_type , lat:lat, lng:lng },
+        success: function(msg){
+            alert("deployment success!");
+        },
+        error: function(){
+            console.log("fail");
+        }
+    });
 
     }
     google.maps.event.addDomListener(submitButton, 'click', onClick);

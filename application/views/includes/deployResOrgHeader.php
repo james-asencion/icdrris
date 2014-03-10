@@ -64,30 +64,6 @@
 				</ul>
 					</li>
     </ul>
-    <ul class="nav">
-            <li class="dropdown" name="livelihoodDropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class = "icon-flag icon-white"></i> Livelihood Matching
-                    <b class="caret"></b>
-                </a>
-            <ul class="dropdown-menu" role="menu">
-				<li> 
-						<a href = "http://localhost/icdrris/Livelihood/registerLivelihoodOrg" ><i class = "icon-edit"></i> Register Livelihood Org </a>
-				</li>
-                <li>
-                    <a href = "#" ><i class = "icon-briefcase"></i> Register External Org</a>
-                </li>
-                <li>
-                    <a href = "http://localhost/icdrris/Livelihood/viewDeploy"><i class = "icon-share"></i> Deploy Livelihood Org</a>
-                </li>
-                <li>
-                    <a href = "#"><i class = "icon-search"></i> Search Livelihood Org</a>
-                </li>
-                <li>
-                    <a href = "http://localhost/icdrris/Livelihood/viewAllLivelihoodOrgs" ><i class = "icon-search"></i> View All Livelihood Orgs</a>
-                </li>
-            </ul>
-    </ul>
 
     <ul class="nav">
             <li class="dropdown" name="organizationDropdown">

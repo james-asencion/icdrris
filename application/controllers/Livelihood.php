@@ -27,25 +27,39 @@ class Livelihood extends CI_Controller
     }
     function addLivelihoodOrg()
     {
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('name', 'Organization Name', 'trim|required');
-        $this->form_validation->set_rules('address', 'Address', 'trim|required');
-        $this->form_validation->set_rules('members', 'Number of members', 'trim|required');
-        $this->form_validation->set_rules('initial_income', 'Initial Income', 'trim|required');
-        $this->form_validation->set_rules('status', 'Organization Status', 'trim|required');
-        $this->form_validation->set_rules('date_formed', 'Date established', 'trim|required');
-        $this->form_validation->set_rules('business_type', 'Business Activity Type', 'trim|required');
+        // $this->load->library('form_validation');
+        // $this->form_validation->set_rules('name', 'Organization Name', 'trim|required');
+        // $this->form_validation->set_rules('address', 'Address', 'trim|required');
+        // $this->form_validation->set_rules('members', 'Number of members', 'trim|required');
+        // $this->form_validation->set_rules('initial_income', 'Initial Income', 'trim|required');
+        // $this->form_validation->set_rules('status', 'Organization Status', 'trim|required');
+        // $this->form_validation->set_rules('date_formed', 'Date established', 'trim|required');
+        // $this->form_validation->set_rules('business_type', 'Business Activity Type', 'trim|required');
 
-        if($this->form_validation->run() == FALSE){
-            echo "failed";
-            //$this->registerLivelihoodOrg();
-        }
-        else{
-            $id = $this->LivelihoodModel->createLivelihoodOrg();
+        // if($this->form_validation->run() == FALSE){
+        //     echo "failed";
+        //     //$this->registerLivelihoodOrg();
+        // }
+        // else{
+            //$id = $this->LivelihoodModel->createLivelihoodOrg();
+        $data = array(
+                    'livelihood_organization_name' => $this->input->post('name'),
+                    'livelihood_organization_address' => $this->input->post('address'),
+                    'no_of_members' => $this->input->post('members'),
+                    'initial_income' => $this->input->post('initial_income'),
+                    'livelihood_organization_status' => $this->input->post('status'),
+                    'date_established' => $this->input->post('date_formed'),
+                    'business_activity_type' => $this->input->post('business_type'),
+                    'location_id' => 1,
+                    'livelihood_org_lat' => $this->input->post('lat'),
+                    'livelihood_org_lng' => $this->input->post('lng')
+                    );
+        
+        $this->LivelihoodModel->createLivelihoodOrg($data);
             //echo $response['org_id'];
-            $this->viewNewLivelihoodOrg($id);
+            //$this->viewNewLivelihoodOrg($id);
             //$this->addOrgMembers($dataArray);
-        }
+        // }
 
     }
 
