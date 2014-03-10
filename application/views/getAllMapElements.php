@@ -114,10 +114,13 @@ foreach($requests as $req){
     $request->setAttribute("request_id",$req->request_id);
     $request->setAttribute("location_id",$req->location_id);
     $request->setAttribute("tweet_id",$req->tweet_id);
-    $request->setAttribute("request_date",$req->request_date);
+    $request->setAttribute("request_date",$req->formatted_request_date);
     $request->setAttribute("request_status",$req->request_status);
     $request->setAttribute("request_comments",$req->request_comments);
     $request->setAttribute("flag_request_granted",$req->flag_request_granted);
+    $request->setAttribute("geo_lat",$req->geo_lat);
+    $request->setAttribute("geo_lng",$req->geo_lng);
+    $request->setAttribute("geo_place_name",$req->geo_place_name);
     $request->setAttribute("tweet_user_id",$req->tweet_user_id);
     $request->setAttribute("request_info_source",$req->request_info_source);
     $request->setAttribute("request_url",$req->request_url);

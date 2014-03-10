@@ -695,17 +695,22 @@ function getAllMapElements() {
             var flag_request_granted = requests[r].getAttribute("flag_request_granted");
             var tweet_user_id = requests[r].getAttribute("tweet_user_id");
 			var request_info_source = requests[r].getAttribute("request_info_source");
+			var geo_lat =  requests[r].getAttribute("geo_lat");
+			var geo_lng =  requests[r].getAttribute("geo_lng");
 			var request_url = requests[r].getAttribute("request_url");
             var geo_place_name = requests[r].getAttribute("geo_place_name");
-			if(geo_place_name == null){
-                geo_place_name= "<i>No location tracked.</i>";
-            }
 
             var icon = customIcons['Default'] || {};
             var point = new google.maps.LatLng(
                     parseFloat(requests[r].getAttribute("geo_lat")),
                     parseFloat(requests[r].getAttribute("geo_lng")));
 
+			if(geo_lat == ''){
+				geo_place_name = "<font color=\"deeppink\">Can't find location.</font>";
+			}
+			if(geo_lat != '' && geo_lng != ''){
+                geo_place_name= "<a href=\"#\" >Locate in map address "+geo_place_name+"</a>";
+			}
             
             var markerOptions = {
                 position: point,
@@ -842,7 +847,7 @@ function appendToRequestList(mapElement) {
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
     listItem += "<div class=\"accordion-inner\">";
-    listItem += "<p class=\"list-group-item-text\">Tweet :" + mapElement.request_comments + "<br> Request Date:" + mapElement.request_date + "<br> Tweet Location: " + mapElement.geo_place_name + "</p>";
+    listItem += "<p class=\"list-group-item-text\">Tweet :" + mapElement.request_comments + "<br> Request Date:" + mapElement.request_date + "<br> Tweet Location: " + mapElement.geo_place_name +"<br> Tweet url: <a href=\""+ mapElement.request_url + "\" target=\"_blank\"> Go to the tweet... </a></p>";
     listItem += "</div></div></div>";
 
     //append to the list

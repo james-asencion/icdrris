@@ -14,7 +14,8 @@ class Twitterlib {
 	{
 		ini_set('precision', 20); // http://stackoverflow.com/a/8106127/908257
 		$this->CI = & get_instance();
-		$this->terms = $this->searchterms();
+		//$this->terms = $this->searchterms();
+		$this->terms = "TeamDasig";
 	}
 
 	/**
@@ -257,7 +258,11 @@ public function searchterms($result=false)
 			
 				echo 'Created at: '.$data->created_at.', ID Str: '.$data->id_str.', Tweet: '.$data->text.', Source: '.$data->source.', userid: '.$data->user->id_str.', username: '.$data->user->name.', geo-enabled: '.$data->user->geo_enabled.'<br />'.PHP_EOL;
 				if($data->geo != null){
-					echo ' Geo-type: '.$data->geo->type.', Geo-lat: '.$data->geo->coordinates[0].', Geo-lng: '.$data->geo->coordinates[1].', Place Name: '.$data->place->full_name.'<br />';
+					echo ' Geo-type: '.$data->geo->type.', Geo-lat: '.$data->geo->coordinates[0].', Geo-lng: '.$data->geo->coordinates[1].'';
+					if($data->place != null){
+						echo ', Place Name: '.$data->place->full_name;
+					}
+					echo '<br />';
 				}
 				echo '<br />';
 			}
@@ -327,7 +332,9 @@ public function searchterms($result=false)
 				if($data->geo != null && $data->geo->type == "Point"){
 					$geo_lat=$data->geo->coordinates[0];
 					$geo_lng=$data->geo->coordinates[1];
-					$geo_place_name=$data->place->full_name;
+					if($data->place !=null){
+						$geo_place_name=$data->place->full_name;
+					}
 				}
 
 			}
