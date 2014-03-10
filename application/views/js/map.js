@@ -755,7 +755,7 @@ function appendToIncidentList(mapElement) {
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
-    listItem += "<label class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px; color: white;\">" + mapElement.disasterType + "</label>";
+    listItem += "<label class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 200px; color: white;\">" + mapElement.disasterType + "</label>";
     //place icon-links here [show details]
     listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\" onclick=\"displayIncidentDetails("+mapElement.id+","+mapElement.arrId+","+mapElement.incidentLocationId+");\">Open</a>"; // show details icon
    var sess_user = get_session();
@@ -805,7 +805,7 @@ function appendToRespondentList(mapElement) {
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
-    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 330px;\">" + mapElement.response_organization_name + "</a>";
+    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 200px;\">" + mapElement.response_organization_name + "</a>";
     //place icon-links here [show details]
     listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayRespondentDetails("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Open </a> "; // show details icon
     //end div
@@ -923,7 +923,9 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
             } else {
                 console.log("Success getIncidentTitle");
                 $("#incident-title").html(msg);
-                $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
+                var str = msg.substring(0,30) + "...";
+                $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + str + '</a></li>');
+                
                 $("#victims-tab, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
 		
                 $("#delete-li").attr("data-incidentdesc", msg);
@@ -1038,7 +1040,7 @@ function getFalseRate(incident_location_id){
 */
 function openSideBar() {
     $("#map_canvass").removeClass("span12");
-    $("#map_canvass").addClass("span6"); //added
+    $("#map_canvass").addClass("span8"); //added
     $("#map_canvass").css({"float":"right"}); //added
     google.maps.event.trigger(map_canvas, 'resize');
     $(".panel").show("fast");

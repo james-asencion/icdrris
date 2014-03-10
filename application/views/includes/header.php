@@ -12,7 +12,6 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
                 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/markerScript.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/externalOrganizationModal.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/deployLivelihoodScript.js"></script>
@@ -60,7 +59,7 @@
 			//localStorage.clear();
 				$(".trigger").click(function(){
                     $("#map_canvass").removeClass("span12");
-					$("#map_canvass").addClass("span6"); //added
+					$("#map_canvass").addClass("span8"); //added
 					$("#map_canvass").css({"float":"right"}); //added					
                                         lastCenter=map.getCenter(); 
                                         google.maps.event.trigger(map_canvas, 'resize');
@@ -71,7 +70,7 @@
 				});
 				$(".trigger").click(function(){
 					if (!$(this).hasClass("active")) {
-					 $("#map_canvass").removeClass("span6");
+					 $("#map_canvass").removeClass("span8");
 					 $("#map_canvass").addClass("span12");
                                         lastCenter=map.getCenter(); 
                                         google.maps.event.trigger(map_canvas, 'resize');
