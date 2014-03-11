@@ -488,6 +488,18 @@ function getAllMapElements() {
             icon: 'icons/naturaldisaster/flood1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
         },
+        RedCross: {
+            icon: 'icons/icons1/firstaid.png'
+        },
+        EvacuationCenter: {
+            icon: 'icons/icons1/condominium.png'
+        },
+        PNP: {
+            icon: 'icons/icons1/police.png'
+        },
+        UN: {
+            icon: 'icons/icons1/world.png'
+        },
         Mudslide: {
             icon: 'icons/nd/flood.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
