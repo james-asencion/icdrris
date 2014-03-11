@@ -11,7 +11,10 @@
        <!-- Bootstrap -->
  
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-                <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        
+        <!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/externalOrganizationModal.js"></script>
