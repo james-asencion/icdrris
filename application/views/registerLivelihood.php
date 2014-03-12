@@ -10,4 +10,14 @@
       
     </div>
   </div>
+  <div id="modalLivelihoodRegistrationSuccess" class="modal hide">
+    <div class="modal-body">
+        <div name="message">
+            Livelihood Organization Successfully Registered
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="http://localhost/icdrris/Livelihood" class="btn secondary">Okay</a>
+    </div>
+</div>
 </div>

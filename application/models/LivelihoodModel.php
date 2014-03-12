@@ -350,7 +350,7 @@ class LivelihoodModel extends CI_Model{
 	}
 	function getLivelihoodOrg($id){
 		$query = $this->db->get_where('livelihood_organizations', array('livelihood_organization_id'=>$id));
-		return $query->result();
+		return $query->row();
 	}
 
 	function getAllMembers($id){
