@@ -147,7 +147,7 @@ $('.delete-victim').on('click', function(e){
 		$('#modalDeleteVictim').data('victimid',victimid);
 		$('#modalDeleteVictim').data('incidentid',incidentid);
 		$('#modalDeleteVictim').data('victimname',victimName);
-		$('#modalDeleteVictim .modal-body').html("<p>Are you sure you want to delete: "+victimName+" </p>");
+		$('#modalDeleteVictim .modal-body').html("<p>Are you sure you want to delete: <b>"+victimName+"</b> </p>");
 		$('#modalDeleteVictim').modal('show');	
 });
 
@@ -218,7 +218,7 @@ function btnYesConfirmIncident(){
                             $('#modalConfirmIncident').modal('hide');	
                             console.log('success: '+msg );
 							getAllMapElements();
-                            console.log("getallMapElements again");
+							incidentList();
                         }
                         else{
                             console.log('Results: '+msg)
@@ -437,24 +437,25 @@ $(document).ready(function(){
 // end  RATE
 
 //  RATING ON REPORTED INCIDENT
-	function rateIncident(rateType){
-           var incident_location_id;
+	function rateIncident(rateType, incident_location_id){
+           //var incident_location_id;
 		   var incident_report_id;
            var element_id;
            
             var upOrDown= "";
+
 			if(rateType == 0){
 				upOrDown = "rateFalse";
-				incident_location_id = $('.disapprove-li').data('incidentid');
-				incident_report_id = $('.disapprove-li').data('incidentreportid');
-				element_id = $('.disapprove-li').data('elementid');
+				//incident_location_id = $('.disapprove-li').data('incidentid');
+				incident_report_id = $('.disapprove-li'+incident_location_id+'').data('incidentreportid');
+				element_id = $('.disapprove-li'+incident_location_id+'').data('elementid');
                                 
 			}
 			else{
 				upOrDown = "rateTrue";
-				incident_location_id = $('.approve-li').data('incidentid');
-				incident_report_id = $('.approve-li').data('incidentreportid');
-				element_id = $('.approve-li').data('elementid');
+				//incident_location_id = $('.approve-li').data('incidentid');
+				incident_report_id = $('.approve-li'+incident_location_id+'').data('incidentreportid');
+				element_id = $('.approve-li'+incident_location_id+'').data('elementid');
 			}
 			var lastUpOrDown = localStorage.getItem("i"+incident_location_id+"");
 			
@@ -471,9 +472,6 @@ $(document).ready(function(){
 				actionType = "on";
 			}
 
-			//dataStr = "incident_location_id="+incident_location_id+ "&upOrDown="+upOrDown+"&actionType="+actionType;
-			//console.log('data passed to rate: '+ dataStr);
-			
 			$.ajax({
 				type: "POST",
 				url: "http://localhost/icdrris/Incident/rateUpOrDown",
@@ -525,8 +523,9 @@ $(document).ready(function(){
 								}
 							
 							}
-							displayIncidentDetails(incident_report_id, element_id, incident_location_id)	
-							
+							//backToIncidentList();
+							console.log("incident_report_id: "+incident_report_id+", incident_location_id: "+incident_location_id+", element_id: "+element_id);
+							displayIncidentDetails(incident_report_id, element_id, incident_location_id);	
 						}else{
 						
 							console.log('failed');

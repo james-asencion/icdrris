@@ -195,13 +195,13 @@
                                 <div class="tab-pane active" id="tab1">
                                     <ul class="nav nav-pills">
                                         <li class="active">
-                                          <a href="#" id="overview-li" data-incidentid="" onclick="displayDetails()"><i class="icon-white icon-info-sign"></i> Overview</a>
+                                          <a href="#" id="overview-li" data-incidentid=""><i class="icon-white icon-info-sign"></i> Overview</a>
                                         </li>
                                          <li>
-                                             <a href="#" id="approve-li" class="approve-li" data-incidentid="" onclick="rateIncident(1)" style="color:whitesmoke"> <span id="span-approve-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-up"></i> Approve</a>
+                                             <a href="#" id="approve-li" class="approve-li" data-incidentid=""  style="color:whitesmoke"> <span id="span-approve-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-up"></i> Witnessed</a>
                                          </li>
                                          <li>
-                                             <a href="#" id="disapprove-li" class="disapprove-li" data-incidentid="" onclick="rateIncident(0)" style="color:whitesmoke"> <span id="span-disapprove-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-down"></i> Disapprove</a>
+                                             <a href="#" id="disapprove-li" class="disapprove-li" data-incidentid="" onclick="rateIncident(0)" style="color:whitesmoke"> <span id="span-disapprove-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-down"></i> False Report</a>
                                          </li>
                                         <?php if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){?>
                                             <li>
@@ -338,7 +338,7 @@
 					
                 </div>
                 <div class="modal-footer">
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Back</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn btn-inverse">Back</a>
                 </div>
             </div> 
 			<!-- end modalDetailsVictim -->
@@ -369,7 +369,7 @@
 					echo form_submit($buttonProperties);
 					?>
 					</form>
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Cancel</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
                 </div>
             </div> 
 			<!-- end modalReportVictim -->
@@ -393,7 +393,7 @@
 						   echo form_submit($submit_property);
 					?>
 					</form>
-					<a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Cancel</a>
+					<a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
                 </div>
             </div> 
 			<!-- end modalUpdateVictim -->
@@ -409,8 +409,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" id="btnYesDeleteIncident" class="btn danger">Yes</a>
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
+                    <a href="#" id="btnYesDeleteIncident" class="btn btn-primary">Yes</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">No</a>
                 </div>
       </div> 
 			<!-- end modalDeleteIncident -->
@@ -419,15 +419,15 @@
 			 <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Victim</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" id="btnYesDeleteVictim" class="btn danger">Yes</a>
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
+                    <a href="#" id="btnYesDeleteVictim" class="btn btn-primary">Yes</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">No</a>
                 </div>
       </div> 
 			<!-- end modalDeleteVictim -->
