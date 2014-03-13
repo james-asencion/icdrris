@@ -267,9 +267,9 @@
                   <!-- onclick="displayList()-->
                  <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
-            <div id="customSearchBox">
+            <!--<div id="customSearchBox">
                 <br><input id="pac-input" type="text" placeholder="Search Box">
-            </div>
+            </div>-->
             <div id= "map_canvass">
               <div id="map_canvas" style="top:40px; width:100%; height:585px;"></div>
             </div>

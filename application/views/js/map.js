@@ -9,10 +9,12 @@ var markersArray1 = new Array();
 var markersArray2 = new Array();
 var output;
 var map;
+var element_id;
 
 $(document).ready(function() {
     getAllMapElements();
 //-------------THIS IS THE ALERT AND NOTIFICATIONS PART-----------------------
+console.log("here");
 var count = -1;
 
     setInterval(function(){    
@@ -22,11 +24,15 @@ var count = -1;
             success: function(data) {
                     //console.log("monitor invoked");
                     if (count != -1 && count != data){
-                        playWarningSound();
+                        getAllMapElements();
+                        setTimeout( function(){ 
+                            playWarningSound(); 
+                        }, 1000 );
+                        
                         console.log("new entry detected");
                     }
                     else{
-                        
+                        //playWarningSound();
                         console.log("cool, nothing new");
                     }
                     count = data;
@@ -240,12 +246,36 @@ var count = -1;
 
 });
 //-----------------------functions for the alrt and notifications -----------------------
+function testAjax1(handleData) {
+
+    $.ajax({
+        url: "http://localhost/icdrris/Incident/getNewIncident",
+        type: "POST",
+        success: function(data) {
+            handleData(data); 
+        },
+        error: function(){
+            console.log("fail");
+            console.log(msg);
+        }
+    });
+}
+
 function findMapElement(id){
+    //alert("findMapElement take array with size->"+mapElements.length);
     for(var i=0;i<mapElements.length;i++){
-        if(mapElements[i].id===id){
-            
-            alert("found a match at index: "+i);
-            return i;
+        console.log("element incidentLocationId: "+mapElements[i].incidentLocationId+" , current incident_location_id: "+id);
+        if(mapElements[i].incidentLocationId===id){
+
+            //alert("found a match at index: "+i);
+            //console.log("element incidentLocationId: "+mapElements[i].incidentLocationId+" , current incident_location_id: "+id);
+            incidentList();
+            displayIncidentDetails(mapElements[i].id,i, id);
+            //map.setCenter(mapElements[i].center);
+            mapElements[i].setVisible(true);
+            //return i;
+        }else{
+            //console.log("not found at index"+i);
         }
     }
 }
@@ -260,24 +290,10 @@ function countInitial(){
     });
 }
 function playWarningSound(){
-    console.log("a notification should appear");
-
-    $.ajax({
-            url: "http://localhost/icdrris/Incident/getNewIncident",
-            type: "POST",
-            success: function(data) {
-                    findMapElement(data);
-                }
+    testAjax1(function(data){
+        //alert("new incident reported has id ->"+data);
+        findMapElement(data);
     });
-
-    var notifDiv = document.createElement('notificationDiv');
-    notifDiv.innerHTML = "<br><br><div class=\"alert alert-error\">Test Notification</div>";
-    notifDiv.id = "notifications";
-    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(notifDiv);
-    //-----------------------------connect notification here------------------------------
-
-    //-------------------------------------------------------------------------------------
-
     $('#siren')[0].play();
     
     setTimeout( function(){ 
@@ -353,69 +369,68 @@ function initializeMap() {
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
-    var defaultBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(8.099003, 124.051510),
-      new google.maps.LatLng(8.395963, 124.425731));
-    map.fitBounds(defaultBounds);
+  //   var defaultBounds = new google.maps.LatLngBounds(
+  //     new google.maps.LatLng(8.099003, 124.051510),
+  //     new google.maps.LatLng(8.395963, 124.425731));
+  //   map.fitBounds(defaultBounds);
 
 
 
-    // Create the search box and link it to the UI element.
-    var input = /** @type {HTMLInputElement} */(
-        document.getElementById('pac-input'));
-    var inputDiv = document.getElementById('customSearchBox');
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputDiv);
+  //   // Create the search box and link it to the UI element.
+  //   var input = /** @type {HTMLInputElement} */(
+  //       document.getElementById('pac-input'));
+  //   var inputDiv = document.getElementById('customSearchBox');
+  //   map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputDiv);
 
-    var searchBox = new google.maps.places.SearchBox(
-    /** @type {HTMLInputElement} */(input));
+  //   var searchBox = new google.maps.places.SearchBox((input));
 
-    // [START region_getplaces]
-  // Listen for the event fired when the user selects an item from the
-  // pick list. Retrieve the matching places for that item.
-  google.maps.event.addListener(searchBox, 'places_changed', function() {
-    var places = searchBox.getPlaces();
+  //   // [START region_getplaces]
+  // // Listen for the event fired when the user selects an item from the
+  // // pick list. Retrieve the matching places for that item.
+  // google.maps.event.addListener(searchBox, 'places_changed', function() {
+  //   var places = searchBox.getPlaces();
 
-    for (var i = 0, marker; marker = markers[i]; i++) {
-      marker.setMap(null);
-    }
+  //   for (var i = 0, marker; marker = markers[i]; i++) {
+  //     marker.setMap(null);
+  //   }
 
-    // For each place, get the icon, place name, and location.
-    markers = [];
-    var bounds = new google.maps.LatLngBounds();
-    for (var i = 0, place; place = places[i]; i++) {
-      var image = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
+  //   // For each place, get the icon, place name, and location.
+  //   markers = [];
+  //   var bounds = new google.maps.LatLngBounds();
+  //   for (var i = 0, place; place = places[i]; i++) {
+  //     var image = {
+  //       url: place.icon,
+  //       size: new google.maps.Size(71, 71),
+  //       origin: new google.maps.Point(0, 0),
+  //       anchor: new google.maps.Point(17, 34),
+  //       scaledSize: new google.maps.Size(25, 25)
+  //     };
 
-      // Create a marker for each place.
-      var marker = new google.maps.Marker({
-        map: map,
-        icon: image,
-        title: place.name,
-        position: place.geometry.location
-      });
+  //     // Create a marker for each place.
+  //     var marker = new google.maps.Marker({
+  //       map: map,
+  //       icon: image,
+  //       title: place.name,
+  //       position: place.geometry.location
+  //     });
 
-      markers.push(marker);
+  //     markers.push(marker);
 
-      bounds.extend(place.geometry.location);
-    }
+  //     bounds.extend(place.geometry.location);
+  //   }
 
-    map.fitBounds(bounds);
-  });
+  //   map.fitBounds(bounds);
+  // });
   // [END region_getplaces]
 
   // Bias the SearchBox results towards places that are within the bounds of the
   // current map's viewport.
-  google.maps.event.addListener(map, 'bounds_changed', function() {
-    var bounds = map.getBounds();
-    searchBox.setBounds(bounds);
-  });
+  // google.maps.event.addListener(map, 'bounds_changed', function() {
+  //   var bounds = map.getBounds();
+  //   searchBox.setBounds(bounds);
+  // });
 
-   }
+}
 
     
 
@@ -509,13 +524,13 @@ function getAllMapElements() {
     console.log("***** getAllMapElements invoked *****");
     //var filterValue = document.filterForm2.filterMenu2.value;
     //console.log("FILTER VALUE 2: "+filterValue);
-
+    console.log("before initialize map");
     initializeMap();
-    
+    console.log("passed initialize map");
     $("#incidentList").html("");
     $("#respondentList").html("");
     $("#requestList").html("");
-    
+    console.log("reached before empty array");
     mapElements = [];
     //console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
 
