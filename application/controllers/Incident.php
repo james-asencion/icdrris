@@ -27,6 +27,10 @@ class Incident extends  CI_Controller
 		$count  = $this->IncidentModel->countIncidents();
 		echo $count;
 	}
+	function getNewIncident(){
+		$incident = $this->IncidentModel->getNewIncident();
+		echo $incident->incident_location_id;
+	}
 	function savePolygon(){
 		$incident_data = array(
 						'incident_description' => $this->input->post('description'),

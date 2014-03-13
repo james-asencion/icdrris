@@ -243,8 +243,9 @@ var count = -1;
 function findMapElement(id){
     for(var i=0;i<mapElements.length;i++){
         if(mapElements[i].id===id){
-            return i;
+            
             alert("found a match at index: "+i);
+            return i;
         }
     }
 }
@@ -260,8 +261,16 @@ function countInitial(){
 }
 function playWarningSound(){
     console.log("a notification should appear");
-    var notifDiv = document.createElement('notificationDiv');
 
+    $.ajax({
+            url: "http://localhost/icdrris/Incident/getNewIncident",
+            type: "POST",
+            success: function(data) {
+                    findMapElement(data);
+                }
+    });
+
+    var notifDiv = document.createElement('notificationDiv');
     notifDiv.innerHTML = "<br><br><div class=\"alert alert-error\">Test Notification</div>";
     notifDiv.id = "notifications";
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(notifDiv);
