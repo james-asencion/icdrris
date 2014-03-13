@@ -267,13 +267,14 @@
                   <!-- onclick="displayList()-->
                  <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
-
-            <div id= "map_canvass">
-              <div id="map_canvas" style="top:40px; width:100%; height:585px;"></div>   
-            </div>
             <div id="customSearchBox">
-              <br><input id="pac-input" type="text" placeholder="Search Box">
-			     </div>
+                <br><input id="pac-input" type="text" placeholder="Search Box">
+            </div>
+            <div id= "map_canvass">
+              <div id="map_canvas" style="top:40px; width:100%; height:585px;"></div>
+            </div>
+            
+           <audio id="siren" src="<?php echo base_url();?>audio/siren.wav" preload="auto" style="display:none"></audio>
 	<!-- MODALS: confirmVictim, confirmIncident, detailsVictim, reportVictim, deleteIncident, deleteVictim, updateVictim>
 			
  	<!-- modalConfirmVictim -->

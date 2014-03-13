@@ -12,7 +12,29 @@ var map;
 
 $(document).ready(function() {
     getAllMapElements();
-    //filterReports();
+//-------------THIS IS THE ALERT AND NOTIFICATIONS PART-----------------------
+var count = -1;
+
+    setInterval(function(){    
+        $.ajax({
+            url: "http://localhost/icdrris/Incident/getIncidentCount",
+            type: "POST",
+            success: function(data) {
+                    //console.log("monitor invoked");
+                    if (count != -1 && count != data){
+                        playWarningSound();
+                        console.log("new entry detected");
+                    }
+                    else{
+                        
+                        console.log("cool, nothing new");
+                    }
+                    count = data;
+            }
+        });
+    },5000);
+//----------------------------------------------------------------------------
+    //filterfilterReports();
 //------------------------FOR THE FILTER FUNCTION------------------------------
     $('.dropdown-menu').on('click', function(e) {
     
@@ -27,7 +49,7 @@ $(document).ready(function() {
             props += ($(b).is(':checked'))?Math.pow(2,i):0;
         });
         //sendProps(props);
-        console.log("current props ->"+props);
+        //console.log("current props ->"+props);
 
     //alert("Map Element size is now -->>> "+mapElements.length+"<<<------");
     $("#incidentList").html("");
@@ -35,9 +57,9 @@ $(document).ready(function() {
     $("#requestList").html("");
     for(var i=0;i<mapElements.length;i++){
 
-        console.log("current props ->"+props);
-        console.log("map elements props 4 ->"+mapElements[i].props4);
-        console.log("mapElements element Type->"+mapElements[i].elementType)
+        //console.log("current props ->"+props);
+        //console.log("map elements props 4 ->"+mapElements[i].props4);
+        //console.log("mapElements element Type->"+mapElements[i].elementType)
         var filterPropBinary = props.toString(2);
         var length = filterPropBinary.length;
 
@@ -48,12 +70,12 @@ $(document).ready(function() {
 
         if(!props){
             //do nothing
-            console.log("nothing to do here");
+            //console.log("nothing to do here");
             mapElements[i].setVisible(false);
         }
         //if the selected filter is only the map elements filter
         else if(!(props & 384) && !(props & 124)){
-            console.log("disregard filter for confirmed/unconfirmed AND disaster type");
+            //console.log("disregard filter for confirmed/unconfirmed AND disaster type");
             
             var evaluation = ((filterProp1 & mapElements[i].props1)|(props & mapElements[i].props4));
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -65,7 +87,7 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    console.log("********PASSED THE FILTER********");
+                    //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
                 else{
@@ -76,7 +98,7 @@ $(document).ready(function() {
         }
         //if the selected filter is only the disaster type filter
         else if(!(props & 384) && !(props & 3)){
-            console.log("disregard filter for markers/polygons AND confirmed/unconfirmed");
+            //console.log("disregard filter for markers/polygons AND confirmed/unconfirmed");
             //console.log("element no."+i+" , props2="+mapElements[i].props2);
             //console.log("element no."+i+" , props4="+mapElements[i].props4);
             mapElements[i].setVisible((filterProp2 & mapElements[i].props2)|(props & mapElements[i].props4)?((props)?true:false):false);
@@ -86,7 +108,7 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    console.log("********PASSED THE FILTER********");
+                    //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
                 else{
@@ -97,7 +119,7 @@ $(document).ready(function() {
         }
         //if the selected filter is the confirmed/unconfirmed filter
         else if(!(props & 3) && !(props & 124)){
-            console.log("disregard filter for marrker/polygon AND disaster type");
+            //console.log("disregard filter for marrker/polygon AND disaster type");
             
             var evaluation = ((filterProp3 & mapElements[i].props3)|(props & mapElements[i].props4));
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -109,7 +131,7 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    console.log("********PASSED THE FILTER********");
+                    //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
                 else{
@@ -120,11 +142,11 @@ $(document).ready(function() {
         }
         //when the filters selected are the element type and and disaster type filters
         else if(!(props & 384)){
-            console.log("disregard filter for confirmed/unconfirmed");
+            //console.log("disregard filter for confirmed/unconfirmed");
             
             var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp2 & mapElements[i].props2))|(props & mapElements[i].props4);
-            console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
-            console.log("evaluation is "+evaluation);
+            //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
+            //console.log("evaluation is "+evaluation);
             mapElements[i].setVisible((evaluation)?((props)?true:false):false);
             if(evaluation) 
             {
@@ -132,7 +154,7 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    console.log("********PASSED THE FILTER********");
+                    //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
                 else{
@@ -143,7 +165,7 @@ $(document).ready(function() {
         }
         //when the selected filters are the element type and confirmation 
         else if(!(props & 124)){
-            console.log("disregard filter for disaster type");
+            //console.log("disregard filter for disaster type");
             
             var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -155,7 +177,7 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    console.log("********PASSED THE FILTER********");
+                    //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
                 else{
@@ -166,7 +188,7 @@ $(document).ready(function() {
         }
         //when the selected filters are the disaster type and confirmation
         else if(!(props & 3)){
-            console.log("disregard filter for element type");
+            //console.log("disregard filter for element type");
             
             var evaluation = ((filterProp2 & mapElements[i].props2) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -178,7 +200,7 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    console.log("********PASSED THE FILTER********");
+                    //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
                 else{
@@ -189,7 +211,7 @@ $(document).ready(function() {
         }
         //when all the filters are selected
         else{
-            console.log("APPLY ALL FILTERS");
+            //console.log("APPLY ALL FILTERS");
             
             var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp2 & mapElements[i].props2) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -201,7 +223,7 @@ $(document).ready(function() {
                     appendToRespondentList(mapElements[i]);
                 }
                 else if(mapElements[i].elementType===4){
-                    console.log("********PASSED THE FILTER********");
+                    //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
                 else{
@@ -212,12 +234,45 @@ $(document).ready(function() {
         }
     }
 
-console.log("=================================================================================================================================");
+//console.log("=================================================================================================================================");
     });
 //------------------------------------------------------------------------------
 
 });
+//-----------------------functions for the alrt and notifications -----------------------
+function countInitial(){
+    //alert("function called inside document ready!");
+    $.ajax({
+            url: "http://localhost/icdrris/Incident/getIncidentCount",
+            type: "POST",
+            success: function(data) {
+                    return data;
+                }
+    });
+}
+function playWarningSound(){
+    console.log("a notification should appear");
+    var notifDiv = document.createElement('notificationDiv');
 
+    notifDiv.innerHTML = "<br><br><div class=\"alert alert-error\">Test Notification</div>";
+    notifDiv.id = "notifications";
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(notifDiv);
+    //-----------------------------connect notification here------------------------------
+
+    //-------------------------------------------------------------------------------------
+
+    $('#siren')[0].play();
+    
+    setTimeout( function(){ 
+    $('#siren')[0].pause(); 
+    }, 3000 );
+
+    setTimeout( function(){ 
+    $("#notifications").html('');
+    }, 20000 );
+
+}
+//-----------------------------------------------------------------------------------------
 function createPropertiesArray1(mapElement){
 
     var elementType = mapElement.getAttribute("elementType");
@@ -285,6 +340,8 @@ function initializeMap() {
       new google.maps.LatLng(8.099003, 124.051510),
       new google.maps.LatLng(8.395963, 124.425731));
     map.fitBounds(defaultBounds);
+
+
 
     // Create the search box and link it to the UI element.
     var input = /** @type {HTMLInputElement} */(
@@ -443,7 +500,7 @@ function getAllMapElements() {
     $("#requestList").html("");
     
     mapElements = [];
-    console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
+    //console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
 
     //This is the option to change the polygon color according to the disaster type
     var polygonColor = {
@@ -523,7 +580,7 @@ function getAllMapElements() {
     downloadUrl("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data) {
 
         var xml = data.responseXML;
-        console.log(xml);
+        //console.log(xml);
         var polygons = xml.documentElement.getElementsByTagName("polygons")[0].getElementsByTagName("polygon");
         var markers = xml.documentElement.getElementsByTagName("markers")[0].getElementsByTagName("marker");
         var respondents = xml.documentElement.getElementsByTagName("responseOrganizations")[0].getElementsByTagName("responseOrganization");
@@ -619,7 +676,7 @@ function getAllMapElements() {
 
 
         }
-        console.log(">>>>>>>>>>>>>>>value after polygon loop"+polygonIndex+"<<<<<<<<<<<<<<<<<<<<<");
+        //console.log(">>>>>>>>>>>>>>>value after polygon loop"+polygonIndex+"<<<<<<<<<<<<<<<<<<<<<");
         var markerIndex=polygonIndex+1;
         var i=0;
         for (i = 0; i < markers.length; i++) {
@@ -856,7 +913,7 @@ function appendToIncidentList(mapElement) {
 
     //append to the list
     var div = document.getElementById('incidentList');
-    console.log(div);
+    //console.log(div);
     div.innerHTML = div.innerHTML + listItem;
 
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
@@ -908,7 +965,7 @@ function appendToRespondentList(mapElement) {
 
 function appendToRequestList(mapElement) {
 
-    console.log("append to request list invoked");
+    //console.log("append to request list invoked");
     
     var listItem="";
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
@@ -946,6 +1003,8 @@ function backToHome(){
 function incidentList(){
     
     $("#homeView").hide();
+    $("#subBreadCrumb1, .subBreadCrumb1").empty();
+    $(".subBreadCrumb2").empty();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToIncidentList()" class="subBreadCrumb1" >Incidents List</a><span class="divider">/</span></li>');
     openSideBar();
     $("#incidentList").show("fast");
@@ -962,21 +1021,21 @@ function requestList(){
     $("#requestList").show("fast");
 }
 function backToIncidentList() {
-    console.log(">>>>---backToIncidentList invoked---<<<<<");
+    //console.log(">>>>---backToIncidentList invoked---<<<<<");
     $(".subBreadCrumb2").remove();
     $(".incidentTabbable").hide();
     $("#IncidentTabbable").hide("fast");
     $("#incidentList").show("fast");
 }
 function backToRespondentList() {
-    console.log(">>>>---backToRespondentList invoked---<<<<<");
+    //console.log(">>>>---backToRespondentList invoked---<<<<<");
     $(".subBreadCrumb2").remove();
     $(".respondentTabbable").hide();
     $("#respondentTabbable").hide("fast");
     $("#respondentList").show("fast");
 }
 function backToRequestList() {
-    console.log(">>>>---backToRequestList invoked---<<<<<");
+    //console.log(">>>>---backToRequestList invoked---<<<<<");
     $(".subBreadCrumb2").remove();
     $(".requestTabbable").hide();
     $("#requestTabbable").hide("fast");
@@ -985,7 +1044,7 @@ function backToRequestList() {
 
 function displayIncidentDetails(incidentReportId, elementId, incident_location_id) {
 
-    console.log('display Incident details clicked with incident_report_id ->'+incidentReportId);
+    //console.log('display Incident details clicked with incident_report_id ->'+incidentReportId);
     $("#incidentList").hide("fast");
     $("#table-rows-victims").removeData("fast");
     openSideBar();
@@ -998,13 +1057,13 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
         type: "POST",
         data: {incident_report_id:incidentReportId},
         success: function(msg) {
-            console.log("success -TITLE");
+            //console.log("success -TITLE");
 			
             if (msg == 'error') {
-                console.log("Error getIncidentDetails - TITLE doy.\n ");
+                //console.log("Error getIncidentDetails - TITLE doy.\n ");
                 $("#incident-title").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-                console.log("Success getIncidentTitle");
+                //console.log("Success getIncidentTitle");
                 $("#incident-title").html(msg);
                 var str = msg.substring(0,30) + "...";
                 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + str + '</a></li>');
@@ -1016,8 +1075,8 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
             }
         },
         error: function() {
-            console.log("system error oy!");
-            console.log(values);
+            //console.log("system error oy!");
+            //console.log(values);
             $("#incident-title").html("Sorry, system error.");
             $("#incidentTabbable").show("slow");
         }
@@ -1041,8 +1100,8 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
             }
         },
         error: function() {
-            console.log("system error oy!");
-            console.log(values);
+            //console.log("system error oy!");
+            //console.log(values);
             $("#incident-information").html("Sorry, system error.");
             $("#incidentTabbable").show("slow");
         }
@@ -1056,21 +1115,21 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
         type: "POST",
         data: {id:incidentReportId},
         success: function(msg) {
-            console.log("success");
+            //console.log("success");
             //console.log(msg);
             if (msg == 'error') {
-                console.log("naay mali sa query getIncidentDetails doy.\n ");
+                //console.log("naay mali sa query getIncidentDetails doy.\n ");
                 $("#tabbable").show("slow");
                 $("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-                console.log("success pa jud");
+                //console.log("success pa jud");
                 $("#incidentTabbable").show("slow");
                 $("#table-rows-victims").html(msg);
             }
         },
         error: function() {
-            console.log("system error oy!");
-            console.log(values);
+            //console.log("system error oy!");
+            //console.log(values);
             $("#tabbable").show("slow");
             $("#table-rows-victims").html("Sorry, system error.");
         }
@@ -1140,14 +1199,14 @@ function openSideBar() {
 function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
 {
 
-    console.log('displayDetails invoked with id'+incidentReportId);
+    //console.log('displayDetails invoked with id'+incidentReportId);
     openSideBar();
     backToHome();
     $("#homeView").hide();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToIncidentList()" class="subBreadCrumb1" >Incidents List</a><span class="divider">/</span></li>');
     $(".subBreadCrumb2").remove();
 
-    console.log(incidentReportId);
+   // console.log(incidentReportId);
 
      /* Send the data using post and put results to the members table */
     request = $.ajax({
@@ -1155,13 +1214,13 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
         type: "POST",
         data: {incident_report_id:incidentReportId},
         success: function(msg) {
-            console.log("success -TITLE");
+            //console.log("success -TITLE");
             //console.log(msg);
             if (msg == 'error') {
-                console.log("naay mali sa query getIncidentDetails - TITLE doy.\n ");
+                //console.log("naay mali sa query getIncidentDetails - TITLE doy.\n ");
                 $("#incident-title").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-                console.log("success pa jud title");
+               // console.log("success pa jud title");
                 $("#incident-title").html(msg);
                 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
                 $("#victims-tab, #details-tab, #overview-li, #editinfo-li, #delete-li, #displaychart-li, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
@@ -1169,8 +1228,8 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
             }
         },
         error: function() {
-            console.log("system error oy!");
-            console.log(values);
+            //console.log("system error oy!");
+            //console.log(values);
             $("#incident-title").html("Sorry, system error.");
             $("#incidentTabbable").show("slow");
         }
@@ -1182,21 +1241,21 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
         type: "POST",
         data: {incident_location_id:incidentLocationId},
         success: function(msg) {
-            console.log("success");
+            //console.log("success");
             //console.log(msg);
             if (msg == 'error') {
-                console.log("naay mali sa query getIncidentDetails doy.\n ");
+                //console.log("naay mali sa query getIncidentDetails doy.\n ");
                 $("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
                 $("#tabbable").show("slow");
             } else {
-                console.log("success pa jud");
+                //console.log("success pa jud");
                 $("#incident-information").html(msg);
                 $("#tabbable").show("slow");
             }
         },
         error: function() {
-            console.log("system error oy!");
-            console.log(values);
+            //console.log("system error oy!");
+            //console.log(values);
             $("#incident-information").html("Sorry, system error.");
             $("#incidentTabbable").show("slow");
         }
@@ -1208,21 +1267,21 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
         type: "POST",
         data: {id:incidentReportId},
         success: function(msg) {
-            console.log("success");
+            //console.log("success");
             //console.log(msg);
             if (msg == 'error') {
-                console.log("naay mali sa query getIncidentDetails doy.\n ");
+                //console.log("naay mali sa query getIncidentDetails doy.\n ");
                 $("#tabbable").show("slow");
                 $("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-                console.log("success pa jud");
+                //console.log("success pa jud");
                 $("#tabbable").show("slow");
                 $("#table-rows-victims").html(msg);
             }
         },
         error: function() {
-            console.log("system error oy!");
-            console.log(values);
+            //console.log("system error oy!");
+            //console.log(values);
             $("#incidentTabbable").show("slow");
             $("#table-rows-victims").html("Sorry, system error.");
         }
@@ -1235,7 +1294,7 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
 function displayRespondentDetailsFromMap(deployment_id,element)
 {
 
-    console.log('displayDetails invoked with id');
+    //console.log('displayDetails invoked with id');
     backToHome();
     $("#homeView").hide();
     openSideBar();
@@ -1254,8 +1313,8 @@ function displayRespondentDetailsFromMap(deployment_id,element)
             $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + name + '</a></li>');
         },
         error: function() {
-            console.log("error retrieving response organization name");
-            console.log(name);
+            //console.log("error retrieving response organization name");
+            //console.log(name);
         }
     });
     request = $.ajax({
@@ -1266,8 +1325,8 @@ function displayRespondentDetailsFromMap(deployment_id,element)
                  $("#respondent-information").html(msg);
         },
         error: function() {
-            console.log("error retrieving response organization name");
-            console.log(msg);
+            //console.log("error retrieving response organization name");
+            //console.log(msg);
         }
     });
 
@@ -1277,12 +1336,12 @@ function displayRespondentDetailsFromMap(deployment_id,element)
         type: "POST",
         data: {orgId:deployment_id},
         success: function(msg) {
-            console.log("successfully retrieved all members");
+            //console.log("successfully retrieved all members");
             $("#respondent-membersTable").html(msg);
         },
         error: function() {
-            console.log("unable to fetch deployed members table");
-            console.log(msg);
+            //console.log("unable to fetch deployed members table");
+            //console.log(msg);
         }
     });
 
@@ -1291,7 +1350,7 @@ function displayRespondentDetailsFromMap(deployment_id,element)
 function displayRespondentDetails(deployment_id,elementId)
 {
 
-    console.log('displayDetails invoked with id->'+deployment_id);
+    //console.log('displayDetails invoked with id->'+deployment_id);
     //$("#subBreadCrumb1").remove();
     $("#respondentList").hide("fast");
     //openSideBar();
@@ -1311,8 +1370,8 @@ function displayRespondentDetails(deployment_id,elementId)
             $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + name + '</a></li>');
         },
         error: function() {
-            console.log("error retrieving response organization name");
-            console.log(name);
+            //console.log("error retrieving response organization name");
+            //console.log(name);
         }
     });
     request = $.ajax({
@@ -1323,8 +1382,8 @@ function displayRespondentDetails(deployment_id,elementId)
                  $("#respondent-information").html(msg);
         },
         error: function() {
-            console.log("error retrieving response organization deployment details");
-            console.log(msg);
+            //console.log("error retrieving response organization deployment details");
+            //console.log(msg);
         }
     });
 
@@ -1334,12 +1393,12 @@ function displayRespondentDetails(deployment_id,elementId)
         type: "POST",
         data: {orgId:deployment_id},
         success: function(msg) {
-            console.log("successfully retrieved all members");
+            //console.log("successfully retrieved all members");
             $("#respondent-membersTable").html(msg);
         },
         error: function() {
-            console.log("unable to fetch deployed members table");
-            console.log(msg);
+            //console.log("unable to fetch deployed members table");
+            //console.log(msg);
         }
     });
 
@@ -1358,7 +1417,7 @@ function displayRespondentDetails(deployment_id,elementId)
 function displayRequestDetailsFromMap(request_id, request_info_source)
 {
 
-    console.log('displayRequest invoked with id->'+request_id);
+    //console.log('displayRequest invoked with id->'+request_id);
     $(".subBreadCrumb").remove();
     $("#requestList").hide("fast");
     openSideBar();
@@ -1373,8 +1432,8 @@ function displayRequestDetailsFromMap(request_id, request_info_source)
                 $("#requestTabbable").show("slow");
         },
         error: function(header) {
-            console.log("error retrieving request details");
-            console.log(header);
+            //console.log("error retrieving request details");
+            //console.log(header);
         }
     });
 
@@ -1387,8 +1446,8 @@ function displayRequestDetailsFromMap(request_id, request_info_source)
             $("#request-information").html(details);
         },
         error: function() {
-            console.log("unable to fetch request details");
-            console.log(details);
+            //console.log("unable to fetch request details");
+            //console.log(details);
         }
     });
 
@@ -1397,7 +1456,7 @@ function displayRequestDetailsFromMap(request_id, request_info_source)
 function displayRequestDetails(request_id, elementId)
 {
 
-    console.log('displayRequest invoked with id->'+request_id);
+    //console.log('displayRequest invoked with id->'+request_id);
     $(".subBreadCrumb").remove();
     $("#requestList").hide("fast");
     openSideBar();
@@ -1414,8 +1473,8 @@ function displayRequestDetails(request_id, elementId)
                 $("#requestTabbable").show("slow");
         },
         error: function(header) {
-            console.log("error retrieving request details");
-            console.log(header);
+            //console.log("error retrieving request details");
+            //console.log(header);
         }
     });
 
@@ -1428,8 +1487,8 @@ function displayRequestDetails(request_id, elementId)
             $("#request-information").html(details);
         },
         error: function() {
-            console.log("unable to fetch request details");
-            console.log(details);
+            //console.log("unable to fetch request details");
+            //console.log(details);
         }
     });
 
@@ -1443,7 +1502,7 @@ function victimsTab() {
 
 		var incident_report_id = $(".victims-tab, #victims-tab").data('incidentid');
        
-	   console.log(incident_report_id);
+	   //console.log(incident_report_id);
       //  var dataStr = 'id=' + incident_report_id;
 
         /* Send the data using post and put results to the members table */
@@ -1452,21 +1511,21 @@ function victimsTab() {
             type: "POST",
             data: {id:incident_report_id},
             success: function(msg) {
-                console.log("success");
+                //console.log("success");
                 //console.log(msg);
                 if (msg == 'error') {
-                    console.log("naay mali sa query getIncidentDetails doy.\n ");
+                    //console.log("naay mali sa query getIncidentDetails doy.\n ");
                     $("#tabbable").show("slow");
                     $("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
                 } else {
-                    console.log("success pa jud");
+                    //console.log("success pa jud");
                     $("#tabbable").show("slow");
                     $("#table-rows-victims").html(msg);
                 }
             },
             error: function() {
-                console.log("system error oy!");
-                console.log(values);
+                //console.log("system error oy!");
+                //console.log(values);
                 $("#tabbable").show("slow");
                 $("#table-rows-victims").html("Sorry, system error.");
             }
