@@ -23,6 +23,10 @@ class Incident extends  CI_Controller
 		$this->load->view('markerView');
 		$this->load->view('includes/footer');
 	}
+	function getIncidentCount(){
+		$count  = $this->IncidentModel->countIncidents();
+		echo $count;
+	}
 	function savePolygon(){
 		$incident_data = array(
 						'incident_description' => $this->input->post('description'),
@@ -108,7 +112,7 @@ class Incident extends  CI_Controller
                             console.log("incident rate: "+ rateClick+ " i'.$incident_location_id.'.");
                             	if(rateClick == null){
                                 	$("#approve-li'.$incident_location_id.'").css("background-color", "");
-                                	$("#diapprove-li'.$incident_location_id.'").css("background-color", "");
+                                	$("#disapprove-li'.$incident_location_id.'").css("background-color", "");
                                 	console.log("incident rate color: none since null");
                             	}                                                                  
 
@@ -121,7 +125,7 @@ class Incident extends  CI_Controller
                             	if(rateClick == "rateTrue"){
                                 	//if approved,  retain thumbsup color
                                 	$("#approve-li'.$incident_location_id.'").css("background-color", "green");
-                                	$("#diapprove-li'.$incident_location_id.'").css("background-color", "");
+                                	$("#disapprove-li'.$incident_location_id.'").css("background-color", "");
                                 	console.log("incident Thumbs up color green");
                             	}
                                                            
