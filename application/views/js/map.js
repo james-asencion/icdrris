@@ -538,15 +538,19 @@ function getAllMapElements() {
     var polygonColor = {
         Flashflood: {
             //blue
-            fillColor: "#0404B4"
+            polyColor: "#2233F2"
         },
         Mudslide: {
             //brown
-            fillColor: "#7A4444"
+            polyColor: "#382723"
         },
         Landslide: {
             //red
-            fillColor: "#E92222"
+            polyColor: "#382723"
+        },
+        Tsunami: {
+            //red
+            polyColor: "#0EACCC"
         }
 
     };
@@ -554,15 +558,19 @@ function getAllMapElements() {
     var polygonStroke = {
         Flashflood: {
             //blue
-            fillColor: "#0404B4"
+            stroke: "#2233F2"
         },
         Mudslide: {
             //brown
-            fillColor: "#7A4444"
+            stroke: "#382723"
         },
         Landslide: {
             //red
-            fillColor: "#E92222"
+            stroke: "#382723"
+        },
+        Tsunami: {
+            //red
+            stroke: "#0EACCC"
         }
     };
 
@@ -596,6 +604,9 @@ function getAllMapElements() {
         Landslide: {
             icon: 'icons/nd/avalanche1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
+        },
+        Tsunami: {
+            icon: 'icons/tsunami.png'
         },
         Default: {
             icon: 'icons/earthquake.png',
@@ -654,6 +665,8 @@ function getAllMapElements() {
             var myPolygon;
             var center;
             var points = polygons[polygonIndex].getElementsByTagName("point");
+            var color = polygonColor[disasterType] || {};
+            var stroke = polygonStroke[disasterType] || {};
 
             var polygonsArray2 = new Array();
 
@@ -673,11 +686,11 @@ function getAllMapElements() {
             var polyOptions = {
                 paths: coordinates,
                 visible: false, 
-                strokeColor: polygonColor[disasterType],
+                strokeColor: color.polyColor,
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
-                fillColor: polygonStroke[disasterType],
-                fillOpacity: 0.35,
+                fillColor: stroke.stroke,
+                fillOpacity: 0.70,
                 arrId: polygonIndex,
                 id: incident_report_id,
                 incidentLocationId: incident_location_id,
