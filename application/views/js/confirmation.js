@@ -447,15 +447,15 @@ $(document).ready(function(){
 			if(rateType == 0){
 				upOrDown = "rateFalse";
 				//incident_location_id = $('.disapprove-li').data('incidentid');
-				incident_report_id = $('.disapprove-li'+incident_location_id+'').data('incidentreportid');
-				element_id = $('.disapprove-li'+incident_location_id+'').data('elementid');
+				incident_report_id = $('#disapprove-li'+incident_location_id+'').data('incidentreportid');
+				element_id = $('#disapprove-li'+incident_location_id+'').data('elementid');
                                 
 			}
 			else{
 				upOrDown = "rateTrue";
 				//incident_location_id = $('.approve-li').data('incidentid');
-				incident_report_id = $('.approve-li'+incident_location_id+'').data('incidentreportid');
-				element_id = $('.approve-li'+incident_location_id+'').data('elementid');
+				incident_report_id = $('#approve-li'+incident_location_id+'').data('incidentreportid');
+				element_id = $('#approve-li'+incident_location_id+'').data('elementid');
 			}
 			var lastUpOrDown = localStorage.getItem("i"+incident_location_id+"");
 			

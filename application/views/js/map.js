@@ -240,6 +240,14 @@ var count = -1;
 
 });
 //-----------------------functions for the alrt and notifications -----------------------
+function findMapElement(id){
+    for(var i=0;i<mapElements.length;i++){
+        if(mapElements[i].id===id){
+            return i;
+            alert("found a match at index: "+i);
+        }
+    }
+}
 function countInitial(){
     //alert("function called inside document ready!");
     $.ajax({
