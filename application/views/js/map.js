@@ -889,9 +889,10 @@ function appendToIncidentList(mapElement) {
     //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
     //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
     //console.log("append to list started here with id");
-
-    
+	
     var listItem="";
+	
+
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
@@ -913,9 +914,13 @@ function appendToIncidentList(mapElement) {
 
     //append to the list
     var div = document.getElementById('incidentList');
-    //console.log(div);
-    div.innerHTML = div.innerHTML + listItem;
-
+    console.log(div);
+	if(listItem == ""){
+		div.innerHTML = div.innerHTML + "No results found.";
+	}
+	else{
+		div.innerHTML = div.innerHTML + listItem;
+	}
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
 }
 
@@ -1003,8 +1008,8 @@ function backToHome(){
 function incidentList(){
     
     $("#homeView").hide();
-    $("#subBreadCrumb1, .subBreadCrumb1").empty();
-    $(".subBreadCrumb2").empty();
+	$("#subBreadCrumb1,.subBreadCrumb1").empty();
+	$(".subBreadCrumb2").empty();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToIncidentList()" class="subBreadCrumb1" >Incidents List</a><span class="divider">/</span></li>');
     openSideBar();
     $("#incidentList").show("fast");
@@ -1065,8 +1070,10 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
             } else {
                 //console.log("Success getIncidentTitle");
                 $("#incident-title").html(msg);
+				
+				$(".subBreadCrumb2").empty();
                 var str = msg.substring(0,30) + "...";
-                $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + str + '</a></li>');
+				 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + str + '</a></li>');
                 
                 $("#victims-tab, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
 		
@@ -1095,6 +1102,8 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
                 $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
                 $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId)
                 $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId)
+                $(".approve-li").attr("onclick", "rateIncident(1,"+incident_location_id+")")
+                $(".disapprove-li").attr("onclick", "rateIncident(0,"+incident_location_id+")")
                 $("#incident-information").html(msg);
                 $("#incidentTabbable").show("slow");
             }
@@ -1148,45 +1157,7 @@ function viewRequestOnMap(elementId, requestId){
 }
 
 //---------------------------------------------- SECOND FUNCTION FOR THE MAP BINDING ------------------------------------------------------------
-/**
-function getTrueRate(incident_location_id){
-    var trueRate;
-     $(document).ready(function(){
-        $.ajax({
-                  url: "http://localhost/icdrris/Login/get_session",
-                  type: "POST",
-                  data: {},
-                  success: function(msg){
-                          trueRate= msg;
-                  },
-                  error: function(msg){
-                          alert('Error!');
-                  }
-        });
-    });
-  
-    return trueRate;
-}
 
-function getFalseRate(incident_location_id){
-     var falseRate="";
-    $(document).ready(function(){
-        $.ajax({
-                  url: "http://localhost/icdrris/Incident/getFalseRate",
-                  type: "POST",
-                  data: {incident_location_id:incident_location_id},
-                  success: function(msg){
-                          falseRate= msg;
-                  },
-                  error: function(msg){
-                          alert('Error!');
-                  }
-        });
-    });
-  
-    return falseRate;
-}
-*/
 function openSideBar() {
     $("#map_canvass").removeClass("span12");
     $("#map_canvass").addClass("span8"); //added
@@ -1222,6 +1193,7 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
             } else {
                // console.log("success pa jud title");
                 $("#incident-title").html(msg);
+				$("#subBreadCrumb2").empty();
                 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
                 $("#victims-tab, #details-tab, #overview-li, #editinfo-li, #delete-li, #displaychart-li, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
                 $("#incidentTabbable").show("slow");
