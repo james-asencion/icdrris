@@ -11,19 +11,27 @@
        <!-- Bootstrap -->
  
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-                <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        
+        <!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/deployLivelihoodScript.js"></script>
+        <script src="<?php echo base_url();?>application/views/js/livelihoodModal.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/livelihoodMap.js"></script>
 
     	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     	
     	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script> 
     	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>  
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
-
-
-
-
+	
+	    <!-- x-editable (bootstrap version) -->
+	    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+	    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/js/bootstrap-editable.min.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/x-editable.js"></script>
+		<script src="<?php echo base_url();?>application/views/js/x-editable1.js"></script>
 
 
 		<style type = "text/css">
@@ -32,6 +40,33 @@
 			#map_canvas img{max-width:none}
 			#map_canvas object{max-width:none}
 		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+			//localStorage.clear();
+				$(".trigger").click(function(){
+                    $("#map_canvass").removeClass("span12");
+					$("#map_canvass").addClass("span8"); //added
+					$("#map_canvass").css({"float":"right"}); //added					
+                                        lastCenter=map.getCenter(); 
+                                        google.maps.event.trigger(map_canvas, 'resize');
+                                        map.setCenter(lastCenter);
+                                        $(".panel").toggle("fast");
+					$(this).toggleClass("active");
+					return false;
+				});
+				$(".trigger").click(function(){
+					if (!$(this).hasClass("active")) {
+					 $("#map_canvass").removeClass("span8");
+					 $("#map_canvass").addClass("span12");
+                                        lastCenter=map.getCenter(); 
+                                        google.maps.event.trigger(map_canvas, 'resize');
+                                        map.setCenter(lastCenter);
+					 }
+				});
+			});
+                       
+		</script>
+		
   </head>
   
   <!--onload="initializeMap()"-->
@@ -56,7 +91,7 @@
                     <li class="dropdown-submenu">
                        
                             <li> <a href="#modalReportIncident" role="button" data-toggle="modal"><i class = "icon-bell"></i> Report New Incident </a></li>
-                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Incidents</a></li>
+                            <li><a href = "javascript:incidentList()"><i class = "icon-briefcase"></i> List of Incidents</a></li>
 
 				</ul>
 					</li>
@@ -181,7 +216,7 @@
 		<?php if(!$this->session->userdata('is_logged_in')){ ?>
 			<ul class="nav pull-right">
 				<li>
-                    <a href="#" id="login-btn">Log-in</a>
+                    <a href="#modalLogin" id="login-btn" class="login-btn" role="button" data-toggle="modal">Log-in</a>
 				</li>
 			</ul>
 		<?php  

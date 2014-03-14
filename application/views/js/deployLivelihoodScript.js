@@ -1,5 +1,16 @@
 $(document).ready(function(){
 
+
+$('.grant-map').on('click', function(e){
+	e.preventDefault();
+	alert('clicked');
+	var id = $(this).data('id');
+	$('#modalLivelihoodProgramList').data('livelihood_org_id',id);
+
+	alert("livelihood organization id: "+id);
+	$('#modalLivelihoodProgramList').modal('show');
+});
+
 $('.confirm-deploy').on('click', function(e){
 	e.preventDefault();
 	console.log('clicked');
@@ -409,3 +420,14 @@ $("#btnSubmitNewResource").click(function(){
 });
 
 });
+
+// function grantLivelihoodProgramFromMap(id){
+// 	//e.preventDefault();
+// 	alert('clicked');
+// 	var id = $(this).data('id');
+// 	$('#modalLivelihoodProgramList').data('livelihood_org_id',id);
+
+// 	alert("livelihood organization id: "+id);
+// 	$('#modalLivelihoodProgramList').modal('show');
+
+// }

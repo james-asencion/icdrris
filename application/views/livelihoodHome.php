@@ -114,22 +114,16 @@
             </div>
           <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm0">
-                    <div class="center" align="center"><p>Response Operations:</p>   
+                    <div class="center" align="center"><p>Livelihood Mapping:</p>   
                           <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
-                              Response operations
+                              Livelihood Orgs
                               <b class="caret"></b>
                           </a>
-                          <ul class="dropdown-menu dropdown-menu-form" role="menu">
+                          <ul class="dropdown-menu dropdown-menu-form" role="menu"> 
                               <li>
                                   <label class="checkbox">
                                       <input type="checkbox">
-                                      View Deployed Respondents
-                                  </label>
-                              </li>
-                              <li>
-                                  <label class="checkbox">
-                                      <input type="checkbox">
-                                      Reported Requests
+                                      Livelihood Organizations
                                   </label>
                               </li>                                                                                                                      
                           </ul>
@@ -170,8 +164,7 @@
           <!-- HOME VIEW -->
           <div class="span12" id="homeView">
               <a onclick="incidentList()" id="a-ListofIncidents"> Incidents</a><br>
-              <a onclick="respondentList()" id="a-ListofRespOrg"> Response Organizations</a><br>
-              <a onclick="requestList()" id="a-ListofRequest"> List of Requests</a><br>
+              <a onclick="livelihoodList()" id="a-ListofRespOrg"> Livelihood Organizations</a><br>
           </div>
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
@@ -195,13 +188,13 @@
                                 <div class="tab-pane active" id="tab1">
                                     <ul class="nav nav-pills">
                                         <li class="active">
-                                          <a href="#" id="overview-li" data-incidentid=""><i class="icon-white icon-info-sign"></i> Overview</a>
+                                          <a href="#" id="overview-li" data-incidentid="" onclick="displayDetails()"><i class="icon-white icon-info-sign"></i> Overview</a>
                                         </li>
                                          <li>
-                                             <a href="#" id="approve-li" class="approve-li" data-incidentid=""  style="color:whitesmoke"> <span id="span-approve-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-up"></i> Witnessed</a>
+                                             <a href="#" id="approve-li" class="approve-li" data-incidentid="" onclick="rateIncident(1)" style="color:whitesmoke"> <span id="span-approve-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-up"></i> Approve</a>
                                          </li>
                                          <li>
-                                             <a href="#" id="disapprove-li" class="disapprove-li" data-incidentid="" onclick="rateIncident(0)" style="color:whitesmoke"> <span id="span-disapprove-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-down"></i> False Report</a>
+                                             <a href="#" id="disapprove-li" class="disapprove-li" data-incidentid="" onclick="rateIncident(0)" style="color:whitesmoke"> <span id="span-disapprove-li" style="font-size:21px"></span> <i class="icon-white icon-thumbs-down"></i> Disapprove</a>
                                          </li>
                                         <?php if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){?>
                                             <li>
@@ -245,19 +238,13 @@
 
 
         <!-- LIST OF RESPONDENTS -->
-        <div class = "span12" id="respondentList" style="display:none"></div>
+        <div class = "span12" id="livelihoodList" style="display:none"></div>
 
             <!--  DISPLAY RESPONDENT DETAILS -->
-            <div id="respondentTabbable" class="respondentTabbable" style="display:none">
-              <div id="respondent-information" ></div>
-              <div id="respondent-membersTable" class="table table-condensed " style="color:#cccccc;"></div>
+            <div id="livelihoodTabbable" class="livelihoodTabbable" style="display:none">
+              <div id="livelihood-information" ></div>
+              <div id="livelihood-membersTable" class="table table-condensed " style="color:#cccccc;"></div>
             </div>
-
-        <!-- LIST OF REQUESTS -->
-        <div class = "span12" id="requestList" style="display:none"></div>
-          <!-- DISPLAY REQUEST DETAILS  -->
-          <div id="requestTabbable" class="requestTabbable" style="display:none">
-          </div>
 
 					
 				<!-- </div>  end of map elements details div  -->
@@ -267,14 +254,13 @@
                   <!-- onclick="displayList()-->
                  <i class="icon-chevron-right-white" id="field" type="button">   </i>              
               </a>
-            <!--<div id="customSearchBox">
-                <br><input id="pac-input" type="text" placeholder="Search Box">
-            </div>-->
+
             <div id= "map_canvass">
-              <div id="map_canvas" style="top:40px; width:100%; height:585px;"></div>
+              <div id="map_canvas" style="top:40px; width:100%; height:585px;"></div>   
             </div>
-            
-           <audio id="siren" src="<?php echo base_url();?>audio/siren.wav" preload="auto" style="display:none"></audio>
+            <div id="customSearchBox">
+              <br><input id="pac-input" type="text" placeholder="Search Box">
+			     </div>
 	<!-- MODALS: confirmVictim, confirmIncident, detailsVictim, reportVictim, deleteIncident, deleteVictim, updateVictim>
 			
  	<!-- modalConfirmVictim -->
@@ -339,7 +325,7 @@
 					
                 </div>
                 <div class="modal-footer">
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn btn-inverse">Back</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Back</a>
                 </div>
             </div> 
 			<!-- end modalDetailsVictim -->
@@ -370,7 +356,7 @@
 					echo form_submit($buttonProperties);
 					?>
 					</form>
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Cancel</a>
                 </div>
             </div> 
 			<!-- end modalReportVictim -->
@@ -394,7 +380,7 @@
 						   echo form_submit($submit_property);
 					?>
 					</form>
-					<a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+					<a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Cancel</a>
                 </div>
             </div> 
 			<!-- end modalUpdateVictim -->
@@ -410,8 +396,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" id="btnYesDeleteIncident" class="btn btn-primary">Yes</a>
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">No</a>
+                    <a href="#" id="btnYesDeleteIncident" class="btn danger">Yes</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
                 </div>
       </div> 
 			<!-- end modalDeleteIncident -->
@@ -420,15 +406,15 @@
 			 <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Victim</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a href="#" id="btnYesDeleteVictim" class="btn btn-primary">Yes</a>
-                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">No</a>
+                    <a href="#" id="btnYesDeleteVictim" class="btn danger">Yes</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">No</a>
                 </div>
       </div> 
 			<!-- end modalDeleteVictim -->
@@ -441,6 +427,44 @@
             <a href="http://localhost/icdrris/" class="btn btn-primary">Okay</a>
           </div>
       </div>
+      <div id="modalLivelihoodProgramList" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h5><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Select Livelihood Program</h5>
+                </div>
+                <div class="modal-body">
+                    <div id='livelihoodProgramsList'>
+                      <?php
+                        foreach ($programs as $program) {
+                            echo "<label class='radio'><input type='radio' name='programs_radio_button' id='programs_radio_button' data-id=".$program->livelihood_program_id.">".$program->livelihood_description."</input></label>";
+                        }
+                      ?>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="proceedToResourcesList" class="btn danger">Next</a>
+                    <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Cancel</a>
+                </div>
+      </div>
+    <div id="livelihoodProgramResourceListModal" class="modal hide fade">
+        <div class="modal-body" id="livelihoodProgramResourceListModalBody">           
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:$('#modalLivelihoodProgramList').modal('show'), $('#livelihoodProgramResourceListModal').modal('hide')" class="btn secondary">Back to list</a>
+            <a class="btn" id="confirmDeploymentModal">Confirm Deployment</a>
+            <a href="javascript:$('#livelihoodProgramResourceListModal').modal('hide')" class="btn secondary">Cancel</a>
+        </div>
+    </div>
+    <div id="modalGrantProgramFromMapSuccess" class="modal hide">
+    <div class="modal-body">
+        <div name="message">
+            Livelihood Program successfully deployed
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:$('#modalGrantProgramFromMapSuccess').modal('hide')" class="btn secondary">Okay</a>
+    </div>
+</div>
 			
 			<div id="directionsPanel"></div>
                         

@@ -9,38 +9,10 @@ var markersArray1 = new Array();
 var markersArray2 = new Array();
 var output;
 var map;
-var element_id;
 
 $(document).ready(function() {
     getAllMapElements();
-//-------------THIS IS THE ALERT AND NOTIFICATIONS PART-----------------------
-console.log("here");
-var count = -1;
-
-    setInterval(function(){    
-        $.ajax({
-            url: "http://localhost/icdrris/Incident/getIncidentCount",
-            type: "POST",
-            success: function(data) {
-                    //console.log("monitor invoked");
-                    if (count != -1 && count != data){
-                        getAllMapElements();
-                        setTimeout( function(){ 
-                            playWarningSound(); 
-                        }, 1000 );
-                        
-                        console.log("new entry detected");
-                    }
-                    else{
-                        //playWarningSound();
-                        console.log("cool, nothing new");
-                    }
-                    count = data;
-            }
-        });
-    },5000);
-//----------------------------------------------------------------------------
-    //filterfilterReports();
+    //filterReports();
 //------------------------FOR THE FILTER FUNCTION------------------------------
     $('.dropdown-menu').on('click', function(e) {
     
@@ -55,12 +27,11 @@ var count = -1;
             props += ($(b).is(':checked'))?Math.pow(2,i):0;
         });
         //sendProps(props);
-        //console.log("current props ->"+props);
+        console.log("current props ->"+props);
 
     //alert("Map Element size is now -->>> "+mapElements.length+"<<<------");
     $("#incidentList").html("");
-    $("#respondentList").html("");
-    $("#requestList").html("");
+    $("#livelihoodList").html("");
     for(var i=0;i<mapElements.length;i++){
 
         //console.log("current props ->"+props);
@@ -74,14 +45,17 @@ var count = -1;
         filterProp2 = parseInt(filterPropBinary.substring(length-7, length-2), 2);
         filterProp3 = parseInt(filterPropBinary.substring(length-9, length-7), 2);
 
+        if( mapElements[i].elementType === 3){
+            console.log("props : "+props+"  elementProps : "+mapElements[i].props4);
+        }
         if(!props){
             //do nothing
-            //console.log("nothing to do here");
+            console.log("nothing to do here");
             mapElements[i].setVisible(false);
         }
         //if the selected filter is only the map elements filter
         else if(!(props & 384) && !(props & 124)){
-            //console.log("disregard filter for confirmed/unconfirmed AND disaster type");
+            console.log("disregard filter for confirmed/unconfirmed AND disaster type");
             
             var evaluation = ((filterProp1 & mapElements[i].props1)|(props & mapElements[i].props4));
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -89,43 +63,37 @@ var count = -1;
             mapElements[i].setVisible((evaluation)?((props)?true:false):false);
             if(evaluation) 
             {
-                if(mapElements[i].elementType===3){
-                    appendToRespondentList(mapElements[i]);
-                }
-                else if(mapElements[i].elementType===4){
-                    //console.log("********PASSED THE FILTER********");
-                    appendToRequestList(mapElements[i]);
-                }
-                else{
+                if(mapElements[i].elementType === 3){
+                    //alert("append to livelihood list");
+                    appendToLivelihoodList(mapElements[i]);
+                } else{
+                    //alert("append to incident list");
                     appendToIncidentList(mapElements[i]);
                 }
-
             }
+            else{
+                console.log("***************** evaluation failed *******************")
+            }
+
         }
         //if the selected filter is only the disaster type filter
         else if(!(props & 384) && !(props & 3)){
-            //console.log("disregard filter for markers/polygons AND confirmed/unconfirmed");
+            console.log("disregard filter for markers/polygons AND confirmed/unconfirmed");
             //console.log("element no."+i+" , props2="+mapElements[i].props2);
             //console.log("element no."+i+" , props4="+mapElements[i].props4);
             mapElements[i].setVisible((filterProp2 & mapElements[i].props2)|(props & mapElements[i].props4)?((props)?true:false):false);
             if((filterProp2 & mapElements[i].props2)|(props & mapElements[i].props4)) 
             {
-                if(mapElements[i].elementType===3){
-                    appendToRespondentList(mapElements[i]);
-                }
-                else if(mapElements[i].elementType===4){
-                    //console.log("********PASSED THE FILTER********");
-                    appendToRequestList(mapElements[i]);
-                }
-                else{
+                if(mapElements[i].elementType === 3){
+                    appendToLivelihoodList(mapElements[i]);
+                } else{
                     appendToIncidentList(mapElements[i]);
                 }
-
             }
         }
         //if the selected filter is the confirmed/unconfirmed filter
         else if(!(props & 3) && !(props & 124)){
-            //console.log("disregard filter for marrker/polygon AND disaster type");
+            console.log("disregard filter for marrker/polygon AND disaster type");
             
             var evaluation = ((filterProp3 & mapElements[i].props3)|(props & mapElements[i].props4));
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -133,22 +101,16 @@ var count = -1;
             mapElements[i].setVisible((evaluation)?((props)?true:false):false);
             if(evaluation) 
             {
-                if(mapElements[i].elementType===3){
-                    appendToRespondentList(mapElements[i]);
-                }
-                else if(mapElements[i].elementType===4){
-                    //console.log("********PASSED THE FILTER********");
-                    appendToRequestList(mapElements[i]);
-                }
-                else{
+                if(mapElements[i].elementType === 3){
+                    appendToLivelihoodList(mapElements[i]);
+                } else{
                     appendToIncidentList(mapElements[i]);
                 }
-
             }
         }
         //when the filters selected are the element type and and disaster type filters
         else if(!(props & 384)){
-            //console.log("disregard filter for confirmed/unconfirmed");
+            console.log("disregard filter for confirmed/unconfirmed");
             
             var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp2 & mapElements[i].props2))|(props & mapElements[i].props4);
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -156,22 +118,16 @@ var count = -1;
             mapElements[i].setVisible((evaluation)?((props)?true:false):false);
             if(evaluation) 
             {
-                if(mapElements[i].elementType===3){
-                    appendToRespondentList(mapElements[i]);
-                }
-                else if(mapElements[i].elementType===4){
-                    //console.log("********PASSED THE FILTER********");
-                    appendToRequestList(mapElements[i]);
-                }
-                else{
+                if(mapElements[i].elementType === 3){
+                    appendToLivelihoodList(mapElements[i]);
+                } else{
                     appendToIncidentList(mapElements[i]);
                 }
-
             }
         }
         //when the selected filters are the element type and confirmation 
         else if(!(props & 124)){
-            //console.log("disregard filter for disaster type");
+            console.log("disregard filter for disaster type");
             
             var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -179,22 +135,16 @@ var count = -1;
             mapElements[i].setVisible((evaluation)?((props)?true:false):false);
             if(evaluation) 
             {
-                if(mapElements[i].elementType===3){
-                    appendToRespondentList(mapElements[i]);
-                }
-                else if(mapElements[i].elementType===4){
-                    //console.log("********PASSED THE FILTER********");
-                    appendToRequestList(mapElements[i]);
-                }
-                else{
+                if(mapElements[i].elementType === 3){
+                    appendToLivelihoodList(mapElements[i]);
+                } else{
                     appendToIncidentList(mapElements[i]);
                 }
-
             }
         }
         //when the selected filters are the disaster type and confirmation
         else if(!(props & 3)){
-            //console.log("disregard filter for element type");
+            console.log("disregard filter for element type");
             
             var evaluation = ((filterProp2 & mapElements[i].props2) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -202,22 +152,16 @@ var count = -1;
             mapElements[i].setVisible((evaluation)?((props)?true:false):false);
             if(evaluation) 
             {
-                if(mapElements[i].elementType===3){
-                    appendToRespondentList(mapElements[i]);
-                }
-                else if(mapElements[i].elementType===4){
-                    //console.log("********PASSED THE FILTER********");
-                    appendToRequestList(mapElements[i]);
-                }
-                else{
+                if(mapElements[i].elementType === 3){
+                    appendToLivelihoodList(mapElements[i]);
+                } else{
                     appendToIncidentList(mapElements[i]);
                 }
-
             }
         }
         //when all the filters are selected
         else{
-            //console.log("APPLY ALL FILTERS");
+            console.log("APPLY ALL FILTERS");
             
             var evaluation = ((filterProp1 & mapElements[i].props1) && (filterProp2 & mapElements[i].props2) && (filterProp3 & mapElements[i].props3))|(props & mapElements[i].props4);
             //console.log("element no."+i+"  ,props1="+mapElements[i].props1+"  filterProps1:"+filterProp1);
@@ -225,87 +169,21 @@ var count = -1;
             mapElements[i].setVisible((evaluation)?((props)?true:false):false);
             if(evaluation) 
             {
-                if(mapElements[i].elementType===3){
-                    appendToRespondentList(mapElements[i]);
-                }
-                else if(mapElements[i].elementType===4){
-                    //console.log("********PASSED THE FILTER********");
-                    appendToRequestList(mapElements[i]);
-                }
-                else{
+                if(mapElements[i].elementType === 3){
+                    appendToLivelihoodList(mapElements[i]);
+                } else{
                     appendToIncidentList(mapElements[i]);
                 }
-
             }
         }
     }
 
-//console.log("=================================================================================================================================");
+console.log("=================================================================================================================================");
     });
 //------------------------------------------------------------------------------
 
 });
-//-----------------------functions for the alrt and notifications -----------------------
-function testAjax1(handleData) {
 
-    $.ajax({
-        url: "http://localhost/icdrris/Incident/getNewIncident",
-        type: "POST",
-        success: function(data) {
-            handleData(data); 
-        },
-        error: function(){
-            console.log("fail");
-            console.log(msg);
-        }
-    });
-}
-
-function findMapElement(id){
-    //alert("findMapElement take array with size->"+mapElements.length);
-    for(var i=0;i<mapElements.length;i++){
-        console.log("element incidentLocationId: "+mapElements[i].incidentLocationId+" , current incident_location_id: "+id);
-        if(mapElements[i].incidentLocationId===id){
-
-            //alert("found a match at index: "+i);
-            //console.log("element incidentLocationId: "+mapElements[i].incidentLocationId+" , current incident_location_id: "+id);
-            incidentList();
-            displayIncidentDetails(mapElements[i].id,i, id);
-            //map.setCenter(mapElements[i].center);
-            mapElements[i].setVisible(true);
-            //return i;
-        }else{
-            //console.log("not found at index"+i);
-        }
-    }
-}
-function countInitial(){
-    //alert("function called inside document ready!");
-    $.ajax({
-            url: "http://localhost/icdrris/Incident/getIncidentCount",
-            type: "POST",
-            success: function(data) {
-                    return data;
-                }
-    });
-}
-function playWarningSound(){
-    testAjax1(function(data){
-        //alert("new incident reported has id ->"+data);
-        findMapElement(data);
-    });
-    $('#siren')[0].play();
-    
-    setTimeout( function(){ 
-    $('#siren')[0].pause(); 
-    }, 3000 );
-
-    setTimeout( function(){ 
-    $("#notifications").html('');
-    }, 20000 );
-
-}
-//-----------------------------------------------------------------------------------------
 function createPropertiesArray1(mapElement){
 
     var elementType = mapElement.getAttribute("elementType");
@@ -349,7 +227,6 @@ function createPropertiesArray4(mapElement){
     var prop = 0;
 
     prop += (elementType === "3")?Math.pow(2,9):0;
-    prop += (elementType === "4")?Math.pow(2,10):0;
     
 
     return prop;
@@ -369,68 +246,67 @@ function initializeMap() {
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
-  //   var defaultBounds = new google.maps.LatLngBounds(
-  //     new google.maps.LatLng(8.099003, 124.051510),
-  //     new google.maps.LatLng(8.395963, 124.425731));
-  //   map.fitBounds(defaultBounds);
+    var defaultBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(8.099003, 124.051510),
+      new google.maps.LatLng(8.395963, 124.425731));
+    map.fitBounds(defaultBounds);
 
+    // Create the search box and link it to the UI element.
+    var input = /** @type {HTMLInputElement} */(
+        document.getElementById('pac-input'));
+    var inputDiv = document.getElementById('customSearchBox');
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputDiv);
 
+    var searchBox = new google.maps.places.SearchBox(
+    /** @type {HTMLInputElement} */(input));
 
-  //   // Create the search box and link it to the UI element.
-  //   var input = /** @type {HTMLInputElement} */(
-  //       document.getElementById('pac-input'));
-  //   var inputDiv = document.getElementById('customSearchBox');
-  //   map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputDiv);
+    // [START region_getplaces]
+  // Listen for the event fired when the user selects an item from the
+  // pick list. Retrieve the matching places for that item.
+  google.maps.event.addListener(searchBox, 'places_changed', function() {
+    var places = searchBox.getPlaces();
 
-  //   var searchBox = new google.maps.places.SearchBox((input));
+    for (var i = 0, marker; marker = markers[i]; i++) {
+      marker.setMap(null);
+    }
 
-  //   // [START region_getplaces]
-  // // Listen for the event fired when the user selects an item from the
-  // // pick list. Retrieve the matching places for that item.
-  // google.maps.event.addListener(searchBox, 'places_changed', function() {
-  //   var places = searchBox.getPlaces();
+    // For each place, get the icon, place name, and location.
+    markers = [];
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0, place; place = places[i]; i++) {
+      var image = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
 
-  //   for (var i = 0, marker; marker = markers[i]; i++) {
-  //     marker.setMap(null);
-  //   }
+      // Create a marker for each place.
+      var marker = new google.maps.Marker({
+        map: map,
+        icon: image,
+        title: place.name,
+        position: place.geometry.location
+      });
 
-  //   // For each place, get the icon, place name, and location.
-  //   markers = [];
-  //   var bounds = new google.maps.LatLngBounds();
-  //   for (var i = 0, place; place = places[i]; i++) {
-  //     var image = {
-  //       url: place.icon,
-  //       size: new google.maps.Size(71, 71),
-  //       origin: new google.maps.Point(0, 0),
-  //       anchor: new google.maps.Point(17, 34),
-  //       scaledSize: new google.maps.Size(25, 25)
-  //     };
+      markers.push(marker);
 
-  //     // Create a marker for each place.
-  //     var marker = new google.maps.Marker({
-  //       map: map,
-  //       icon: image,
-  //       title: place.name,
-  //       position: place.geometry.location
-  //     });
+      bounds.extend(place.geometry.location);
+    }
 
-  //     markers.push(marker);
-
-  //     bounds.extend(place.geometry.location);
-  //   }
-
-  //   map.fitBounds(bounds);
-  // });
+    map.fitBounds(bounds);
+  });
   // [END region_getplaces]
 
   // Bias the SearchBox results towards places that are within the bounds of the
   // current map's viewport.
-  // google.maps.event.addListener(map, 'bounds_changed', function() {
-  //   var bounds = map.getBounds();
-  //   searchBox.setBounds(bounds);
-  // });
+  google.maps.event.addListener(map, 'bounds_changed', function() {
+    var bounds = map.getBounds();
+    searchBox.setBounds(bounds);
+  });
 
-}
+   }
 
     
 
@@ -466,23 +342,15 @@ function bindMarkerToSidePanel(marker) {
         map.setCenter(marker.center);
     });
 }
-function bindRespondentToSidePanel(marker) {
-    var respondentId = marker.id;
+function bindLivelihoodToSidePanel(marker) {
+    var livelihoodId = marker.id;
     google.maps.event.addListener(marker, 'click', function() {
         //alert("element props: "+marker.elementProps+ " disaster type props: "+marker.disasterTypeProps+" confirmation props"+marker.statusProps+" respondent props: "+marker.respondentProps);
-        displayRespondentDetailsFromMap(respondentId, marker.response_organization_name);
+        //alert("marker clicked");
+        displayLivelihoodDetailsFromMap(livelihoodId);
         map.setCenter(marker.center);
     });
 }
-
-function bindRequestToSidePanel(marker) {
-    var requestId = marker.id;
-    google.maps.event.addListener(marker, 'click', function() {
-        displayRequestDetailsFromMap(requestId, marker.request_info_source);
-        map.setCenter(marker.center);
-    });
-}
-
 function stopAnimation(marker) {
     setTimeout(function () {
         marker.setAnimation(null);
@@ -524,33 +392,27 @@ function getAllMapElements() {
     console.log("***** getAllMapElements invoked *****");
     //var filterValue = document.filterForm2.filterMenu2.value;
     //console.log("FILTER VALUE 2: "+filterValue);
-    console.log("before initialize map");
+
     initializeMap();
-    console.log("passed initialize map");
+    
     $("#incidentList").html("");
-    $("#respondentList").html("");
-    $("#requestList").html("");
-    console.log("reached before empty array");
+
     mapElements = [];
-    //console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
+    console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
 
     //This is the option to change the polygon color according to the disaster type
     var polygonColor = {
         Flashflood: {
             //blue
-            polyColor: "#2233F2"
+            fillColor: "#0404B4"
         },
         Mudslide: {
             //brown
-            polyColor: "#382723"
+            fillColor: "#7A4444"
         },
         Landslide: {
             //red
-            polyColor: "#382723"
-        },
-        Tsunami: {
-            //red
-            polyColor: "#0EACCC"
+            fillColor: "#E92222"
         }
 
     };
@@ -558,19 +420,15 @@ function getAllMapElements() {
     var polygonStroke = {
         Flashflood: {
             //blue
-            stroke: "#2233F2"
+            fillColor: "#0404B4"
         },
         Mudslide: {
             //brown
-            stroke: "#382723"
+            fillColor: "#7A4444"
         },
         Landslide: {
             //red
-            stroke: "#382723"
-        },
-        Tsunami: {
-            //red
-            stroke: "#0EACCC"
+            fillColor: "#E92222"
         }
     };
 
@@ -581,21 +439,12 @@ function getAllMapElements() {
         Needs: {
             icon: 'icons/flag.png'
         },
+        Livelihood: {
+            icon: 'icons/livelihood.png'
+        },
         Flashflood: {
             icon: 'icons/naturaldisaster/flood1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
-        },
-        RedCross: {
-            icon: 'icons/icons1/firstaid.png'
-        },
-        EvacuationCenter: {
-            icon: 'icons/icons1/condominium.png'
-        },
-        PNP: {
-            icon: 'icons/icons1/police.png'
-        },
-        UN: {
-            icon: 'icons/icons1/world.png'
         },
         Mudslide: {
             icon: 'icons/nd/flood.png',
@@ -604,9 +453,6 @@ function getAllMapElements() {
         Landslide: {
             icon: 'icons/nd/avalanche1.png',
             shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
-        },
-        Tsunami: {
-            icon: 'icons/tsunami.png'
         },
         Default: {
             icon: 'icons/earthquake.png',
@@ -620,15 +466,13 @@ function getAllMapElements() {
     // Change this depending on the name of your PHP file
     //alert("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom);
 
-    downloadUrl("http://localhost/icdrris/MapController/getAllMapElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data) {
+    downloadUrl("http://localhost/icdrris/MapController/getLivelihoodMappingElements/dateTo/"+dateTo+"/dateFrom/"+dateFrom, function(data) {
 
         var xml = data.responseXML;
-        //console.log(xml);
+        console.log(xml);
         var polygons = xml.documentElement.getElementsByTagName("polygons")[0].getElementsByTagName("polygon");
         var markers = xml.documentElement.getElementsByTagName("markers")[0].getElementsByTagName("marker");
-        var respondents = xml.documentElement.getElementsByTagName("responseOrganizations")[0].getElementsByTagName("responseOrganization");
-        var requests = xml.documentElement.getElementsByTagName("requests")[0].getElementsByTagName("request");
-
+        var organizations = xml.documentElement.getElementsByTagName("livelihoodOrganizations")[0].getElementsByTagName("livelihoodOrganization");
         //empty the Polygon array first
         //emptyArray(polygonsArray1);
         //console.log("polygons array length: "+polygonsArray1.length);
@@ -665,8 +509,6 @@ function getAllMapElements() {
             var myPolygon;
             var center;
             var points = polygons[polygonIndex].getElementsByTagName("point");
-            var color = polygonColor[disasterType] || {};
-            var stroke = polygonStroke[disasterType] || {};
 
             var polygonsArray2 = new Array();
 
@@ -686,11 +528,11 @@ function getAllMapElements() {
             var polyOptions = {
                 paths: coordinates,
                 visible: false, 
-                strokeColor: color.polyColor,
+                strokeColor: polygonColor[disasterType],
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
-                fillColor: stroke.stroke,
-                fillOpacity: 0.70,
+                fillColor: polygonStroke[disasterType],
+                fillOpacity: 0.35,
                 arrId: polygonIndex,
                 id: incident_report_id,
                 incidentLocationId: incident_location_id,
@@ -721,7 +563,7 @@ function getAllMapElements() {
 
 
         }
-        //console.log(">>>>>>>>>>>>>>>value after polygon loop"+polygonIndex+"<<<<<<<<<<<<<<<<<<<<<");
+        console.log(">>>>>>>>>>>>>>>value after polygon loop"+polygonIndex+"<<<<<<<<<<<<<<<<<<<<<");
         var markerIndex=polygonIndex+1;
         var i=0;
         for (i = 0; i < markers.length; i++) {
@@ -786,34 +628,34 @@ function getAllMapElements() {
         }
 
         var j=0;
-        for (j = 0; j < respondents.length; j++) {
+        for (j = 0; j < organizations.length; j++) {
 
-            var arr1 = createPropertiesArray1(respondents[j]);
+            var arr1 = createPropertiesArray1(organizations[j]);
             var int1 = parseInt(arr1.join(''),2);
 
-            var arr2 = createPropertiesArray2(respondents[j]);
+            var arr2 = createPropertiesArray2(organizations[j]);
             var int2 = parseInt(arr2.join(''),2);
 
-            var arr3 = createPropertiesArray3(respondents[j]);
+            var arr3 = createPropertiesArray3(organizations[j]);
             var int3 = parseInt(arr3.join(''),2);
 
-            var int4 = createPropertiesArray4(respondents[j]);
+            var int4 = createPropertiesArray4(organizations[j]);
 
             //console.log("Integer Equivalent -->>"+int+"<<<---");
 
-            var response_organization_location_id = respondents[j].getAttribute("response_organization_location_id");
-            var response_organization_name = respondents[j].getAttribute("response_organization_name");
-            var activity_start_date = respondents[j].getAttribute("activity_start_date");
-            var activity_end_date = respondents[j].getAttribute("activity_end_date");
-            var activity_status = respondents[j].getAttribute("activity_status");
-            var activity_description = respondents[j].getAttribute("activity_description");
-            var location_address = respondents[j].getAttribute("location_address");
-
-
-            var icon = customIcons['ResponseOrg'] || {};
+            var livelihood_organization_id = organizations[j].getAttribute("livelihood_organization_id");
+            var livelihood_organization_name = organizations[j].getAttribute("livelihood_organization_name");
+            var livelihood_organization_address = organizations[j].getAttribute("livelihood_organization_address");
+            var no_of_members = organizations[j].getAttribute("no_of_members");
+            var initial_income = organizations[j].getAttribute("initial_income");
+            var livelihood_organization_status = organizations[j].getAttribute("livelihood_organization_status");
+            var date_established = organizations[j].getAttribute("date_established");
+            var business_activity_type = organizations[j].getAttribute("business_activity_type");
+            var elementType = organizations[j].getAttribute("elementType");
             var point = new google.maps.LatLng(
-                    parseFloat(respondents[j].getAttribute("deployment_lat")),
-                    parseFloat(respondents[j].getAttribute("deployment_lng")));
+                    parseFloat(organizations[j].getAttribute("lat")),
+                    parseFloat(organizations[j].getAttribute("lng")));
+            var icon = customIcons['Livelihood'];
 
             
             var markerOptions = {
@@ -823,14 +665,14 @@ function getAllMapElements() {
                 shadow: icon.shadow,
                 center: point,
                 arrId: (polygonIndex+i+j),
-                id: response_organization_location_id,
-                response_organization_name: response_organization_name,
-                incidentDescription: incidentDescription,
-                activity_start_date: activity_start_date,
-                activity_end_date: activity_end_date,
-                activity_status:activity_status,
-                activity_description:activity_description,
-                location_address:location_address,
+                id: livelihood_organization_id,
+                livelihood_organization_name: livelihood_organization_name,
+                livelihood_organization_address: livelihood_organization_address,
+                no_of_members: no_of_members,
+                initial_income: initial_income,
+                livelihood_organization_status:livelihood_organization_status,
+                date_established:date_established,
+                business_activity_type:business_activity_type,
                 elementType: 3,
                 props1: int1,
                 props2: int2, 
@@ -839,87 +681,8 @@ function getAllMapElements() {
             }
             var marker = new google.maps.Marker(markerOptions);
             mapElements.push(marker);
-            appendToRespondentList(marker);
-
-            //console.log("marker loop reached here");
-            bindRespondentToSidePanel(marker);
-            //appendToList(marker, id, point, markers[i]);
             marker.setMap(map);
-
-        }
-		
-		var r=0;
-        for (r = 0; r < requests.length; r++) {
-
-            var arr1 = createPropertiesArray1(requests[r]);
-            var int1 = parseInt(arr1.join(''),2);
-
-            var arr2 = createPropertiesArray2(requests[r]);
-            var int2 = parseInt(arr2.join(''),2);
-
-            var arr3 = createPropertiesArray3(requests[r]);
-            var int3 = parseInt(arr3.join(''),2);
-
-            var int4 = createPropertiesArray4(requests[r]);
-
-            var request_id = requests[r].getAttribute("request_id");
-            var location_id = requests[r].getAttribute("location_id");
-            var tweet_id = requests[r].getAttribute("tweet_id");
-            var request_date = requests[r].getAttribute("request_date");
-            var request_status = requests[r].getAttribute("request_status");
-            var request_comments = requests[r].getAttribute("request_comments");
-            var flag_request_granted = requests[r].getAttribute("flag_request_granted");
-            var tweet_user_id = requests[r].getAttribute("tweet_user_id");
-			var request_info_source = requests[r].getAttribute("request_info_source");
-			var geo_lat =  requests[r].getAttribute("geo_lat");
-			var geo_lng =  requests[r].getAttribute("geo_lng");
-			var request_url = requests[r].getAttribute("request_url");
-            var geo_place_name = requests[r].getAttribute("geo_place_name");
-
-            var icon = customIcons['Needs'] || {};
-            var point = new google.maps.LatLng(
-                    parseFloat(requests[r].getAttribute("geo_lat")),
-                    parseFloat(requests[r].getAttribute("geo_lng")));
-
-			if(geo_lat == ''){
-				geo_place_name = "<font color=\"deeppink\">Can't find location.</font>";
-			}
-			if(geo_lat != '' && geo_lng != ''){
-                geo_place_name= "<a onclick=\"viewRequestOnMap("+(polygonIndex+i+j+r)+","+request_id+");\" >Locate in map address "+geo_place_name+"</a>";
-			}
-            
-            var markerOptions = {
-                position: point,
-                visible:false,
-                icon: icon.icon,
-                shadow: icon.shadow,
-                center: point,
-                arrId: (polygonIndex+i+j+r),
-                id: request_id,
-                tweet_id: tweet_id,
-                request_date: request_date,
-                request_status: request_status,
-                request_comments: request_comments,
-                flag_request_granted:flag_request_granted,
-                tweet_user_id:tweet_user_id,
-                request_info_source:request_info_source,
-                request_url:request_url,
-                geo_place_name:geo_place_name,
-                elementType: 4,
-                props1: int1,
-                props2: int2, 
-                props3: int3,
-                props4: int4
-            }
-            var marker = new google.maps.Marker(markerOptions);
-            mapElements.push(marker);
-            appendToRequestList(marker);
-
-            //console.log("marker loop reached here");
-            bindRequestToSidePanel(marker);
-            //appendToList(marker, id, point, markers[i]);
-            marker.setMap(map);
-
+            bindLivelihoodToSidePanel(marker);
         }
         
         triggerFilters();
@@ -930,14 +693,9 @@ function triggerFilters(){
     $('#elementBoxes input:checkbox').trigger("change");
 }
 function appendToIncidentList(mapElement) {
+    console.log("append to incident list invoked");
 
-    //console.log("Filter menu 1: "+document.filterForm1.filterMenu1.value);
-    //console.log("Filter menu 2: "+document.filterForm2.filterMenu2.value);
-    //console.log("append to list started here with id");
-	
     var listItem="";
-	
-
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
@@ -960,12 +718,8 @@ function appendToIncidentList(mapElement) {
     //append to the list
     var div = document.getElementById('incidentList');
     console.log(div);
-	if(listItem == ""){
-		div.innerHTML = div.innerHTML + "No results found.";
-	}
-	else{
-		div.innerHTML = div.innerHTML + listItem;
-	}
+    div.innerHTML = div.innerHTML + listItem;
+
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
 }
 
@@ -989,50 +743,25 @@ function get_session(){
 }
 
 
-function appendToRespondentList(mapElement) {
+function appendToLivelihoodList(mapElement) {
+    console.log("append to livelihood list invoked");
     
     var listItem="";
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
-    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 200px;\">" + mapElement.response_organization_name + "</a>";
+    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 200px;\">" + mapElement.livelihood_organization_name + "</a>";
     //place icon-links here [show details]
-    listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayRespondentDetails("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Open </a> "; // show details icon
+    listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayLivelihoodDetails("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Open </a> "; // show details icon
     //end div
     listItem += "</div>";
     listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
     listItem += "<div class=\"accordion-inner\">";
-    listItem += "<p class=\"list-group-item-text\">Activity Description :" + mapElement.activity_description + "<br> Activity Start Date:" + mapElement.activity_start_date + "<br> Deployment Location: " + mapElement.location_address + "</p>";
+    listItem += "<p class=\"list-group-item-text\">Livelihood Organization Address :" + mapElement.livelihood_organization_address + "<br> Business Activity Type:" + mapElement.business_activity_type + "<br> Organization Status: " + mapElement.livelihood_organization_status + "</p>";
     listItem += "</div></div></div>";
 
     //append to the list
-    var div = document.getElementById('respondentList');
-    //console.log(div);
-    div.innerHTML = div.innerHTML + listItem;
-
-    //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
-}
-
-function appendToRequestList(mapElement) {
-
-    //console.log("append to request list invoked");
-    
-    var listItem="";
-    listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
-    listItem += "<div class=\"accordion-group\">";
-    listItem += "<div class=\"accordion-heading\">";
-    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 230px; color: white;\">"+mapElement.request_info_source+"</a>";
-    //place icon-links here [granted]
-    listItem += "| <a  data-id=\"" + mapElement.id + "\" onclick=\"respondRequest("+mapElement.id+");\"><i class= \"icon-ok icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"respond-btn\" title= \"Respond Needs\"> </i> Respond Needs </a> "; // respond icon
-    //end div
-    listItem += "</div>";
-    listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
-    listItem += "<div class=\"accordion-inner\">";
-    listItem += "<p class=\"list-group-item-text\">Tweet :" + mapElement.request_comments + "<br> Request Date:" + mapElement.request_date + "<br> Tweet Location: <a>" + mapElement.geo_place_name +"<br> Tweet url: <a href=\""+ mapElement.request_url + "\" target=\"_blank\"> Go to the tweet... </a></p>";
-    listItem += "</div></div></div>";
-
-    //append to the list
-    var div = document.getElementById('requestList');
+    var div = document.getElementById('livelihoodList');
     //console.log(div);
     div.innerHTML = div.innerHTML + listItem;
 
@@ -1042,10 +771,8 @@ function appendToRequestList(mapElement) {
 function backToHome(){
     $("#incidentList").hide();
     $(".incidentTabbable").hide();
-    $("#respondentList").hide();
-    $(".respondentTabbable").hide();
-    $("#requestList").hide();
-    $(".requestTabbable").hide();
+    $("#livelihoodList").hide();
+    $(".livelihoodTabbable").hide();
     $("#homeView").show("fast");
     $(".subBreadCrumb2").remove();
     $("#subBreadCrumb1").remove();
@@ -1053,48 +780,33 @@ function backToHome(){
 function incidentList(){
     
     $("#homeView").hide();
-	$("#subBreadCrumb1,.subBreadCrumb1").empty();
-	$(".subBreadCrumb2").empty();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToIncidentList()" class="subBreadCrumb1" >Incidents List</a><span class="divider">/</span></li>');
     openSideBar();
     $("#incidentList").show("fast");
 
 }
-function respondentList(){
+function livelihoodList(){
     $("#homeView").hide();
-    $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToRespondentList()" class="subBreadCrumb1" id="subBreadCrumb1">Respondents List</a><span class="divider">/</span></li>');
-    $("#respondentList").show("fast");
-}
-function requestList(){
-    $("#homeView").hide();
-    $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToRequestList()" class="subBreadCrumb1" id="subBreadCrumb1">Requests List</a><span class="divider">/</span></li>');
-    $("#requestList").show("fast");
+    $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToLivelihoodList()" class="subBreadCrumb1" id="subBreadCrumb1">Livelihood Orgs List</a><span class="divider">/</span></li>');
+    $("#livelihoodList").show("fast");
 }
 function backToIncidentList() {
-    //console.log(">>>>---backToIncidentList invoked---<<<<<");
+    console.log(">>>>---backToIncidentList invoked---<<<<<");
     $(".subBreadCrumb2").remove();
     $(".incidentTabbable").hide();
     $("#IncidentTabbable").hide("fast");
     $("#incidentList").show("fast");
 }
-function backToRespondentList() {
-    //console.log(">>>>---backToRespondentList invoked---<<<<<");
+function backToLivelihoodList() {
+    console.log(">>>>---backToRespondentList invoked---<<<<<");
     $(".subBreadCrumb2").remove();
-    $(".respondentTabbable").hide();
-    $("#respondentTabbable").hide("fast");
-    $("#respondentList").show("fast");
+    $(".livelihoodTabbable").hide();
+    $("#livelihoodTabbable").hide("fast");
+    $("#livelihoodList").show("fast");
 }
-function backToRequestList() {
-    //console.log(">>>>---backToRequestList invoked---<<<<<");
-    $(".subBreadCrumb2").remove();
-    $(".requestTabbable").hide();
-    $("#requestTabbable").hide("fast");
-    $("#requestList").show("fast");
-}
-
 function displayIncidentDetails(incidentReportId, elementId, incident_location_id) {
 
-    //console.log('display Incident details clicked with incident_report_id ->'+incidentReportId);
+    console.log('display Incident details clicked with incident_report_id ->'+incidentReportId);
     $("#incidentList").hide("fast");
     $("#table-rows-victims").removeData("fast");
     openSideBar();
@@ -1107,18 +819,16 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
         type: "POST",
         data: {incident_report_id:incidentReportId},
         success: function(msg) {
-            //console.log("success -TITLE");
+            console.log("success -TITLE");
 			
             if (msg == 'error') {
-                //console.log("Error getIncidentDetails - TITLE doy.\n ");
+                console.log("Error getIncidentDetails - TITLE doy.\n ");
                 $("#incident-title").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-                //console.log("Success getIncidentTitle");
+                console.log("Success getIncidentTitle");
                 $("#incident-title").html(msg);
-				
-				$(".subBreadCrumb2").empty();
                 var str = msg.substring(0,30) + "...";
-				 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + str + '</a></li>');
+                $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + str + '</a></li>');
                 
                 $("#victims-tab, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
 		
@@ -1127,8 +837,8 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
             }
         },
         error: function() {
-            //console.log("system error oy!");
-            //console.log(values);
+            console.log("system error oy!");
+            console.log(values);
             $("#incident-title").html("Sorry, system error.");
             $("#incidentTabbable").show("slow");
         }
@@ -1147,15 +857,13 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
                 $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
                 $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId)
                 $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId)
-                $(".approve-li").attr("onclick", "rateIncident(1,"+incident_location_id+")")
-                $(".disapprove-li").attr("onclick", "rateIncident(0,"+incident_location_id+")")
                 $("#incident-information").html(msg);
                 $("#incidentTabbable").show("slow");
             }
         },
         error: function() {
-            //console.log("system error oy!");
-            //console.log(values);
+            console.log("system error oy!");
+            console.log(values);
             $("#incident-information").html("Sorry, system error.");
             $("#incidentTabbable").show("slow");
         }
@@ -1169,21 +877,21 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
         type: "POST",
         data: {id:incidentReportId},
         success: function(msg) {
-            //console.log("success");
+            console.log("success");
             //console.log(msg);
             if (msg == 'error') {
-                //console.log("naay mali sa query getIncidentDetails doy.\n ");
+                console.log("naay mali sa query getIncidentDetails doy.\n ");
                 $("#tabbable").show("slow");
                 $("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-                //console.log("success pa jud");
+                console.log("success pa jud");
                 $("#incidentTabbable").show("slow");
                 $("#table-rows-victims").html(msg);
             }
         },
         error: function() {
-            //console.log("system error oy!");
-            //console.log(values);
+            console.log("system error oy!");
+            console.log(values);
             $("#tabbable").show("slow");
             $("#table-rows-victims").html("Sorry, system error.");
         }
@@ -1195,14 +903,6 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
 
 
 }
-function viewRequestOnMap(elementId, requestId){
-    map.setCenter(mapElements[elementId].center);
-    mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
-    stopAnimation(mapElements[elementId]);
-}
-
-//---------------------------------------------- SECOND FUNCTION FOR THE MAP BINDING ------------------------------------------------------------
-
 function openSideBar() {
     $("#map_canvass").removeClass("span12");
     $("#map_canvass").addClass("span8"); //added
@@ -1215,14 +915,14 @@ function openSideBar() {
 function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
 {
 
-    //console.log('displayDetails invoked with id'+incidentReportId);
+    console.log('displayDetails invoked with id'+incidentReportId);
     openSideBar();
     backToHome();
     $("#homeView").hide();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToIncidentList()" class="subBreadCrumb1" >Incidents List</a><span class="divider">/</span></li>');
     $(".subBreadCrumb2").remove();
 
-   // console.log(incidentReportId);
+    console.log(incidentReportId);
 
      /* Send the data using post and put results to the members table */
     request = $.ajax({
@@ -1230,23 +930,22 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
         type: "POST",
         data: {incident_report_id:incidentReportId},
         success: function(msg) {
-            //console.log("success -TITLE");
+            console.log("success -TITLE");
             //console.log(msg);
             if (msg == 'error') {
-                //console.log("naay mali sa query getIncidentDetails - TITLE doy.\n ");
+                console.log("naay mali sa query getIncidentDetails - TITLE doy.\n ");
                 $("#incident-title").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-               // console.log("success pa jud title");
+                console.log("success pa jud title");
                 $("#incident-title").html(msg);
-				$("#subBreadCrumb2").empty();
                 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
                 $("#victims-tab, #details-tab, #overview-li, #editinfo-li, #delete-li, #displaychart-li, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
                 $("#incidentTabbable").show("slow");
             }
         },
         error: function() {
-            //console.log("system error oy!");
-            //console.log(values);
+            console.log("system error oy!");
+            console.log(values);
             $("#incident-title").html("Sorry, system error.");
             $("#incidentTabbable").show("slow");
         }
@@ -1258,21 +957,21 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
         type: "POST",
         data: {incident_location_id:incidentLocationId},
         success: function(msg) {
-            //console.log("success");
+            console.log("success");
             //console.log(msg);
             if (msg == 'error') {
-                //console.log("naay mali sa query getIncidentDetails doy.\n ");
+                console.log("naay mali sa query getIncidentDetails doy.\n ");
                 $("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
                 $("#tabbable").show("slow");
             } else {
-                //console.log("success pa jud");
+                console.log("success pa jud");
                 $("#incident-information").html(msg);
                 $("#tabbable").show("slow");
             }
         },
         error: function() {
-            //console.log("system error oy!");
-            //console.log(values);
+            console.log("system error oy!");
+            console.log(values);
             $("#incident-information").html("Sorry, system error.");
             $("#incidentTabbable").show("slow");
         }
@@ -1284,21 +983,21 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
         type: "POST",
         data: {id:incidentReportId},
         success: function(msg) {
-            //console.log("success");
+            console.log("success");
             //console.log(msg);
             if (msg == 'error') {
-                //console.log("naay mali sa query getIncidentDetails doy.\n ");
+                console.log("naay mali sa query getIncidentDetails doy.\n ");
                 $("#tabbable").show("slow");
                 $("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
             } else {
-                //console.log("success pa jud");
+                console.log("success pa jud");
                 $("#tabbable").show("slow");
                 $("#table-rows-victims").html(msg);
             }
         },
         error: function() {
-            //console.log("system error oy!");
-            //console.log(values);
+            console.log("system error oy!");
+            console.log(values);
             $("#incidentTabbable").show("slow");
             $("#table-rows-victims").html("Sorry, system error.");
         }
@@ -1308,114 +1007,102 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
 
 //================================== EDIT HERE ===================================================================================
 //================================================================================================================================
-function displayRespondentDetailsFromMap(deployment_id,element)
+function displayLivelihoodDetailsFromMap(livelihoodId,element)
 {
 
-    //console.log('displayDetails invoked with id');
+    console.log('displayLivelihoodDetails invoked with id'+livelihoodId);
     backToHome();
     $("#homeView").hide();
     openSideBar();
 
     //alert("respondent id ->"+deployment_id);
-    $("#respondentTabbable").show("slow");
-    $("#respondent-membersTable").show("slow");
+    $("#livelihoodTabbable").show("slow");
+    $("#livelihood-membersTable").show("slow");
 
      /*retrieve the response organization name to be used in the breadcrumbs*/
      request = $.ajax({
-        url: "http://localhost/icdrris/ResponseOrg/getDeployedOrganizationName",
+        url: "http://localhost/icdrris/Livelihood/getLivelihoodOrganizationName",
         type: "POST",
-        data: {id:deployment_id},
+        data: {id:livelihoodId},
         success: function(name) {
-            $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToRespondentList()" class="subBreadCrumb1" id="subBreadCrumb1">Respondents List</a><span class="divider">/</span></li>');
+            $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToLivelihoodList()" class="subBreadCrumb1" id="subBreadCrumb1">Livelihood Orgs List</a><span class="divider">/</span></li>');
             $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + name + '</a></li>');
+            //alert("name retrieved: "+name);
         },
         error: function() {
-            //console.log("error retrieving response organization name");
-            //console.log(name);
+            console.log("error retrieving response organization name");
+            console.log(name);
         }
     });
     request = $.ajax({
-        url: "http://localhost/icdrris/ResponseOrg/getDeployedOrganizationDetails",
+        url: "http://localhost/icdrris/Livelihood/getLivelihoodOrganizationDetails",
         type: "POST",
-        data: {id:deployment_id},
+        data: {id:livelihoodId},
         success: function(msg) {
-                 $("#respondent-information").html(msg);
+                 $("#livelihood-information").html(msg);
         },
         error: function() {
-            //console.log("error retrieving response organization name");
-            //console.log(msg);
+            console.log("error retrieving response organization name");
+            console.log(msg);
         }
     });
 
-    /* retrieve table of deployed members */
-    request = $.ajax({
-        url: "http://localhost/icdrris/ResponseOrg/getAllDeployedMembers",
-        type: "POST",
-        data: {orgId:deployment_id},
-        success: function(msg) {
-            //console.log("successfully retrieved all members");
-            $("#respondent-membersTable").html(msg);
-        },
-        error: function() {
-            //console.log("unable to fetch deployed members table");
-            //console.log(msg);
-        }
-    });
+    // /* retrieve table of deployed members */
+    // request = $.ajax({
+    //     url: "http://localhost/icdrris/ResponseOrg/getLivelihoodOrganizationMembers",
+    //     type: "POST",
+    //     data: {orgId:livelihoodId},
+    //     success: function(msg) {
+    //         console.log("successfully retrieved all members");
+    //         $("#livelihood-membersTable").html("Test");
+    //     },
+    //     error: function() {
+    //         console.log("unable to fetch deployed members table");
+    //         console.log(msg);
+    //     }
+    // });
 
 }
 
-function displayRespondentDetails(deployment_id,elementId)
+function displayLivelihoodDetails(livelihoodId,elementId)
 {
 
-    //console.log('displayDetails invoked with id->'+deployment_id);
+    console.log('displayDetails invoked with id->'+livelihoodId);
     //$("#subBreadCrumb1").remove();
-    $("#respondentList").hide("fast");
+    $("#livelihoodList").hide("fast");
     //openSideBar();
 
     //alert("respondent id ->"+deployment_id);
 
      /*retrieve the response organization name to be used in the breadcrumbs*/
-    $("#respondentTabbable").show("slow");
-    $("#respondent-membersTable").show("slow");
+    $("#livelihoodTabbable").show("slow");
+    $("#livelihood-membersTable").show("slow");
 
      /*retrieve the response organization name to be used in the breadcrumbs*/
-    request = $.ajax({
-        url: "http://localhost/icdrris/ResponseOrg/getDeployedOrganizationName",
+     request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getLivelihoodOrganizationName",
         type: "POST",
-        data: {id:deployment_id},
+        data: {id:livelihoodId},
         success: function(name) {
+            //$("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToLivelihoodList()" class="subBreadCrumb1" id="subBreadCrumb1">Livelihood Orgs List</a><span class="divider">/</span></li>');
             $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + name + '</a></li>');
+            //alert("name retrieved: "+name);
         },
         error: function() {
-            //console.log("error retrieving response organization name");
-            //console.log(name);
+            console.log("error retrieving response organization name");
+            console.log(name);
         }
     });
     request = $.ajax({
-        url: "http://localhost/icdrris/ResponseOrg/getDeployedOrganizationDetails",
+        url: "http://localhost/icdrris/Livelihood/getLivelihoodOrganizationDetails",
         type: "POST",
-        data: {id:deployment_id},
-        success: function(msg) {$(".respondentTabbable").show("slow");
-                 $("#respondent-information").html(msg);
-        },
-        error: function() {
-            //console.log("error retrieving response organization deployment details");
-            //console.log(msg);
-        }
-    });
-
-    /* retrieve table of deployed members */
-    request = $.ajax({
-        url: "http://localhost/icdrris/ResponseOrg/getAllDeployedMembers",
-        type: "POST",
-        data: {orgId:deployment_id},
+        data: {id:livelihoodId},
         success: function(msg) {
-            //console.log("successfully retrieved all members");
-            $("#respondent-membersTable").html(msg);
+                 $("#livelihood-information").html(msg);
         },
         error: function() {
-            //console.log("unable to fetch deployed members table");
-            //console.log(msg);
+            console.log("error retrieving response organization name");
+            console.log(msg);
         }
     });
 
@@ -1425,101 +1112,18 @@ function displayRespondentDetails(deployment_id,elementId)
 
 }
 
-
-//================================================================================================================================
-//================================================================================================================================
-
-//================================== EDIT HERE ===================================================================================
-//================================================================================================================================
-function displayRequestDetailsFromMap(request_id, request_info_source)
-{
-
-    //console.log('displayRequest invoked with id->'+request_id);
-    $(".subBreadCrumb").remove();
-    $("#requestList").hide("fast");
-    openSideBar();
-
-     /*retrieve the request name to be used in the breadcrumbs*/
-    request = $.ajax({
-        url: "http://localhost/icdrris/Request/getRequestHeader",
-        type: "POST",
-        data: {id:request_id},
-        success: function(header) {
-                $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + header + '</a></li>');
-                $("#requestTabbable").show("slow");
-        },
-        error: function(header) {
-            //console.log("error retrieving request details");
-            //console.log(header);
-        }
-    });
-
-    /* retrieve the request details */
-    request = $.ajax({
-        url: "http://localhost/icdrris/Request/getRequestDetails",
-        type: "POST",
-        data: {id:request_id},
-        success: function(details) {
-            $("#request-information").html(details);
-        },
-        error: function() {
-            //console.log("unable to fetch request details");
-            //console.log(details);
-        }
-    });
+function grantLivelihoodProgram(id){
+    //show list of Deployable Livelihood Programs modal
+    //after click show all available resources, specify quantity for each resource then deploy
+    //uodate the grants table for the livelihoodOrganization
 
 }
-
-function displayRequestDetails(request_id, elementId)
-{
-
-    //console.log('displayRequest invoked with id->'+request_id);
-    $(".subBreadCrumb").remove();
-    $("#requestList").hide("fast");
-    openSideBar();
-
-    alert("request id ->"+request_id);
-
-     /*retrieve the response organization name to be used in the breadcrumbs*/
-    request = $.ajax({
-        url: "http://localhost/icdrris/Request/getRequestHeader",
-        type: "POST",
-        data: {id:request_id},
-        success: function(header) {
-                $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + header + '</a></li>');
-                $("#requestTabbable").show("slow");
-        },
-        error: function(header) {
-            //console.log("error retrieving request details");
-            //console.log(header);
-        }
-    });
-
-    /* retrieve the response organization details */
-    request = $.ajax({
-        url: "http://localhost/icdrris/Request/getRequestDetails",
-        type: "POST",
-        data: {id:deployment_id},
-        success: function(details) {
-            $("#request-information").html(details);
-        },
-        error: function() {
-            //console.log("unable to fetch request details");
-            //console.log(details);
-        }
-    });
-
-    map.setCenter(mapElements[elementId].center);
-
-}
-//================================================================================================================================
-//================================================================================================================================
 
 function victimsTab() {
 
 		var incident_report_id = $(".victims-tab, #victims-tab").data('incidentid');
        
-	   //console.log(incident_report_id);
+	   console.log(incident_report_id);
       //  var dataStr = 'id=' + incident_report_id;
 
         /* Send the data using post and put results to the members table */
@@ -1528,21 +1132,21 @@ function victimsTab() {
             type: "POST",
             data: {id:incident_report_id},
             success: function(msg) {
-                //console.log("success");
+                console.log("success");
                 //console.log(msg);
                 if (msg == 'error') {
-                    //console.log("naay mali sa query getIncidentDetails doy.\n ");
+                    console.log("naay mali sa query getIncidentDetails doy.\n ");
                     $("#tabbable").show("slow");
                     $("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
                 } else {
-                    //console.log("success pa jud");
+                    console.log("success pa jud");
                     $("#tabbable").show("slow");
                     $("#table-rows-victims").html(msg);
                 }
             },
             error: function() {
-                //console.log("system error oy!");
-                //console.log(values);
+                console.log("system error oy!");
+                console.log(values);
                 $("#tabbable").show("slow");
                 $("#table-rows-victims").html("Sorry, system error.");
             }

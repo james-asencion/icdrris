@@ -8,6 +8,17 @@ class IncidentModel extends CI_Model
             $id = $this->db->insert_id();
             return $id;
         }
+        function countIncidents(){
+            $query = $this->db->get('incident_location');
+            return $query->num_rows();
+
+        }
+        function getNewIncident(){
+            $this->db->select_max('incident_location_id');
+            $query = $this->db->get('incident_location');
+            return $query->row();
+
+        }
         function saveIncidentPolygon($data){
             // $result = $this->db->query("  INSERT INTO incident_location(incident_report_id,location_id, incident_intensity, polygon, death_toll, no_of_injuries, no_of_people_missing, no_of_families_affected,no_of_houses_destroyed,estimated_damage_cost, incident_info_source)".
             //                     "VALUES ('$data['incident_report_id']','$data['location_id']', '$data['incident_intensity']', PolygonFromText('$data['polygon']'), '$data['death_toll']', '$data['no_of_injuries']', '$data['no_of_people_missing']', '$data['no_of_families_affected']','$data['no_of_houses_destroyed']','$data['estimated_damage_cost']', '$data['incident_info_source']';");
@@ -112,7 +123,7 @@ class IncidentModel extends CI_Model
                              $sql = "update incident_location set flag_false_rating = flag_false_rating + 1, flag_true_rating = flag_true_rating -1 where incident_location_id= ?";
                      }
              }
-                     $this->db->query($sql, array($incident_location_id));
+                    $query= $this->db->query($sql, array($incident_location_id));
                      return $this->db->affected_rows();
    }
 

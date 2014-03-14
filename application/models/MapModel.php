@@ -45,6 +45,10 @@ class MapModel extends CI_Model
 		$query = $this->db->get_where('member_deployments',array('response_organization_location_id'=>$id));
 		return $query->result();
 	}
+	function getAllLivelihoodOrganizations(){
+		$query = $this->db->get('livelihood_organizations');
+		return $query->result();
+	}
 	function getMapElements2(){
 
 		$query = $this->db->query("SELECT i.incident_report_id, i.incident_description,b.location_address, l.incident_intensity, DATE_FORMAT(i.incident_date,'%W, %M %e, %Y') as incident_date, i.disaster_type, i.death_toll, i.no_of_injuries, i.no_of_people_missing, i.no_of_families_affected, i.no_of_houses_destroyed, i.estimated_damage_cost, i.incident_info_source, l.location_id, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon,l.flag_confirmed, l.flag_true_rating, l.flag_false_rating

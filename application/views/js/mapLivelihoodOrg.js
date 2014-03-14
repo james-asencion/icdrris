@@ -68,6 +68,9 @@ function initializeMap3() {
 
     var onClick = function() {
         console.log("on click function invoked");
+        if(marker===null){
+            alert("please specify a location");
+        }
     
 
     var name = $("#name").val();
@@ -86,7 +89,7 @@ function initializeMap3() {
         type: "POST",
         data: {name:name, address:address, members:members, initial_income:initial_income , status:status , date_formed:date_formed , business_type:business_type , lat:lat, lng:lng },
         success: function(msg){
-            alert("deployment success!");
+            $("#modalLivelihoodRegistrationSuccess").modal('show');
         },
         error: function(){
             console.log("fail");

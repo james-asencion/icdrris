@@ -4,13 +4,13 @@
 <div class = "row-fluid">
 <!--<div class = "row-fluid">-->
  <div class="well span3">
- <h3><?php foreach($livelihood_org as $org){ echo $org->livelihood_organization_name; ?></h3>
-    <br>Address: <?php echo $org->livelihood_organization_address; ?>
-    <br>Members: <?php echo $org->no_of_members; ?>
-    <br>Initial Income: <?php echo $org->initial_income;?>
-    <br>Status: <?php echo $org->livelihood_organization_status; ?>
-    <br>Date Established: <?php echo $org->date_established; ?>
-    <br>Business Activity Type: <?php echo $org->business_activity_type; }?>
+ <h3><?php echo $livelihood_org->livelihood_organization_name; ?></h3>
+    <br>Address: <?php echo $livelihood_org->livelihood_organization_address; ?>
+    <br>Members: <?php echo $livelihood_org->no_of_members; ?>
+    <br>Initial Income: <?php echo $livelihood_org->initial_income;?>
+    <br>Status: <?php echo $livelihood_org->livelihood_organization_status; ?>
+    <br>Date Established: <?php echo $livelihood_org->date_established; ?>
+    <br>Business Activity Type: <?php echo $livelihood_org->business_activity_type; ?>
     <br><br>
     <button class="btn btn-small btn-default showLivelihoodOrganizationMembers"><i class="icon-share"></i>View Members</button>
     <button class="btn btn-small btn-success sendLivelihoodProgramRequest"><i class="icon-share"></i>Send Request</button><br><br>
@@ -25,7 +25,7 @@
     <h4>Livelihood Organization Members</h4>
 
             <div style="float: right; margin-bottom: 10px">
-                <a class = "btn btn-primary addLivelihoodOrgMembers" data-toggle = "modal" data-org="<?php echo $org->livelihood_organization_id; ?>">Add Members</a>
+                <a class = "btn btn-primary addLivelihoodOrgMembers" data-toggle = "modal" data-org="<?php echo $livelihood_org->livelihood_organization_id; ?>">Add Members</a>
                 <button class="btn edit"><i class="icon-pencil"></i>edit</button>
                 <button class="btn btn-doneEdit btn-success btn-small hide">Done Editing</button> 
             </div>

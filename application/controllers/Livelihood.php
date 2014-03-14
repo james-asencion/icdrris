@@ -16,9 +16,17 @@ class Livelihood extends CI_Controller
         parent :: __construct();
         $this->load->model('LivelihoodModel');
     }
-    function index(){
-        $this->load->view('addLivelihoodOrg');
-    }
+    function index()
+    {   //first initialization of login form
+            //$data= $this->countIncidents();
+            $data['programs'] = $this->LivelihoodModel->getAllLivelihoodPrograms();
+            $this->load->view('includes/livelihoodHeader');
+            $this->load->view('livelihoodHome',$data);
+            $this->load->view('includes/livelihoodFooter'); 
+    } 
+    // function index(){
+    //     $this->load->view('addLivelihoodOrg');
+    // }
     function addMembers($orgId){
 
             $this->load->view('includes/header');
@@ -148,6 +156,7 @@ class Livelihood extends CI_Controller
            echo "Fail: ".$query;
         }
     }
+
     function viewDeploy(){
         $this->load->view('includes/deployheader');
         $this->load->view('testDeploy');
@@ -168,6 +177,61 @@ class Livelihood extends CI_Controller
         $this->load->view('includes/header');
         $this->load->view('livelihoodOrgView',$data);
         $this->load->view('includes/footer');        
+    }
+    function getLivelihoodOrganizationName(){
+        $org = $this->LivelihoodModel->getLivelihoodOrg($this->input->post('id'));
+        echo $org->livelihood_organization_name;
+        //echo "test";
+    }
+    function getLivelihoodOrganizationDetails(){
+
+        $org = $this->LivelihoodModel->getLivelihoodOrg($this->input->post('id'));
+
+
+        echo '<h4><div id="incident-title" class="span8" style="color:darkorange">'.$org->livelihood_organization_name.'</div></h4>';
+        if(($this->session->userdata('user_type') === 'cdlo') & ($this->session->userdata('is_logged_in'))){
+                echo '<button type="button" class= "grant-map btn btn-success"  data-id='.$org->livelihood_organization_id.' onclick="grantLivelihoodProgramFromMap('.$org->livelihood_organization_id.')"><i class= "icon icon-share icon-white" title="Grant"></i>Grant Livelihood Program</button>'; 
+        }              
+
+                    echo '<div class="details" style="margin-left: 5px; margin-top: 10px">
+                          <div class="row-fluid">
+                              <div class="span12">
+                                <div id="activityDescriptionLabel" class="span4">Livelihood Organization Name:  </div>
+                                <div id="activityDescriptionField" class="span8">'.$org->livelihood_organization_name.'</div>
+                              </div>
+                          </div>
+                          <div class="row-fluid">
+                              <div class="span12">
+                                <div id="activityDescriptionLabel" class="span4">Business Activity Type:  </div>
+                                <div id="activityDescriptionField" class="span8">'.$org->business_activity_type.'</div>
+                              </div>
+                          </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                              <div id="activityStartDateLabel" class="span4">Livelihood Organization Address:  </div>
+                              <div id="activityStartDateField" class="span8">'.$org->livelihood_organization_address.'</div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                              <div id="activityEndDateLabel" class="span4">Number of members:  </div>
+                              <div id="activityEndDateField" class="span8">'.$org->no_of_members.'</div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                              <div id="deploymentStatusLabel" class="span4">Organization Status:  </div>
+                              <div id="deploymentStatusField" class="span8">'.$org->livelihood_organization_status.'</div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                              <div id="deploymentStatusLabel" class="span4">Initial Income:  </div>
+                              <div id="deploymentStatusField" class="span8">'.$org->initial_income.'</div>
+                            </div>
+                        </div>
+                    </div>';
+    
     }
 
     function addNewProgramResource(){
@@ -425,7 +489,28 @@ class Livelihood extends CI_Controller
         $this->load->view('includes/footer');
         
     }
+    function getAllLivelihoodProgramsCheckboxList(){
+        $programs = $this->LivelihoodModel->getAllLivelihoodPrograms();
 
+       foreach ($programs as $program) {
+                echo "<label class='checkbox'><input type='checkbox' data-id=".$program->livelihood_program_id.">".$program->livelihood_description."</input></label>";
+        }
+    }
+    function constructLivelihoodProgramResourceForm(){
+        $id = $this->input->post('program_id');
+        $program_resources = $this->LivelihoodModel->getLivelihoodProgramResources($id);
+
+        echo "<form class='form-horizontal'>";
+              foreach ($program_resources as $resource) {
+                echo "  <label class=\"control-label\">".$resource->livelihood_resource_description."   (".$resource->quantity_available.")</label>
+                            <div class=\"controls resourceInput\">
+                                <input type=\"number\" min=\"0\" max=\"".$resource->quantity_available."\"data-id=\"".$resource->livelihood_resource_id."\" data-resource=\"".$resource->livelihood_program_resource_id."\">
+                            </div><br>";
+
+            }
+            
+        echo "</form>";
+    }
     function registerExternalOrganization(){
 
         $this->load->view('includes/header');

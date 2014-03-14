@@ -31,6 +31,20 @@ class MapController extends  CI_Controller
 
 
 	}
+	public function getLivelihoodMappingElements(){
+		//$dateFrom = $_GET['dateFrom'];
+		$get = $this->uri->uri_to_assoc();
+		//$dateFrom = $get['fromYear']."-".$get['fromMonth']."-".$get['fromDay'];
+		//$dateTo = $get['toYear']."-".$get['toMonth']."-".$get['toDay'];
+		$dateFrom = date('Y-m-d', strtotime($get['dateFrom']));
+		$dateTo = date('Y-m-d', strtotime($get['dateTo']));
+		//echo $dateFrom."   ".$dateTo;
+
+		$data['elements']  = $this->MapModel->getMapElements1($dateFrom, $dateTo);
+		$data['organizations'] = $this->MapModel->getAllLivelihoodOrganizations();
+		//echo count($data['responseOrganizations']);
+		$this->load->view('getAllLivelihoodMappingElements',$data);
+	}
 }
 
 ?>
