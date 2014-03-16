@@ -13,7 +13,37 @@ class Membership_model extends CI_Model
                     echo 'Problem with the query.';
                 }
                 
-        }
+        }	
+	
+	function passwordMatches($user_id, $old_password){
+		$this->db->select('user_name', 'password', 'user_first_name', 'user_last_name', 'user_type');
+		$this->db->from('users');
+		$this->db->where('user_id', $user_id);
+		$this->db->where('password', $old_password);
+		
+		$query = $this->db->get();
+		
+                if($query-> num_rows() == 1){
+                   return TRUE; 
+                }
+                else{
+                    echo FALSE;
+                }
+	}
+		
+	function getUserDetailsByID($user_id){
+                
+		$query = $this->db->query('SELECT u.user_id, u.user_name, u.user_first_name, u.user_last_name, u.user_type, u.user_email FROM users u WHERE u.user_id= "'.$user_id.'"');
+                
+                if($query){
+                   return $query; 
+                }
+                else{
+                    echo 'Problem with the query.';
+                }
+                
+	}
+		
 	function validate($username, $password)
 	{
        //       $username=$this->input->post('username');
@@ -23,7 +53,7 @@ class Membership_model extends CI_Model
 		$this->db->from('users');
 		$this->db->where('user_name', $username);
 		$this->db->where('password', $password);
-		$this->db->where('confirmed_user', 1);
+	//	$this->db->where('confirmed_user', 1);
 	
 		$query = $this->db->get();
 
@@ -50,6 +80,28 @@ class Membership_model extends CI_Model
                 else{
                     return false;
                 }
+	}
+	
+	function changeAccountSettings($userid, $user_username,$user_firstname, $user_lastname, $user_email){
+		$sql = "UPDATE users SET user_name = ?, user_first_name = ?, user_last_name= ?, user_email=? WHERE user_id = ?";
+		$query= $this->db->query($sql, array($user_username, $user_firstname, $user_lastname, $user_email, $userid));
+		if($query){
+			return true;
+		}
+		else{ 
+			return $query;
+		}
+	}
+	
+	function changeAccountSettingswPass($userid, $user_username,$user_firstname, $user_lastname, $user_email, $pass){
+		$sql = "UPDATE users SET user_name = ?, user_first_name = ?, user_last_name= ?, user_email=?, password=? WHERE user_id = ?";
+		$query= $this->db->query($sql, array($user_username, $user_firstname, $user_lastname, $user_email, $pass, $userid));
+		if($query){
+			return true;
+		}
+		else{ 
+			return $query;
+		}
 	}
 }
 ?>
