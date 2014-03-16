@@ -9,9 +9,11 @@ $markersNode = $mapElementsNode->appendChild($markers);
 $responseOrganizations = $dom->createElement("responseOrganizations");
 $responseOrgNode = $mapElementsNode->appendChild($responseOrganizations);
 
-
 $requestItems = $dom->createElement("requests");
 $requestNode = $mapElementsNode->appendChild($requestItems);
+
+$sites = $dom->createElement("evacuationSites");
+$evacuationSiteNode = $mapElementsNode->appendChild($sites);
 
 header("Content-type: text/xml"); 
 
@@ -127,6 +129,22 @@ foreach($requests as $req){
     $request->setAttribute("elementType", "4");
 
     $newRequest = $requestItems->appendChild($request);
+        
+}
+foreach($evacuationSites as $s){
+    $site = $dom->createElement("evacuationSite");
+    $site->setAttribute("evacuation_site_id",$s->evacuation_site_id);
+    $site->setAttribute("evacuation_site_name",$s->evacuation_site_name);
+    $site->setAttribute("location_address",$s->location_address);
+    $site->setAttribute("maximum_capacity",$s->site_maximum_capacity);
+    $site->setAttribute("current_evacues_count",$s->current_evacues_count);
+    $site->setAttribute("site_status",$s->evacuation_site_status);
+    $site->setAttribute("lat",$s->evacuation_site_lat);
+    $site->setAttribute("lng",$s->evacuation_site_lng);
+    $site->setAttribute("elementType",'5');
+
+
+    $newSite = $sites->appendChild($site);
         
 }
 /**

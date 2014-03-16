@@ -11,41 +11,15 @@
        <!-- Bootstrap -->
  
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-        
-        <!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
-
+                <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/externalOrganizationModal.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/deployLivelihoodScript.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/responseOrganization.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
 
-
-         <!--
-		<script src="<?php //echo base_url();?>application/views/js/dropdown.js"></script>
-		<script src="<?php //echo base_url();?>application/views/js/polygonScript.js"></script>
-		<script src="<?php //echo base_url();?>application/views/js/polygonScript.js"></script>
-		<script src="<?php //echo base_url();?>application/views/js/markerScript.js"></script>
-		<script src="<?php //echo base_url();?>application/views/js/verify.js"></script>-->
-		
-		    <!-- bootstrap -->
-		<!--
-		<link href="<?php echo base_url();?>application/views/css/bootstrap.css">
-		-->
     	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     	
     	<script src="http://code.jquery.com/jquery-2.0.3.min.js"></script> 
     	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>  
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
-	
-	    <!-- x-editable (bootstrap version) -->
-	    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
-	    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/js/bootstrap-editable.min.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/x-editable.js"></script>
-		<script src="<?php echo base_url();?>application/views/js/x-editable1.js"></script>
-
 
 
 
@@ -58,33 +32,6 @@
 			#map_canvas img{max-width:none}
 			#map_canvas object{max-width:none}
 		</style>
-		<script type="text/javascript">
-			$(document).ready(function(){
-			//localStorage.clear();
-				$(".trigger").click(function(){
-                    $("#map_canvass").removeClass("span12");
-					$("#map_canvass").addClass("span8"); //added
-					$("#map_canvass").css({"float":"right"}); //added					
-                                        lastCenter=map.getCenter(); 
-                                        google.maps.event.trigger(map_canvas, 'resize');
-                                        map.setCenter(lastCenter);
-                                        $(".panel").toggle("fast");
-					$(this).toggleClass("active");
-					return false;
-				});
-				$(".trigger").click(function(){
-					if (!$(this).hasClass("active")) {
-					 $("#map_canvass").removeClass("span8");
-					 $("#map_canvass").addClass("span12");
-                                        lastCenter=map.getCenter(); 
-                                        google.maps.event.trigger(map_canvas, 'resize');
-                                        map.setCenter(lastCenter);
-					 }
-				});
-			});
-                       
-		</script>
-		
   </head>
   
   <!--onload="initializeMap()"-->
@@ -107,24 +54,18 @@
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li class="dropdown-submenu">
-                       <li><a href = "javascript:incidentList()"><i class = "icon-briefcase"></i> List of Incidents</a></li>
+                       
+                            <li> <a href="#modalReportIncident" role="button" data-toggle="modal"><i class = "icon-bell"></i> Report New Incident </a></li>
+                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Incidents</a></li>
+
 				</ul>
 					</li>
     </ul>
-    <ul class="nav">
-        <button id="reportNewIncidentButton" class="btn btn-primary btn-small" type="button">Report New Incident</button>
-    </ul>
-
-    <?php if(($this->session->userdata('user_type') === 'bdrrmo') & ($this->session->userdata('is_logged_in'))){?>
-    <ul class="nav">
-        <a class="btn btn-primary btn-small" href="http://localhost/icdrris/Evacuation/mapEvacuationSite" >Map an Evacuation Site</a>
-    </ul>
-    <?php   } ?>
 
     <!-- modal Report Incident -->
             <div id="modalReportIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_333_bell.png"  alt="bin" style="margin-top:-10px"> Report Incident</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_333_bell.png"  alt="bin" style="margin-top:-10px"> Report an Incident</h3>
                 </div>
                  <div class="modal-body">
                  	<center>
@@ -240,7 +181,7 @@
 		<?php if(!$this->session->userdata('is_logged_in')){ ?>
 			<ul class="nav pull-right">
 				<li>
-                    <a href="#modalLogin" id="login-btn" class="login-btn" role="button" data-toggle="modal">Log-in</a>
+                    <a href="#" id="login-btn">Log-in</a>
 				</li>
 			</ul>
 		<?php  
