@@ -131,7 +131,13 @@
                                       <input type="checkbox">
                                       Reported Requests
                                   </label>
-                              </li>                                                                                                                      
+                              </li> 
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Evacuation Sites
+                                  </label>
+                              </li>                                                                                                                     
                           </ul>
                       </div> 
                 </form>
@@ -261,6 +267,11 @@
           <div id="requestTabbable" class="requestTabbable" style="display:none">
           </div>
 
+          <!-- DISPLAY SITE DETAILS  -->
+          <div class = "span12" id="siteList" style="display:none"></div>
+          <div id="siteTabbable" class="siteTabbable" style="display:none">
+            <div id="site-information" ></div>
+          </div>
 					
 				<!-- </div>  end of map elements details div  -->
 				</div>	<!-- end #PANEL .PANEL 	-->
