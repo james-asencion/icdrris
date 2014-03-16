@@ -2,9 +2,9 @@
 
 class Membership_model extends CI_Model
 {
-        function getUserDetails($user_name){
+	function getUserDetails($user_name){
                 
-		$query = $this->db->query('SELECT u.user_id, u.user_name, u.user_first_name, u.user_last_name, u.user_type FROM icdrris.users u WHERE u.user_name= "'.$user_name.'"');
+		$query = $this->db->query('SELECT u.user_id, u.user_name, u.user_first_name, u.user_last_name, u.user_type, u.user_email FROM users u WHERE u.user_name= "'.$user_name.'"');
                 
                 if($query){
                    return $query; 
@@ -23,6 +23,7 @@ class Membership_model extends CI_Model
 		$this->db->from('users');
 		$this->db->where('user_name', $username);
 		$this->db->where('password', $password);
+		$this->db->where('confirmed_user', 1);
 	
 		$query = $this->db->get();
 
