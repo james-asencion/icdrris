@@ -178,7 +178,8 @@
               <a onclick="incidentList()" id="a-ListofIncidents"> Incidents</a><br>
               <a onclick="respondentList()" id="a-ListofRespOrg"> Response Organizations</a><br>
               <a onclick="requestList()" id="a-ListofRequest"> List of Requests</a><br>
-              <a onclick="siteList()" id="a-ListofRequest"> Evacuation Sites</a><br>
+              <a onclick="requestList()" id="a-ListofRequest"> List of Barangays</a><br>
+              <a onclick="requestList()" id="a-ListofRequest"> List of Evacuation Centers</a><br>
           </div>
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
