@@ -21,7 +21,7 @@ class Home extends  CI_Controller
             $this->load->view('polyHome');
             $this->load->view('includes/footer'); 
 	}   
-       
+       /**
         function countIncidents(){
             
             $config = array();
@@ -45,7 +45,7 @@ class Home extends  CI_Controller
                
             return $data;
         }
-        
+        */
         public function logout(){
                 $this->session->sess_destroy();
                 redirect('Login');

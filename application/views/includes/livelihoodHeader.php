@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
  
   <head>
-	<title>Iligan City Disaster Response and Recovery Information System</title>
+	<title>Project Dasig</title>
 	<link rel="icon" href="<?php echo base_url(); ?>img/Tsunami-256.png" type="image/gif">	
 		
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -75,12 +75,20 @@
 	<div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
 			<!-- SITE TITLE -->
-			<a class = "brand" href = "<?php echo base_url();?>">ICDRRIS</a>
+			<a class = "brand" href = "<?php echo base_url();?>">Project Dasig</a>
 			<ul class = "nav">
 				<li class = "active"><a href = "<?php echo base_url();?>"><i class = "icon-home"></i> Home</a></li>
 			</ul>
                    
 	<!-- HEADER MENUS-->
+   	<ul class= "nav">
+			<a href="#modalReportIncident" class="btn btn-danger" role="button" data-toggle="modal">
+				<i class = "icon-white icon-bell"></i> Report Incident 
+			</a>
+                            
+	</ul>
+	
+	
     <ul class="nav">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -89,18 +97,21 @@
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li class="dropdown-submenu">
-                       
-                            <li> <a href="#modalReportIncident" role="button" data-toggle="modal"><i class = "icon-bell"></i> Report New Incident </a></li>
+                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Barangays</a></li>
+                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Evacuation Centers</a></li>
                             <li><a href = "javascript:incidentList()"><i class = "icon-briefcase"></i> List of Incidents</a></li>
+                            <li><a href = "javascript:requestList()"><i class = "icon-briefcase"></i> List of Requested Needs</a></li>
 
-				</ul>
 					</li>
+				</ul>
+			</li>
     </ul>
+	
 
     <!-- modal Report Incident -->
             <div id="modalReportIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_333_bell.png"  alt="bin" style="margin-top:-10px"> Report an Incident</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_333_bell.png"  alt="bin" style="margin-top:-10px"> Report Incident</h3>
                 </div>
                  <div class="modal-body">
                  	<center>
@@ -201,16 +212,22 @@
 						<?php 
 							// Capital the first letter
 							// Username OR Name of the User??
-							print_r($this->session->userdata('user_id').'.'.$this->session->userdata('user_type').'.'.$this->session->userdata('firstname')); 
+							print_r($this->session->userdata('firstname').' '.$this->session->userdata('lastname')); 
 						 ?>
 						<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href = "#"><i class = "icon-pencil"></i> Edit User Info</a></li>
+						<li><a href = "#modalAccountSettings" role="button" data-toggle="modal"><i class = "icon-pencil"></i> Edit User Info</a></li>
 						<li><a href = "<?php echo base_url().'Home/logout' ?>"><i class = "icon-off"></i> Log-out</a></li>			
 					</ul>
 				</li>
 			</ul>
+			<?php
+				/**
+				*	EDIT USER INFO MODAL
+				*/
+				$this->load->view('forms/user_info_form');
+			?>
         <?php } ?>
 		
 		<?php if(!$this->session->userdata('is_logged_in')){ ?>
