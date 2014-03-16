@@ -45,7 +45,7 @@ class IncidentModel extends CI_Model
         }
 
         function confirmThisIncident($id, $userid){
-			$sql = "UPDATE icdrris.incident_location SET flag_confirmed = 1, user_id = ? WHERE incident_location_id = ?";
+			$sql = "UPDATE incident_location SET flag_confirmed = 1, user_id = ? WHERE incident_location_id = ?";
 			$query= $this->db->query($sql, array($userid, $id));
 			//$query= $this->db->query($sql);
 			if($query){
@@ -85,10 +85,12 @@ class IncidentModel extends CI_Model
         }
 		
         function getIncidentDetails($id){
-            $sql= "SELECT i.incident_report_id, i.incident_description, i.disaster_type, DATE_FORMAT(i.incident_date,'%W, %M %e, %Y') as incident_date, l.flag_true_rating, l.flag_false_rating, l.death_toll, l.no_of_injuries, l.no_of_people_missing, l.no_of_families_affected, l.no_of_houses_destroyed, l.estimated_damage_cost, l.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon, l.flag_true_rating, l.flag_false_rating, l.flag_confirmed
+            $sql= "SELECT i.incident_report_id, i.incident_description, i.disaster_type, DATE_FORMAT(i.incident_date,'%W, %M %e, %Y') as incident_date, b.location_address, b.barangay, l.flag_true_rating, l.flag_false_rating, l.death_toll, l.no_of_injuries, l.no_of_people_missing, l.no_of_families_affected, l.no_of_houses_destroyed, l.estimated_damage_cost, l.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon, l.flag_true_rating, l.flag_false_rating, l.flag_confirmed
                     FROM incidents i
                     LEFT OUTER JOIN incident_location l 
-                    ON i.incident_report_id = l.incident_report_id
+						ON i.incident_report_id = l.incident_report_id
+					INNER JOIN locations b
+						ON b.location_id = l.location_id
                     WHERE l.incident_location_id= '$id';";
             
             $query= $this->db->query($sql);

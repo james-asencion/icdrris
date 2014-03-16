@@ -7,7 +7,7 @@
      </div>
     <div class="modal-body">
         <fieldset>
-			<div class="span6" style="">
+			<div class="span5" style="">
 			   <div id="login-msg">    
 					<?php //error message inside here ?>
 				</div>

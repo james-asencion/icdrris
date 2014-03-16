@@ -53,6 +53,7 @@ class Login extends CI_Controller{
 				 $fname= $row_user->user_first_name;
 				 $lname= $row_user->user_last_name;
 				 $utype= $row_user->user_type;
+				 $email= $row_user->user_email;
 			}
 			
 			$data= array(
@@ -61,7 +62,8 @@ class Login extends CI_Controller{
 						'is_logged_in' => 1,
 						'firstname' => $fname,
 						'lastname' => $lname,
-						'user_type' => $utype
+						'user_type' => $utype,
+						'email' => $email
 					);
 			
 			$this->session->set_userdata($data);
