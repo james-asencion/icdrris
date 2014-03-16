@@ -159,13 +159,24 @@ class Incident extends  CI_Controller
 										<div id="fieldvalue" class="span8"> '.$details->incident_date.'</div>
 									</div>
 							</div>
+							
+							<div class="row-fluid">
+									<div class="span12">
+										<div id="fieldlabel" class="span4">Location:  </div>
+										<div id="fieldvalue" class="span8"> '.$details->location_address.', '.$details->barangay.'</div>
+									</div>
+							</div>
 
 						</div>
 
 						<div class="navbar" style="height:30px;">
 							 <div class="navbar-inner" style="height: 30px; min-height: 25px; background-image: linear-gradient(to bottom,#051849,#332F2F);">
 								<p class="brand" href="#" style="font-size: 14px;"> <i class="icon-white icon-signal" style="margin-top:4px"> </i> STATISTICS</p>
-							 </div>
+								';
+								if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){
+						echo	'<p class="brand" style="font-size: 14px;"> <a href="#modalUpdateIncidentStat" data-incident= "'.$incident_location_id.' class="btn-link" role="button" data-toggle="modal">[Update]</a> </p>';
+							}
+						echo '</div>
 						</div>
 
 						<div class="details">

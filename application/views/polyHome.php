@@ -172,6 +172,8 @@
               <a onclick="incidentList()" id="a-ListofIncidents"> Incidents</a><br>
               <a onclick="respondentList()" id="a-ListofRespOrg"> Response Organizations</a><br>
               <a onclick="requestList()" id="a-ListofRequest"> List of Requests</a><br>
+              <a onclick="requestList()" id="a-ListofRequest"> List of Barangays</a><br>
+              <a onclick="requestList()" id="a-ListofRequest"> List of Evacuation Centers</a><br>
           </div>
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
@@ -205,7 +207,7 @@
                                          </li>
                                         <?php if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){?>
                                             <li>
-                                              <a href="#" id="editinfo-li" data-incidentid="" onclick="modifyIncident()"><i class="icon-white icon-edit"></i> Edit Info</a>
+                                              <a href="#modalUpdateIncident" id="editinfo-li" onclick="modifyIncident()" data-incidentid="" role="button" data-toggle="modal"><i class="icon-white icon-edit"></i> Edit Info</a>
                                             </li>
                                             <li>
                                               <a href="#" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
@@ -281,7 +283,7 @@
             <div id="modalConfirmVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Confirm Victim</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_206_ok_2.png"  alt="confirm" style="margin-top:-10px"> Confirm Victim</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
@@ -298,7 +300,7 @@
 			 <div id="modalConfirmIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Confirm Incident</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_206_ok_2.png"  alt="confirm" style="margin-top:-10px"> Confirm Incident</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
@@ -316,7 +318,7 @@
 			  <div id="modalDetailsVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_024_parents.png"  alt="bin" style="margin-top:-10px"> Victim Details</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_024_parents.png"  alt="Details" style="margin-top:-10px"> Victim Details</h3>
                 </div>
                  <div class="modal-body">
 					<div class= "row-fluid">
@@ -348,16 +350,13 @@
 			  <div id="modalReportVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_333_bell.png"  alt="bin" style="margin-top:-10px"> Report Victim</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_333_bell.png"  alt="report" style="margin-top:-10px"> Report Victim</h3>
                 </div>
                  <div class="modal-body">
 				 
 					<form method = "post" action = "" name= "reportVictimForm" id= "reportVictimForm">
 				 
-                    <?php  
-						/** A LOGIN MODAL
-						 ** uses application/views/js/formSubmission.js 
-						 */
+                    <?php 
 							$this->load->view('forms/victimReport');		
 					?>
 					<div name="message">
@@ -375,12 +374,58 @@
             </div> 
 			<!-- end modalReportVictim -->
 			
+			<!-- modalUpdateIncident -->
+			<div id="modalUpdateIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                
+				<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_150_edit.png"  alt="update" style="margin-top:-10px"> Edit Incident Info</h3>
+                </div>
+                
+				<div class="modal-body">
+				
+						<form method = "post" action = "<?php echo base_url();?>Incident/updateIncident" name= "updateIncidentForm" id= "updateIncidentForm">
+				 						<?php $this->load->view('forms/incident_report_form');?>
+                </div>
+                <div class="modal-footer">
+					<?php $submit_property = array( 'type' => 'submit', 'class' => 'btn btn-primary', 'name' => 'updateIncidentInfo', 'value' =>'Update Info');
+						   echo form_submit($submit_property);
+					?>
+					</form>
+					<a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+                </div>
+            </div> 
+			<!-- end modalUpdateIncident -->
+			
+			<!-- modalUpdateStat -->
+			<div id="modalUpdateIncidentStat" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                
+				<div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_150_edit.png"  alt="update" style="margin-top:-10px"> Update Statistics</h3>
+                </div>
+                
+				<div class="modal-body">
+				
+						<form method = "post" action = "<?php echo base_url();?>Incident/updateStatistics" name= "updateStatisticsForm" id= "updateStatisticsForm">
+				 						<?php $this->load->view('forms/incident_statistics_form');?>
+                </div>
+                <div class="modal-footer">
+					<?php $submit_property = array( 'type' => 'submit', 'class' => 'btn btn-primary', 'name' => 'updateStatistics', 'value' =>'Update Statistics');
+						   echo form_submit($submit_property);
+					?>
+					</form>
+					<a href="#" data-dismiss="modal" aria-hidden="true" class="btn">Cancel</a>
+                </div>
+            </div> 
+			<!-- end modalUpdateStat -->
+			
 			<!-- modalUpdateVictim -->
 			<div id="modalUpdateVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 
 				<div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_150_edit.png"  alt="bin" style="margin-top:-10px"> Edit Victim</h3>
+                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_150_edit.png"  alt="edit" style="margin-top:-10px"> Edit Victim</h3>
                 </div>
                 
 				<div class="modal-body">
@@ -413,7 +458,7 @@
                     <a href="#" id="btnYesDeleteIncident" class="btn btn-primary">Yes</a>
                     <a href="#" data-dismiss="modal" aria-hidden="true" class="btn">No</a>
                 </div>
-      </div> 
+			</div> 
 			<!-- end modalDeleteIncident -->
 			
 			<!-- modalDeleteVictim -->

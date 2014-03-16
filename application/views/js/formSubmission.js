@@ -83,13 +83,13 @@ $(document).ready(function(){
         // Get some values from elements on the modal login page:
         var username = $("#username").val();
         var password = $("#password").val();
-        var dataStr = 'username='+username+'&password='+password;
+       // var dataStr = 'username='+username+'&password='+password;
 
         /* Send the data using post and put results to the members table */
 		request = $.ajax({
 			url: "http://localhost/icdrris/Login/validate_credentials",
 			type: "POST",
-			data: dataStr,
+			data: {username:username, password:password},
 			success: function(msg){
 				console.log("success");
 				console.log(msg);
@@ -111,6 +111,129 @@ $(document).ready(function(){
 });
 // --end
 }
+
+//EDIT ACCOUNT INFO
+$(document).ready(function(){
+	$('.editAccountSettings').on('click', function(e){
+		e.preventDefault();
+		$('#modalAccountSettings').modal('show');
+	});
+	
+	$('#accountSettingsForm').submit(function(event){
+        // Stop form from submitting normally
+        event.preventDefault();
+        console.log("btnYesAcocuntSettings clicked");
+		
+        // Get some values from elements on the modal:
+        var userid  = $('#modalAccountSettings').data('userid');
+        var user_firstname = $("#modalAccountSettings #ufirst_name").val();
+        var user_lastname = $("#modalAccountSettings #ulast_name").val();
+        var user_email = $("#modalAccountSettings #uemail").val();
+        var user_username = $("#modalAccountSettings #uuser_name").val();
+		
+		console.log(userid+user_firstname+user_lastname+user_email+user_username);
+		request = $.ajax({
+			url: "http://localhost/icdrris/Account Settings/modifyAccount",
+			type: "POST",
+			data: {userid:userid,
+					user_firstname:user_firstname,
+					user_lastname:user_lastname,
+					user_email:user_email,
+					user_username:user_username,
+				   },
+			success: function(msg){
+				console.log("success");
+				console.log(msg);
+				if(msg == 'success'){
+					console.log('naedit na bai. check the database');
+					$('#modalAccountSettings').modal('hide');
+				}else{
+					console.log('naay mali sa controller or model. recheck the code.')
+					$(".modal-body").innerHTML(msg);
+				}
+			},
+			error: function(){
+				console.log("fail");
+				$(".modal-body").html("Sorry, system error.");
+				$("#btnYesAccountSettings").hide("fast");
+			}
+		});
+    });
+});
+
+//CHANGE PASSWORD BUTTON LINL
+function changepassword(){
+		console.log('Change Password button clicked.');
+		  if ( $( "#oldpass-div" ).is( ":hidden" ) ) {
+			$( "#oldpass-div" ).slideDown( "slow" );
+			$( "#newpass-div" ).slideDown( "slow" );
+			$( "#confirmpass-div" ).slideDown( "slow" );
+			$( "#oldpass, #newpass, #confirmpass" ).attr( "required" );
+		  } else {
+			$( "#oldpass-div, #newpass-div, #confirmpass-div" ).hide();
+		  }
+		  
+	
+		  
+}
+
+
+
+//UPDATE INCIDENT
+function modifyIncident(){
+	$('.editinfo-li').on('click', function(e){
+		e.preventDefault();
+		console.log('edit-incident clicked');
+		
+		var incidentid = $(this).data('incidentid');
+		console.log('update incident: '+ incidentid);
+		$('#modalUpdateVictim').data('incidentid',incidentid);	
+		console.log('passed the data to the modalUpdateIncident');
+		$('#modalUpdateIncident').modal('show');
+	});
+	
+	$('#modalUpdateIncident').on('show.bs.modal', function(){
+			var incidentid  = $(this).data('incidentid');
+			console.log("#modalUpdateincident : " + incidentid);
+	});
+	
+	    $('#updateIncidentForm').submit(function(event){
+        // Stop form from submitting normally
+        event.preventDefault();
+        
+        // Get some values from elements on the modal:
+        var incidentid  = $('#modalUpdateVictim').data('incidentid');
+        /* Send the data using post and put results to the members table */
+		request = $.ajax({
+			url: "http://localhost/icdrris/Incident/updateIncident",
+			type: "POST",
+			data: {incident_location_id:incidentid,
+					incident_report_id:incident_report_id,
+					incident_description: incident_description,
+					disaster_type: disaster_type,
+					incident_date: incident_date
+				   },
+			success: function(msg){
+				console.log("success");
+				console.log(msg);
+				if(msg == 'success'){
+					console.log('naedit na bai. check the database');
+					$('#modalUpdateIncident').modal('hide');
+				}else{
+					console.log('naay mali sa controller or model. recheck the code.')
+					$(".modal-body").innerHTML(msg);
+				}
+			},
+			error: function(){
+				console.log("fail");
+				$(".modal-body").html("Sorry, system error.");
+			}
+		});
+    });
+	
+}
+// -end of UPDATE INCIDENT
+
 // UPDATE VICTIM
 function editVictim(element){
 	$('.edit-victim').on('click', function(e){

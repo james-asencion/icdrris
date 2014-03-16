@@ -300,7 +300,7 @@ background-position: -254px -64px;
 -moz-border-radius-bottomleft: 0px;
 -webkit-border-bottom-left-radius: 0px;
 display: block;
-z-index: 1000;
+z-index: 30;
 }
 
 a.trigger:hover{
@@ -330,7 +330,7 @@ background:#333333 url(http://localhost/icdrris/img/glyphicons-halflings-white.p
 background-position: -423px -64px;
 left: 35.4%;
 top: 103px;
-z-index: 50;
+z-index: 30;
 }
 
 
