@@ -1118,7 +1118,7 @@ function appendToRequestList(mapElement) {
     listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
     listItem += "<div class=\"accordion-group\">";
     listItem += "<div class=\"accordion-heading\">";
-    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 230px; color: white;\">"+mapElement.request_info_source+"</a>";
+    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 200px; color: white;\">"+mapElement.request_info_source+"</a>";
     //place icon-links here [granted]
     listItem += "| <a  data-id=\"" + mapElement.id + "\" onclick=\"respondRequest("+mapElement.id+");\"><i class= \"icon-ok icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"respond-btn\" title= \"Respond Needs\"> </i> Respond Needs </a> "; // respond icon
     //end div
