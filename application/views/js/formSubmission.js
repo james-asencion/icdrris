@@ -128,28 +128,26 @@ $(document).ready(function(){
         var userid  = $('#modalAccountSettings').data('userid');
         var user_firstname = $("#modalAccountSettings #ufirst_name").val();
         var user_lastname = $("#modalAccountSettings #ulast_name").val();
-        var user_email = $("#modalAccountSettings #uemail").val();
+        var email = $("#modalAccountSettings #uemail").val();
         var user_username = $("#modalAccountSettings #uuser_name").val();
 		
-		console.log(userid+user_firstname+user_lastname+user_email+user_username);
+        var oldpassword = $("#oldpass").val();
+        var newpassword = $("#newpass").val();
+        var confirmpassword = $("#confirmpass").val();
+		
+		
+		console.log(userid+user_firstname+user_lastname+email+user_username+oldpassword+newpassword+confirmpassword+"end");
 		request = $.ajax({
-			url: "http://localhost/icdrris/Account Settings/modifyAccount",
+			url: "http://localhost/icdrris/AccountSettings/modifyAccount",
 			type: "POST",
-			data: {userid:userid,
-					user_firstname:user_firstname,
-					user_lastname:user_lastname,
-					user_email:user_email,
-					user_username:user_username,
-				   },
+			data: {user_id:userid,user_first_name:user_firstname,user_last_name:user_lastname,user_email:email,user_name:user_username, old_password:oldpassword, new_password:newpassword, confirm_password:confirmpassword},
 			success: function(msg){
-				console.log("success");
-				console.log(msg);
 				if(msg == 'success'){
 					console.log('naedit na bai. check the database');
-					$('#modalAccountSettings').modal('hide');
+					window.location.reload();
 				}else{
 					console.log('naay mali sa controller or model. recheck the code.')
-					$(".modal-body").innerHTML(msg);
+					$("#modalAccountSettings #message").html(msg);
 				}
 			},
 			error: function(){
@@ -168,9 +166,10 @@ function changepassword(){
 			$( "#oldpass-div" ).slideDown( "slow" );
 			$( "#newpass-div" ).slideDown( "slow" );
 			$( "#confirmpass-div" ).slideDown( "slow" );
-			$( "#oldpass, #newpass, #confirmpass" ).attr( "required" );
+			$( "#oldpass, #newpass, #confirmpass" ).attr("required","required");
 		  } else {
 			$( "#oldpass-div, #newpass-div, #confirmpass-div" ).hide();
+			$( "#oldpass, #newpass, #confirmpass" ).removeAttr("required","required");
 		  }
 		  
 	

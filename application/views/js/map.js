@@ -61,6 +61,7 @@ var count = -1;
     $("#incidentList").html("");
     $("#respondentList").html("");
     $("#requestList").html("");
+    $("#siteList").html("");
     for(var i=0;i<mapElements.length;i++){
 
         //console.log("current props ->"+props);
@@ -96,6 +97,10 @@ var count = -1;
                     //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
+                else if(mapElements[i].elementType===5){
+                    //console.log("********PASSED THE FILTER********");
+                    appendToSiteList(mapElements[i]);
+                }
                 else{
                     appendToIncidentList(mapElements[i]);
                 }
@@ -116,6 +121,10 @@ var count = -1;
                 else if(mapElements[i].elementType===4){
                     //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===5){
+                    //console.log("********PASSED THE FILTER********");
+                    appendToSiteList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -140,6 +149,10 @@ var count = -1;
                     //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
+                else if(mapElements[i].elementType===5){
+                    //console.log("********PASSED THE FILTER********");
+                    appendToSiteList(mapElements[i]);
+                }
                 else{
                     appendToIncidentList(mapElements[i]);
                 }
@@ -162,6 +175,10 @@ var count = -1;
                 else if(mapElements[i].elementType===4){
                     //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===5){
+                    //console.log("********PASSED THE FILTER********");
+                    appendToSiteList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -186,6 +203,10 @@ var count = -1;
                     //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
+                else if(mapElements[i].elementType===5){
+                    //console.log("********PASSED THE FILTER********");
+                    appendToSiteList(mapElements[i]);
+                }
                 else{
                     appendToIncidentList(mapElements[i]);
                 }
@@ -209,6 +230,10 @@ var count = -1;
                     //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
                 }
+                else if(mapElements[i].elementType===5){
+                    //console.log("********PASSED THE FILTER********");
+                    appendToSiteList(mapElements[i]);
+                }
                 else{
                     appendToIncidentList(mapElements[i]);
                 }
@@ -231,6 +256,10 @@ var count = -1;
                 else if(mapElements[i].elementType===4){
                     //console.log("********PASSED THE FILTER********");
                     appendToRequestList(mapElements[i]);
+                }
+                else if(mapElements[i].elementType===5){
+                    //console.log("********PASSED THE FILTER********");
+                    appendToSiteList(mapElements[i]);
                 }
                 else{
                     appendToIncidentList(mapElements[i]);
@@ -350,6 +379,7 @@ function createPropertiesArray4(mapElement){
 
     prop += (elementType === "3")?Math.pow(2,9):0;
     prop += (elementType === "4")?Math.pow(2,10):0;
+    prop += (elementType === "5")?Math.pow(2,11):0;
     
 
     return prop;
@@ -482,6 +512,13 @@ function bindRequestToSidePanel(marker) {
         map.setCenter(marker.center);
     });
 }
+function bindSiteToSidePanel(marker) {
+    var evacuationSiteId = marker.id;
+    google.maps.event.addListener(marker, 'click', function() {
+        displaySiteDetailsFromMap(evacuationSiteId, marker.evacuation_site_name);
+        map.setCenter(marker.center);
+    });
+}
 
 function stopAnimation(marker) {
     setTimeout(function () {
@@ -524,13 +561,13 @@ function getAllMapElements() {
     console.log("***** getAllMapElements invoked *****");
     //var filterValue = document.filterForm2.filterMenu2.value;
     //console.log("FILTER VALUE 2: "+filterValue);
-    console.log("before initialize map");
+    //console.log("before initialize map");
     initializeMap();
-    console.log("passed initialize map");
+    //console.log("passed initialize map");
     $("#incidentList").html("");
     $("#respondentList").html("");
     $("#requestList").html("");
-    console.log("reached before empty array");
+    //console.log("reached before empty array");
     mapElements = [];
     //console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
 
@@ -576,7 +613,7 @@ function getAllMapElements() {
 
     var customIcons = {
         ResponseOrg: {
-            icon: 'icons/health/sozialeeinrichtung.png'
+            icon: 'icons/icons1/firstaid.png'
         },
         Needs: {
             icon: 'icons/flag.png'
@@ -628,12 +665,14 @@ function getAllMapElements() {
         var markers = xml.documentElement.getElementsByTagName("markers")[0].getElementsByTagName("marker");
         var respondents = xml.documentElement.getElementsByTagName("responseOrganizations")[0].getElementsByTagName("responseOrganization");
         var requests = xml.documentElement.getElementsByTagName("requests")[0].getElementsByTagName("request");
+        var sites = xml.documentElement.getElementsByTagName("evacuationSites")[0].getElementsByTagName("evacuationSite");
 
         //empty the Polygon array first
         //emptyArray(polygonsArray1);
         //console.log("polygons array length: "+polygonsArray1.length);
         //initialize the div for the list in the sidebar
         //and empty the output string to fill with fresh values
+
         var polygonIndex = 0;
         for (polygonIndex = 0; polygonIndex < polygons.length; polygonIndex++) {
 
@@ -669,7 +708,6 @@ function getAllMapElements() {
             var stroke = polygonStroke[disasterType] || {};
 
             var polygonsArray2 = new Array();
-
             //======EXTRACT MULTIPLE POINTS======
             for (var j = 0; j < points.length; j++)
             {
@@ -921,6 +959,65 @@ function getAllMapElements() {
             marker.setMap(map);
 
         }
+        //============================================================================
+        var n=0;
+        //alert(sites.length);
+        for (n = 0; n < sites.length; n++) {
+            var arr1 = createPropertiesArray1(sites[n]);
+            var int1 = parseInt(arr1.join(''),2);
+
+            var arr2 = createPropertiesArray2(sites[n]);
+            var int2 = parseInt(arr2.join(''),2);
+
+            var arr3 = createPropertiesArray3(sites[n]);
+            var int3 = parseInt(arr3.join(''),2);
+
+            var int4 = createPropertiesArray4(sites[n]);
+            //console.log("Integer Equivalent -->>"+int+"<<<---");
+            
+            var evacuation_site_id = sites[n].getAttribute("evacuation_site_id");
+            var evacuation_site_name = sites[n].getAttribute("evacuation_site_name");
+            var location_address = sites[n].getAttribute("location_address");
+            var maximum_capacity = sites[n].getAttribute("maximum_capacity");
+            var current_evacues_count = sites[n].getAttribute("current_evacues_count");
+            var site_status = sites[n].getAttribute("site_status");
+
+            var icon = customIcons['EvacuationCenter'] || {};
+            var point = new google.maps.LatLng(
+                    parseFloat(sites[n].getAttribute("lat")),
+                    parseFloat(sites[n].getAttribute("lng")));
+
+            var markerOptions = {
+                position: point,
+                visible:false,
+                icon: icon.icon,
+                shadow: icon.shadow,
+                center: point,
+                arrId: (polygonIndex+i+j+r+n),
+                id: evacuation_site_id,
+                evacuation_site_name: evacuation_site_name,
+                location_address: location_address,
+                maximum_capacity: maximum_capacity,
+                current_evacues_count: current_evacues_count,
+                site_status: site_status,
+                elementType:5,
+                props1: int1,
+                props2: int2, 
+                props3: int3,
+                props4: int4
+            }
+            var marker = new google.maps.Marker(markerOptions);
+            mapElements.push(marker);
+            console.log("evacuation site recorded here");
+            appendToSiteList(marker);
+
+            //console.log("marker loop reached here");
+            bindSiteToSidePanel(marker);
+            //appendToList(marker, evacuation_site_id, point, markers[i]);
+            marker.setMap(map);
+
+        }
+        //============================================================================
         
         triggerFilters();
     });
@@ -1038,6 +1135,32 @@ function appendToRequestList(mapElement) {
 
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
 }
+function appendToSiteList(mapElement) {
+
+    //console.log("append to request list invoked");
+    
+    var listItem="";
+    listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
+    listItem += "<div class=\"accordion-group\">";
+    listItem += "<div class=\"accordion-heading\">";
+    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 230px; color: white;\">"+mapElement.evacuation_site_name+"</a>";
+    listItem += "<a class= \"show-details-btn\"  data-id=\"" + mapElement.id + "\" onclick=\"displaySiteDetails("+mapElement.id+","+mapElement.arrId+");\">Open</a>"; // show details icon
+    //place icon-links here [granted]
+    //listItem += "| <a  data-id=\"" + mapElement.id + "\" onclick=\"respondRequest("+mapElement.id+");\"><i class= \"icon-ok icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"respond-btn\" title= \"Respond Needs\"> </i> Respond Needs </a> "; // respond icon
+    //end div
+    listItem += "</div>";
+    listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
+    listItem += "<div class=\"accordion-inner\">";
+    listItem += "<p class=\"list-group-item-text\">Location :" + mapElement.location_address + "<br> Maximum Capacity:" + mapElement.maximum_capacity + "<br> Status: " + mapElement.site_status +"<br> Current Evacues Count: "+ mapElement.current_evacues_count + " </p>";
+    listItem += "</div></div></div>";
+
+    //append to the list
+    var div = document.getElementById('siteList');
+    //console.log(div);
+    div.innerHTML = div.innerHTML + listItem;
+
+    //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
+}
 
 function backToHome(){
     $("#incidentList").hide();
@@ -1046,6 +1169,8 @@ function backToHome(){
     $(".respondentTabbable").hide();
     $("#requestList").hide();
     $(".requestTabbable").hide();
+    $("#siteList").hide();
+    $(".siteTabbable").hide();
     $("#homeView").show("fast");
     $(".subBreadCrumb2").remove();
     $("#subBreadCrumb1").remove();
@@ -1064,6 +1189,11 @@ function respondentList(){
     $("#homeView").hide();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToRespondentList()" class="subBreadCrumb1" id="subBreadCrumb1">Respondents List</a><span class="divider">/</span></li>');
     $("#respondentList").show("fast");
+}
+function siteList(){
+    $("#homeView").hide();
+    $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToSiteList()" class="subBreadCrumb1" id="subBreadCrumb1">Evacuation Sites</a><span class="divider">/</span></li>');
+    $("#siteList").show("fast");
 }
 function requestList(){
     $("#homeView").hide();
@@ -1090,6 +1220,13 @@ function backToRequestList() {
     $(".requestTabbable").hide();
     $("#requestTabbable").hide("fast");
     $("#requestList").show("fast");
+}
+function backToSiteList() {
+    //console.log(">>>>---backToSiteList invoked---<<<<<");
+    $(".subBreadCrumb2").remove();
+    $(".siteTabbable").hide();
+    $("#siteTabbable").hide("fast");
+    $("#siteList").show("fast");
 }
 
 function displayIncidentDetails(incidentReportId, elementId, incident_location_id) {
@@ -1424,7 +1561,57 @@ function displayRespondentDetails(deployment_id,elementId)
     stopAnimation(mapElements[elementId]);
 
 }
+function displaySiteDetails(siteId,elementId)
+{
 
+    //console.log('displayDetails invoked with id->'+deployment_id);
+    //$("#subBreadCrumb1").remove();
+    $("#siteList").hide("fast");
+
+    //alert("respondent id ->"+deployment_id);
+    //$("#siteTabbable").show("slow");
+    //$("#respondent-membersTable").show("slow");
+
+     /*retrieve the response organization name to be used in the breadcrumbs*/
+    $("#siteTabbable").show("slow");
+
+     /*retrieve the response organization name to be used in the breadcrumbs*/
+
+    
+
+    request = $.ajax({
+        url: "http://localhost/icdrris/Evacuation/getSiteName",
+        type: "POST",
+        data: {id:siteId},
+        success: function(msg) {
+                    $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            //console.log(msg);
+        }
+    });
+
+    request = $.ajax({
+        url: "http://localhost/icdrris/Evacuation/getSiteDetails",
+        type: "POST",
+        data: {id:siteId},
+        success: function(msg) {
+                    $(".siteTabbable").show("slow");
+                    $("#site-information").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            //console.log(msg);
+        }
+    });
+
+
+    map.setCenter(mapElements[elementId].center);
+    mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
+    stopAnimation(mapElements[elementId]);
+
+}
 
 //================================================================================================================================
 //================================================================================================================================
@@ -1470,6 +1657,37 @@ function displayRequestDetailsFromMap(request_id, request_info_source)
 
 }
 
+function displaySiteDetailsFromMap(evacuationSiteId, siteName)
+{
+
+    backToHome();
+    $("#homeView").hide();
+    openSideBar();
+
+    //alert("respondent id ->"+deployment_id);
+    $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToSiteList()" class="subBreadCrumb1" id="subBreadCrumb1">Evacuation Sites</a><span class="divider">/</span></li>');
+    $("#siteList").hide("fast");
+
+     /*retrieve the request name to be used in the breadcrumbs*/
+    $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + siteName + '</a></li>');
+    $("#siteTabbable").show("slow");
+  
+
+    /* retrieve the request details */
+    request = $.ajax({
+        url: "http://localhost/icdrris/Evacuation/getSiteDetails",
+        type: "POST",
+        data: {id:evacuationSiteId},
+        success: function(details) {
+            $("#site-information").html(details);
+        },
+        error: function() {
+            //console.log("unable to fetch request details");
+            //console.log(details);
+        }
+    });
+
+}
 function displayRequestDetails(request_id, elementId)
 {
 

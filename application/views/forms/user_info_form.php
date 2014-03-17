@@ -1,8 +1,10 @@
-	<div id="modalAccountSettings" class="modal hide fade" data-userid="<?php echo $this->session->userdata('userid');?>" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div id="modalAccountSettings" class="modal hide fade" data-userid="<?php echo $this->session->userdata('user_id');?>" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-header">
 			<h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_150_edit.png"  alt="bin" style="margin-top:-10px"> Edit User Info</h3>
 		</div>
 			<div class="modal-body">
+				<div id="message">
+				</div>
 				 <form action="" method="POST" name="accountSettingsForm" id="accountSettingsForm">			
 				<div class = "row-fluid">
 					<strong>First Name</strong><br>
@@ -39,21 +41,21 @@
 				<div id= "oldpass-div" class = "row-fluid" style="display:none">
 					<strong>Old Password</strong><br>
 					<?php 
-						$oldPassword=array('type'=>'text','class'=>'span8','id'=>'oldpass', 'name'=>'oldpass');
+						$oldPassword=array('type'=>'password','class'=>'span8','id'=>'oldpass', 'name'=>'oldpass');
 						echo form_input($oldPassword);?>
 				</div>
 				
 				<div id= "newpass-div" class = "row-fluid" style="display:none">
 					<strong>New Password</strong><br>
 					<?php 
-						$newPassword=array('type'=>'text','class'=>'span8','id'=>'newpass', 'name'=>'newpass');
+						$newPassword=array('type'=>'password','class'=>'span8','id'=>'newpass', 'name'=>'newpass');
 						echo form_input($newPassword);?>
 				</div>
 				
 				<div id= "confirmpass-div" class = "row-fluid" style="display:none">
 					<strong>Confirm Password</strong><br>
 					<?php 
-						$confirmPassword=array('type'=>'text','class'=>'span8','id'=>'confirmpass', 'name'=>'confirmpass');
+						$confirmPassword=array('type'=>'password','class'=>'span8','id'=>'confirmpass', 'name'=>'confirmpass');
 						echo form_input($confirmPassword);?>
 				</div>
 				

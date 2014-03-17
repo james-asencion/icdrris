@@ -188,7 +188,12 @@ $('#btnYesDeleteVictim').click(function(){
 
                 });
 });
-  
+
+$('#reportNewIncidentButton').click(function(){
+		$('#modalReportIncident').modal('show');
+		console.log("report new incident button clicked");
+});
+
 }
 
 
