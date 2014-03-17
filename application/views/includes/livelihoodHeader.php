@@ -15,11 +15,14 @@
         <!--<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 
+        
+        <script src="<?php echo base_url();?>application/views/js/barangayResources.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/confirmation.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/formSubmission.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/deployLivelihoodScript.js"></script>
         <script src="<?php echo base_url();?>application/views/js/livelihoodModal.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/livelihoodMap.js"></script>
+
 
     	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
     	

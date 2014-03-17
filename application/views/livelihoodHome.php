@@ -258,6 +258,7 @@
 
             <!--  display Barangay Resources details -->
             <div id="barangayTabbable" class="barangayTabbable" style="display:none">
+              <div id="manageResourceButton"></div>
               <h4><div style="color:darkorange;">Physical Resources</div></h4>
               <div id="physical-resource" style="color:white;"></div>
               <h4><div style="color:darkorange;" >Natural Resources</div></h4>

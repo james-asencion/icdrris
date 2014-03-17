@@ -436,7 +436,7 @@ function getAllMapElements() {
     $("#incidentList").html("");
 
     mapElements = [];
-    console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
+    //console.log("Map Elements array is now ----->>>>>"+mapElements.length+"<<<<<-----");
 
     //This is the option to change the polygon color according to the disaster type
     var polygonColor = {
@@ -1219,7 +1219,7 @@ function displayBarangayDetailsFromMap(location_id)
     //alert("respondent id ->"+deployment_id);
     $("#barangayTabbable").show("slow");
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToBarangayList()" class="subBreadCrumb1" id="subBreadCrumb1">Barangay List</a><span class="divider">/</span></li>');
-
+    $("#manageResourceButton").html("<a class=\"btn btn-small btn-primary\" href=\"http://localhost/icdrris/Livelihood/manageBarangayResources/id/"+location_id+"\">Manage Resources</a>");
      /*retrieve the response organization name to be used in the breadcrumbs*/
     request = $.ajax({
         url: "http://localhost/icdrris/Livelihood/getBarangayName",
@@ -1348,6 +1348,11 @@ function displayBarangayResource(locationId, elementId)
     //alert('displayDetails invoked with id->'+livelihoodId);
     //$("#subBreadCrumb1").remove();
     $("#barangayList").hide("fast");
+    $("#physical-resource").html('');
+    $("#natural-resource").html('');
+    $("#social-resource").html('');
+    $("#human-resource").html('');
+    $("#financial-resource").html('');
     //openSideBar();
 
     //alert("respondent id ->"+deployment_id);
@@ -1355,7 +1360,8 @@ function displayBarangayResource(locationId, elementId)
      /*retrieve the response organization name to be used in the breadcrumbs*/
     $("#barangayTabbable").show("fast");
     $(".barangayTabbable").show("fast");
-     /*retrieve the response organization name to be used in the breadcrumbs*/
+    $("#manageResourceButton").html("<a class=\"btn btn-small btn-primary\" href=\"http://localhost/icdrris/Livelihood/manageBarangayResources/id/"+locationId+"\">Manage Resources</a>");
+      /*retrieve the response organization name to be used in the breadcrumbs*/
 
     
 
@@ -1507,5 +1513,8 @@ function victimsTab() {
                 $("#table-rows-victims").html("Sorry, system error.");
             }
         });
+}
+function manageBarangayResources(locationId){
+    window.location("http://localhost/icdrris/Livelihood/id/"+locationId);
 }
 

@@ -191,12 +191,15 @@ class Livelihood extends CI_Controller
         $query = $this->LivelihoodModel->getBarangayResourceByCategory($this->input->post('location_id'), $this->input->post('resource_category'));
         $resources = $query->result();
         //echo count($resources);
+        echo "<table class='table table-condensed' style='color:#cccccc;'>";
         if($query->num_rows()>0){
             foreach ($resources as $resource) {
             //echo $resource->resource_category;
-            echo $resource->location_resource_description.": ".$resource->location_resource_quantity." <br>";
+            echo "<tr><td>".$resource->location_resource_description."</td>
+            <td>".$resource->location_resource_quantity."</td></tr>";
             }
         }
+        echo "</table>";
         
     }
     function getLivelihoodOrganizationDetails(){
@@ -505,6 +508,45 @@ class Livelihood extends CI_Controller
         $this->load->view('includes/footer');
         
     }
+    function manageBarangayResources(){
+
+        $get = $this->uri->uri_to_assoc();
+        $data['barangay'] = $this->LivelihoodModel->getBarangay($get['id']);
+        $data['physicalResources'] = $this->LivelihoodModel->getBarangayResource($get['id'],'1');
+        $data['naturalResources'] = $this->LivelihoodModel->getBarangayResource($get['id'],'2');
+        $data['humanResources'] = $this->LivelihoodModel->getBarangayResource($get['id'],'3');
+        $data['socialResources'] = $this->LivelihoodModel->getBarangayResource($get['id'],'4');
+        $data['financialResources'] = $this->LivelihoodModel->getBarangayResource($get['id'],'5');
+        $this->load->view('includes/livelihoodHeader');
+        $this->load->view('barangayResourceView',$data);
+        $this->load->view('includes/livelihoodFooter');
+        
+    }
+    function addBarangayResource(){
+        $data = array(  'resource_id' => $this->input->post('resource_id'),
+                        'location_id' => $this->input->post('location_id'),
+                        'location_resource_quantity' => $this->input->post('quantity'),
+                        'location_resource_description' => $this->input->post('description')
+                    );
+        
+        $this->LivelihoodModel->addBarangayResource($data);
+        return $this->displayBarangayResourceTable($this->input->post('location_id'), $this->input->post('resource_id'));
+        
+
+    }
+    function displayBarangayResourceTable($location_id, $resource_id){
+        $result = $this->LivelihoodModel->getBarangayResource($location_id,$resource_id);
+        echo "<tr><th>Resource Description</th><th>Resource Quantity</th><th>Actions</th></tr>";
+        foreach ($result as $r) {
+                echo "<tr>
+                <td>".$r->location_resource_description."</td>
+                <td>".$r->location_resource_quantity."</td>
+                <td>
+                <a href=\"#\" class=\"confirm-delete\" data-name=\"".$r->location_resource."\" data-id=".$r->location_resource.">
+                <i class=\"icon-trash\"></i></a>
+                </td></tr>";
+        }  
+    }
     function getAllLivelihoodProgramsCheckboxList(){
         $programs = $this->LivelihoodModel->getAllLivelihoodPrograms();
 
@@ -628,19 +670,6 @@ class Livelihood extends CI_Controller
             header('HTTP 400 Bad Request', true, 400);
             echo "error encountered";
          }
-         //else{
-            //echo "error encountered";
-            //$a = array("username"=>"username already exist");
-            //$arr = array("errors"=>$a);
-            //$responseData = json_encode($arr);
-            //echo $responseData;
-            //header('HTTP 400 Bad Request', true, 400);
-            //echo "error encountered";
-            //{"errors": {"username": "username already exist"} }
-            //$responseData = json_encode("{success:false, message:'server error'}");
-            
-            //echo "Error in Query".$this->input->post('pk');
-         //}
         
     }
 
