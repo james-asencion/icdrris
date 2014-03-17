@@ -183,6 +183,22 @@ class Livelihood extends CI_Controller
         echo $org->livelihood_organization_name;
         //echo "test";
     }
+    function getBarangayName(){
+        $result = $this->LivelihoodModel->getBarangayName($this->input->post('id'));
+        echo $result->location_address;
+    }
+    function getResourceByCategory(){
+        $query = $this->LivelihoodModel->getBarangayResourceByCategory($this->input->post('location_id'), $this->input->post('resource_category'));
+        $resources = $query->result();
+        //echo count($resources);
+        if($query->num_rows()>0){
+            foreach ($resources as $resource) {
+            //echo $resource->resource_category;
+            echo $resource->location_resource_description.": ".$resource->location_resource_quantity." <br>";
+            }
+        }
+        
+    }
     function getLivelihoodOrganizationDetails(){
 
         $org = $this->LivelihoodModel->getLivelihoodOrg($this->input->post('id'));

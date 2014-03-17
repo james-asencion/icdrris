@@ -43,6 +43,7 @@ class MapController extends  CI_Controller
 
 		$data['elements']  = $this->MapModel->getMapElements1($dateFrom, $dateTo);
 		$data['organizations'] = $this->MapModel->getAllLivelihoodOrganizations();
+		$data['barangayListItem'] = $this->MapModel->getAllBarangays();
 		//echo count($data['responseOrganizations']);
 		$this->load->view('getAllLivelihoodMappingElements',$data);
 	}

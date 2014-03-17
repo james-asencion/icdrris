@@ -27,11 +27,12 @@ $(document).ready(function() {
             props += ($(b).is(':checked'))?Math.pow(2,i):0;
         });
         //sendProps(props);
-        console.log("current props ->"+props);
+        //console.log("current props ->"+props);
 
     //alert("Map Element size is now -->>> "+mapElements.length+"<<<------");
     $("#incidentList").html("");
     $("#livelihoodList").html("");
+    $("#barangayList").html("");
     for(var i=0;i<mapElements.length;i++){
 
         //console.log("current props ->"+props);
@@ -46,11 +47,11 @@ $(document).ready(function() {
         filterProp3 = parseInt(filterPropBinary.substring(length-9, length-7), 2);
 
         if( mapElements[i].elementType === 3){
-            console.log("props : "+props+"  elementProps : "+mapElements[i].props4);
+            //console.log("props : "+props+"  elementProps : "+mapElements[i].props4);
         }
         if(!props){
             //do nothing
-            console.log("nothing to do here");
+            //console.log("nothing to do here");
             mapElements[i].setVisible(false);
         }
         //if the selected filter is only the map elements filter
@@ -66,7 +67,11 @@ $(document).ready(function() {
                 if(mapElements[i].elementType === 3){
                     //alert("append to livelihood list");
                     appendToLivelihoodList(mapElements[i]);
-                } else{
+                }
+                else if(mapElements[i].elementType === 6){
+                    appendToBarangayList(mapElements[i]);
+                } 
+                else{
                     //alert("append to incident list");
                     appendToIncidentList(mapElements[i]);
                 }
@@ -86,7 +91,11 @@ $(document).ready(function() {
             {
                 if(mapElements[i].elementType === 3){
                     appendToLivelihoodList(mapElements[i]);
-                } else{
+                } 
+                else if(mapElements[i].elementType === 6){
+                    appendToBarangayList(mapElements[i]);
+                } 
+                else{
                     appendToIncidentList(mapElements[i]);
                 }
             }
@@ -103,7 +112,11 @@ $(document).ready(function() {
             {
                 if(mapElements[i].elementType === 3){
                     appendToLivelihoodList(mapElements[i]);
-                } else{
+                } 
+                else if(mapElements[i].elementType === 6){
+                    appendToBarangayList(mapElements[i]);
+                } 
+                else{
                     appendToIncidentList(mapElements[i]);
                 }
             }
@@ -120,7 +133,11 @@ $(document).ready(function() {
             {
                 if(mapElements[i].elementType === 3){
                     appendToLivelihoodList(mapElements[i]);
-                } else{
+                } 
+                else if(mapElements[i].elementType === 6){
+                    appendToBarangayList(mapElements[i]);
+                } 
+                else{
                     appendToIncidentList(mapElements[i]);
                 }
             }
@@ -137,7 +154,11 @@ $(document).ready(function() {
             {
                 if(mapElements[i].elementType === 3){
                     appendToLivelihoodList(mapElements[i]);
-                } else{
+                } 
+                else if(mapElements[i].elementType === 6){
+                    appendToBarangayList(mapElements[i]);
+                } 
+                else{
                     appendToIncidentList(mapElements[i]);
                 }
             }
@@ -154,7 +175,11 @@ $(document).ready(function() {
             {
                 if(mapElements[i].elementType === 3){
                     appendToLivelihoodList(mapElements[i]);
-                } else{
+                } 
+                else if(mapElements[i].elementType === 6){
+                    appendToBarangayList(mapElements[i]);
+                } 
+                else{
                     appendToIncidentList(mapElements[i]);
                 }
             }
@@ -171,7 +196,11 @@ $(document).ready(function() {
             {
                 if(mapElements[i].elementType === 3){
                     appendToLivelihoodList(mapElements[i]);
-                } else{
+                } 
+                else if(mapElements[i].elementType === 6){
+                    appendToBarangayList(mapElements[i]);
+                } 
+                else{
                     appendToIncidentList(mapElements[i]);
                 }
             }
@@ -227,6 +256,8 @@ function createPropertiesArray4(mapElement){
     var prop = 0;
 
     prop += (elementType === "3")?Math.pow(2,9):0;
+    prop += (elementType === "6")?Math.pow(2,10):0;
+
     
 
     return prop;
@@ -333,6 +364,13 @@ function bindPolygonToSidePanel(polygon) {
         map.setCenter(polygon.center);
     });
 }
+function bindBarangayToSidePanel(polygon) {
+    var location_id = polygon.id;
+    google.maps.event.addListener(polygon, 'click', function() {
+        displayBarangayDetailsFromMap(location_id);
+        map.setCenter(polygon.center);
+    });
+}
 function bindMarkerToSidePanel(marker) {
     var incidentReportId = marker.id;
     var incidentLocationId = marker.incidentLocationId;
@@ -413,6 +451,10 @@ function getAllMapElements() {
         Landslide: {
             //red
             fillColor: "#E92222"
+        },
+        barangay: {
+            //red
+            fillColor: "#E92222"
         }
 
     };
@@ -420,13 +462,17 @@ function getAllMapElements() {
     var polygonStroke = {
         Flashflood: {
             //blue
-            fillColor: "#0404B4"
+            strokeColor: "#0404B4"
         },
         Mudslide: {
             //brown
-            fillColor: "#7A4444"
+            strokeColor: "#7A4444"
         },
         Landslide: {
+            //red
+            strokeColor: "#E92222"
+        },
+        barangay: {
             //red
             fillColor: "#E92222"
         }
@@ -473,6 +519,7 @@ function getAllMapElements() {
         var polygons = xml.documentElement.getElementsByTagName("polygons")[0].getElementsByTagName("polygon");
         var markers = xml.documentElement.getElementsByTagName("markers")[0].getElementsByTagName("marker");
         var organizations = xml.documentElement.getElementsByTagName("livelihoodOrganizations")[0].getElementsByTagName("livelihoodOrganization");
+        var barangays = xml.documentElement.getElementsByTagName("barangays")[0].getElementsByTagName("barangay");
         //empty the Polygon array first
         //emptyArray(polygonsArray1);
         //console.log("polygons array length: "+polygonsArray1.length);
@@ -684,6 +731,83 @@ function getAllMapElements() {
             marker.setMap(map);
             bindLivelihoodToSidePanel(marker);
         }
+        //================================================================================================================
+        var barangayIndex=0;
+        for (barangayIndex = 0; barangayIndex < barangays.length; barangayIndex++) {
+
+            var arr1 = createPropertiesArray1(barangays[barangayIndex]);
+            var int1 = parseInt(arr1.join(''),2);
+
+            var arr2 = createPropertiesArray2(barangays[barangayIndex]);
+            var int2 = parseInt(arr2.join(''),2);
+
+            var arr3 = createPropertiesArray3(barangays[barangayIndex]);
+            var int3 = parseInt(arr3.join(''),2);
+
+            var int4 = createPropertiesArray4(barangays[barangayIndex]);
+
+            //console.log("Integer Equivalent -->>"+int+"<<<---");
+            //Extract all the elements needed for the sidebar(incident details)
+            var location_id = barangays[barangayIndex].getAttribute("location_id");
+            var location_address = barangays[barangayIndex].getAttribute("location_address");
+            var location_type = barangays[barangayIndex].getAttribute("location_type");
+            var color = polygonColor['barangay'] || {};
+            var stroke = polygonStroke['barangay'] || {};
+           //============DECLARE VARIABLES=============
+            var coordinates = [];
+            //var bounds = new google.maps.LatLngBounds();
+            var myPolygon;
+            var center;
+            var points = barangays[barangayIndex].getElementsByTagName("point");
+
+            //console.log(location_address+" -> "+(polygonIndex+i+j+barangayIndex));
+            //======EXTRACT MULTIPLE POINTS======
+            for (var b = 0; b < points.length; b++)
+            {
+                var point = new google.maps.LatLng(
+                        parseFloat(points[b].getAttribute("lat")),
+                        parseFloat(points[b].getAttribute("lng")));
+                coordinates[b] = point;
+                //bounds.extend(point);
+            }
+
+            //console.log( "CALCULATED CENTER: "+calculateCenter(coordinates));
+            center = calculateCenter(coordinates);
+            //alert("center calculated at-->"+center);
+            var polyOptions = {
+                paths: coordinates,
+                center:center,
+                visible: false, 
+                strokeColor: color.fillColor,
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: color.strokeColor,
+                fillOpacity: 0.35,
+                arrId: (polygonIndex+i+j+barangayIndex),
+                id: location_id,
+                location_address: location_address,
+                location_type: location_type,
+                elementType: 6,
+                props1: int1,
+                props2: int2, 
+                props3: int3,
+                props4: int4
+            }
+
+            myPolygon = new google.maps.Polygon(polyOptions);
+            mapElements.push(myPolygon);
+            appendToBarangayList(myPolygon);
+
+            //alert("current array length = "+mapElements.length+"  ,monitored index = "+(polygonIndex+i+j+barangayIndex));
+            //APPEND THE POLYGON DETAILS TO SIDEBAR HERE
+            bindBarangayToSidePanel(myPolygon);
+            //appendToList(myPolygon, incident_report_id, center, polygons[polygonIndex]);
+
+            myPolygon.setMap(map);
+
+
+        }
+        //================================================================================================================
         
         triggerFilters();
     });
@@ -717,7 +841,7 @@ function appendToIncidentList(mapElement) {
 
     //append to the list
     var div = document.getElementById('incidentList');
-    console.log(div);
+    //console.log(div);
     div.innerHTML = div.innerHTML + listItem;
 
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
@@ -767,12 +891,38 @@ function appendToLivelihoodList(mapElement) {
 
     //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
 }
+function appendToBarangayList(mapElement) {
+    console.log("append to barangay list invoked");
+    
+    var listItem="";
+    listItem += "<div class=\"accordion\" id=\"accordion" + mapElement.id + "\">";
+    listItem += "<div class=\"accordion-group\">";
+    listItem += "<div class=\"accordion-heading\">";
+    listItem += "<a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion" + mapElement.id + "\" href=\"#collapse" + mapElement.id + "\" style= \"display: inline-block; width: 200px;\">" + mapElement.location_address + "</a>";
+    //place icon-links here [show details]
+    listItem += "| <a class= \"label label-info\"  data-id=\"" + mapElement.id + "\" onclick=\"displayBarangayResource("+mapElement.id+","+mapElement.arrId+");\"><i class= \"icon-eye-open icon-white\" data-arrId=\""+mapElement.arrId+"\"data-id=\"" + mapElement.id + "\" id= \"show-details-btn\" title= \"Show details\"> </i> Show Resources </a> "; // show details icon
+    //end div
+    listItem += "</div>";
+    listItem += "<div id=\"collapse" + mapElement.id + "\" class=\"accordion-body collapse in\">";
+    listItem += "<div class=\"accordion-inner\">";
+    listItem += "<p class=\"list-group-item-text\">Location :" + mapElement.location_address + "<br> Location Type:" + mapElement.location_type + "</p>";
+    listItem += "</div></div></div>";
+
+    //append to the list
+    var div = document.getElementById('barangayList');
+    //console.log(div);
+    div.innerHTML = div.innerHTML + listItem;
+
+    //map.setCenter(new google.maps.LatLng(parseFloat(markerDetails.getAttribute("lat")), parseFloat(markerDetails.getAttribute("lng"))));
+}
 
 function backToHome(){
     $("#incidentList").hide();
     $(".incidentTabbable").hide();
     $("#livelihoodList").hide();
     $(".livelihoodTabbable").hide();
+    $("#barangayList").hide();
+    $(".barangayTabbable").hide();
     $("#homeView").show("fast");
     $(".subBreadCrumb2").remove();
     $("#subBreadCrumb1").remove();
@@ -790,6 +940,11 @@ function livelihoodList(){
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToLivelihoodList()" class="subBreadCrumb1" id="subBreadCrumb1">Livelihood Orgs List</a><span class="divider">/</span></li>');
     $("#livelihoodList").show("fast");
 }
+function barangayList(){
+    $("#homeView").hide();
+    $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToBarangayList()" class="subBreadCrumb1" id="subBreadCrumb1">Barangay List</a><span class="divider">/</span></li>');
+    $("#barangayList").show("fast");
+}
 function backToIncidentList() {
     console.log(">>>>---backToIncidentList invoked---<<<<<");
     $(".subBreadCrumb2").remove();
@@ -803,6 +958,13 @@ function backToLivelihoodList() {
     $(".livelihoodTabbable").hide();
     $("#livelihoodTabbable").hide("fast");
     $("#livelihoodList").show("fast");
+}
+function backToBarangayList() {
+    console.log(">>>>---backToRespondentList invoked---<<<<<");
+    $(".subBreadCrumb2").remove();
+    $(".barangayTabbable").hide();
+    $("#barangayTabbable").hide("fast");
+    $("#barangayList").show("fast");
 }
 function displayIncidentDetails(incidentReportId, elementId, incident_location_id) {
 
@@ -1046,28 +1208,97 @@ function displayLivelihoodDetailsFromMap(livelihoodId,element)
             console.log(msg);
         }
     });
-
-    // /* retrieve table of deployed members */
-    // request = $.ajax({
-    //     url: "http://localhost/icdrris/ResponseOrg/getLivelihoodOrganizationMembers",
-    //     type: "POST",
-    //     data: {orgId:livelihoodId},
-    //     success: function(msg) {
-    //         console.log("successfully retrieved all members");
-    //         $("#livelihood-membersTable").html("Test");
-    //     },
-    //     error: function() {
-    //         console.log("unable to fetch deployed members table");
-    //         console.log(msg);
-    //     }
-    // });
-
 }
+function displayBarangayDetailsFromMap(location_id)
+{
 
+    backToHome();
+    $("#homeView").hide();
+    openSideBar();
+
+    //alert("respondent id ->"+deployment_id);
+    $("#barangayTabbable").show("slow");
+    $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToBarangayList()" class="subBreadCrumb1" id="subBreadCrumb1">Barangay List</a><span class="divider">/</span></li>');
+
+     /*retrieve the response organization name to be used in the breadcrumbs*/
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getBarangayName",
+        type: "POST",
+        data: {id:location_id},
+        success: function(msg) {
+                    $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            //console.log(msg);
+        }
+    });
+
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:location_id,resource_category:'1'},
+        success: function(msg) {
+                    $("#physical-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:location_id,resource_category:'2'},
+        success: function(msg) {
+                    $("#natural-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:location_id,resource_category:'3'},
+        success: function(msg) {
+                    $("#human-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:location_id,resource_category:'4'},
+        success: function(msg) {
+                    $("#social-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:location_id,resource_category:'5'},
+        success: function(msg) {
+                    $("#financial-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });    
+}
 function displayLivelihoodDetails(livelihoodId,elementId)
 {
 
-    console.log('displayDetails invoked with id->'+livelihoodId);
+    //alert('displayDetails invoked with id->'+livelihoodId);
     //$("#subBreadCrumb1").remove();
     $("#livelihoodList").hide("fast");
     //openSideBar();
@@ -1109,6 +1340,131 @@ function displayLivelihoodDetails(livelihoodId,elementId)
     map.setCenter(mapElements[elementId].center);
     mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
     stopAnimation(mapElements[elementId]);
+
+}
+function displayBarangayResource(locationId, elementId)
+{
+
+    //alert('displayDetails invoked with id->'+livelihoodId);
+    //$("#subBreadCrumb1").remove();
+    $("#barangayList").hide("fast");
+    //openSideBar();
+
+    //alert("respondent id ->"+deployment_id);
+
+     /*retrieve the response organization name to be used in the breadcrumbs*/
+    $("#barangayTabbable").show("fast");
+    $(".barangayTabbable").show("fast");
+     /*retrieve the response organization name to be used in the breadcrumbs*/
+
+    
+
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getBarangayName",
+        type: "POST",
+        data: {id:locationId},
+        success: function(msg) {
+                    $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + msg + '</a></li>');
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            //console.log(msg);
+        }
+    });
+
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:locationId,resource_category:'1'},
+        success: function(msg) {
+                    $("#physical-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:locationId,resource_category:'2'},
+        success: function(msg) {
+                    $("#natural-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:locationId,resource_category:'3'},
+        success: function(msg) {
+                    $("#human-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:locationId,resource_category:'4'},
+        success: function(msg) {
+                    $("#social-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+    request = $.ajax({
+        url: "http://localhost/icdrris/Livelihood/getResourceByCategory",
+        type: "POST",
+        data: {location_id:locationId,resource_category:'5'},
+        success: function(msg) {
+                    $("#financial-resource").html(msg);
+        },
+        error: function() {
+            //console.log("error retrieving response organization deployment details");
+            console.log(msg);
+        }
+    });
+
+
+     /*retrieve the response organization name to be used in the breadcrumbs*/
+    //  request = $.ajax({
+    //     url: "http://localhost/icdrris/Livelihood/getLivelihoodOrganizationName",
+    //     type: "POST",
+    //     data: {id:livelihoodId},
+    //     success: function(name) {
+    //         //$("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToLivelihoodList()" class="subBreadCrumb1" id="subBreadCrumb1">Livelihood Orgs List</a><span class="divider">/</span></li>');
+    //         $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + name + '</a></li>');
+    //         //alert("name retrieved: "+name);
+    //     },
+    //     error: function() {
+    //         console.log("error retrieving response organization name");
+    //         console.log(name);
+    //     }
+    // });
+    // request = $.ajax({
+    //     url: "http://localhost/icdrris/Livelihood/getLivelihoodOrganizationDetails",
+    //     type: "POST",
+    //     data: {id:livelihoodId},
+    //     success: function(msg) {
+    //              $("#livelihood-information").html(msg);
+    //     },
+    //     error: function() {
+    //         console.log("error retrieving response organization name");
+    //         console.log(msg);
+    //     }
+    // });
+    //alert("element center ->"+mapElements.length);
+    map.setCenter(mapElements[elementId].center);
+    //mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
+    //stopAnimation(mapElements[elementId]);
 
 }
 
