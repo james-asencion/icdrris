@@ -100,7 +100,7 @@
                    
 	<!-- HEADER MENUS-->
 	<ul class= "nav">
-			<a href="#modalReportIncident" class="btn btn-danger" role="button" data-toggle="modal">
+			<a href="#modalReportIncident" class="btn btn-danger btn-small" role="button" data-toggle="modal">
 				<i class = "icon-white icon-bell"></i> Report Incident 
 			</a>
                             
@@ -122,9 +122,6 @@
 					</li>
 				</ul>
 			</li>
-    </ul>
-    <ul class="nav">
-        <button id="reportNewIncidentButton" class="btn btn-primary btn-small" type="button">Report New Incident</button>
     </ul>
 
     <?php if(($this->session->userdata('user_type') === 'bdrrmo') & ($this->session->userdata('is_logged_in'))){?>

@@ -399,5 +399,21 @@ class LivelihoodModel extends CI_Model{
 			return false;
 		}
 	}
+	function getBarangayName($id){
+		$this->db->where('location_id',$id);
+        $query = $this->db->get('locations');
+
+        return $query->row();
+	}
+	function getBarangayResourceByCategory($id, $category){
+		$query = $this->db->query("	SELECT l.location_id, l.resource_id, l.location_resource_description, l.location_resource_quantity, r.resource_category
+							FROM location_resources l
+							LEFT JOIN resources r
+							ON l.resource_id=r.resource_id
+							WHERE l.location_id='$id'
+							AND r.resource_id='$category';");
+		
+		return $query;
+	}
 }
 ?>

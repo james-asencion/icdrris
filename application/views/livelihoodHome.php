@@ -125,7 +125,13 @@
                                       <input type="checkbox">
                                       Livelihood Organizations
                                   </label>
-                              </li>                                                                                                                      
+                              </li>  
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Barangay Resources
+                                  </label>
+                              </li>                                                                                                                    
                           </ul>
                       </div> 
                 </form>
@@ -164,7 +170,8 @@
           <!-- HOME VIEW -->
           <div class="span12" id="homeView">
               <a onclick="incidentList()" id="a-ListofIncidents"> Incidents</a><br>
-              <a onclick="livelihoodList()" id="a-ListofRespOrg"> Livelihood Organizations</a><br>
+              <a onclick="livelihoodList()" id="a-ListofLivelihoodOrgs"> Livelihood Organizations</a><br>
+              <a onclick="barangayList()" id="a-ListofBarangays"> Barangays</a>
           </div>
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
@@ -237,13 +244,31 @@
 
 
 
-        <!-- LIST OF RESPONDENTS -->
+        <!-- LIST OF Livelihood Programs -->
         <div class = "span12" id="livelihoodList" style="display:none"></div>
 
-            <!--  DISPLAY RESPONDENT DETAILS -->
+            <!--  DISPLAY Livelihood Program Details -->
             <div id="livelihoodTabbable" class="livelihoodTabbable" style="display:none">
               <div id="livelihood-information" ></div>
               <div id="livelihood-membersTable" class="table table-condensed " style="color:#cccccc;"></div>
+            </div>
+
+            <!-- LIST OF Barangays -->
+        <div class = "span12" id="barangayList" style="display:none"></div>
+
+            <!--  display Barangay Resources details -->
+            <div id="barangayTabbable" class="barangayTabbable" style="display:none">
+              <h4><div style="color:darkorange;">Physical Resources</div></h4>
+              <div id="physical-resource" style="color:white;"></div>
+              <h4><div style="color:darkorange;" >Natural Resources</div></h4>
+              <div id="natural-resource" style="color:white;"></div>
+              <h4><div style="color:darkorange;">Human Resources</div></h4>
+              <div id="human-resource" style="color:white;"style="color:white;"></div>
+              <h4><div style="color:darkorange;">Social Resources</div></h4>
+              <div id="social-resource" style="color:white;" ></div>
+              <h4><div style="color:darkorange;">Financial Resources</div></h4>
+              <div id="financial-resource" style="color:white;"></div>
+              <!--<div id="livelihood-membersTable" class="table table-condensed " style="color:#cccccc;"></div> -->
             </div>
 
 					

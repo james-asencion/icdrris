@@ -82,7 +82,7 @@
                    
 	<!-- HEADER MENUS-->
    	<ul class= "nav">
-			<a href="#modalReportIncident" class="btn btn-danger" role="button" data-toggle="modal">
+			<a href="#modalReportIncident" class="btn btn-danger btn-small" role="button" data-toggle="modal">
 				<i class = "icon-white icon-bell"></i> Report Incident 
 			</a>
                             
