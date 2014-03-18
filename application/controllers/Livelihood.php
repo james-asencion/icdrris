@@ -341,7 +341,7 @@ class Livelihood extends CI_Controller
                         echo "<tr><td>".$resource->livelihood_resource_description.
                         "</td><td>".$resource->quantity_available."</td>
                         <td><a href=\"#\" class=\"confirm-delete\" data-name=\"".$resource->livelihood_program_resource_id."\" data-id=".$resource->livelihood_program_resource_id."><i class=\"icon-trash\"></i></a>
-                        <a class=\"confirm-edit\" align=\"center\" href=viewLivelihooodProgram/id/".$resource->livelihood_program_resource_id."><i class=\"icon-search\"></i></a>
+                        <a class=\"confirm-edit\" align=\"center\" href=viewLivelihoodProgram/id/".$resource->livelihood_program_resource_id."><i class=\"icon-search\"></i></a>
                         </td></tr>";
             } 
             echo "</table>";
@@ -472,15 +472,11 @@ class Livelihood extends CI_Controller
 
         $result = $this->LivelihoodModel->getTaggedExternalOrganizations($program_id);
         if($result){
-            echo "<div class = \"well offset3 span4\">";
-            echo "<h4>External Organization Provider/s</h4>";
-            echo "<table class=\"table table-striped\">";
-            echo "<tr><th>Agency Name</th><th>Agency Address</th><th>Contact Information</th><th>Actions</th></tr>";
+            echo "<tr><th>Agency Name</th><th>Actions</th></tr>";
           
            foreach ($result as $row) {
-                echo "<tr><td>".$row->agency_name."</td><td>".$row->agency_address."</td><td>".$row->contact_number."</td><td></td></tr>";
+                echo "<tr><td>".$row->agency_name."</td><td><i class=\"icon-trash\"></i></td></tr>";
            }  
-           echo "</table></div>";
         }
         else{
             echo "error encountered"+$result;
@@ -492,7 +488,7 @@ class Livelihood extends CI_Controller
         $this->load->view('externalOrganizationsView',$data);
         $this->load->view('includes/footer');
     }
-    function viewLivelihooodProgram(){
+    function viewLivelihoodProgram(){
 
         $get = $this->uri->uri_to_assoc();
         $data['livelihood_program'] = $this->LivelihoodModel->getLivelihoodProgram($get['id']);
@@ -603,15 +599,12 @@ class Livelihood extends CI_Controller
         $result = $this->LivelihoodModel->getTaggedExternalOrganizations($livelihood_program_id);
 
         if($result){
-            echo "<div class = \"well offset3 span4\">";
-            echo "<h4>External Organization Provider/s</h4>";
-            echo "<table class=\"table table-striped\">";
-            echo "<tr><th>Agency Name</th><th>Agency Address</th><th>Contact Information</th><th>Actions</th></tr>";
+
+            echo "<tr><th>Agency Name</th><th>Actions</th></tr>";
           
            foreach ($result as $row) {
-                echo "<tr><td>".$row->agency_name."</td><td>".$row->agency_address."</td><td>".$row->contact_number."</td><td></td></tr>";
+                echo "<tr><td>".$row->agency_name."</td><td><i class=\"icon-trash\"></i></td></tr>";
            }  
-           echo "</table></div>";
         }
         else{
             echo "error encountered"+$result;

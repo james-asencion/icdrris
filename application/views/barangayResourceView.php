@@ -46,7 +46,7 @@
 <div class = "well well-small span6">
 <div id="naturalResourceList">
     <h6>Natural Resources</h6>
-    <table id="physicalResources" class="table table-striped" >
+    <table id="naturalResources" class="table table-striped" >
     <tr><th>Resource Description</th><th>Resource Quantity</th><th>Actions</th></tr>
     <?php foreach ($naturalResources as $natural) {
                 echo "<tr>
@@ -64,7 +64,7 @@
 <div class = "well well-small span6">
 <div id="humanResourceList">
     <h6>Human Resources</h6>
-    <table id="physicalResources" class="table table-striped" >
+    <table id="humanResources" class="table table-striped" >
     <tr><th>Resource Description</th><th>Resource Quantity</th><th>Actions</th></tr>
     <?php foreach ($humanResources as $human) {
                 echo "<tr>
@@ -82,7 +82,7 @@
 <div class = "well well-small span6">
 <div id="socialResourceList">
     <h6>Social Resources</h6>
-    <table id="physicalResources" class="table table-striped" >
+    <table id="socialResources" class="table table-striped" >
     <tr><th>Resource Description</th><th>Resource Quantity</th><th>Actions</th></tr>
     <?php foreach ($socialResources as $social) {
                 echo "<tr>
@@ -100,7 +100,7 @@
 <div class = "well well-small span6">
 <div id="financialResourceList">
     <h6>Financial Resources</h6>
-    <table id="physicalResources" class="table table-striped" >
+    <table id="financialResources" class="table table-striped" >
     <tr><th>Resource Description</th><th>Resource Quantity</th><th>Actions</th></tr>
     <?php foreach ($financialResources as $financial) {
                 echo "<tr>

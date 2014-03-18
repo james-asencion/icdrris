@@ -120,6 +120,7 @@ foreach($requests as $req){
     $request->setAttribute("request_status",$req->request_status);
     $request->setAttribute("request_comments",$req->request_comments);
     $request->setAttribute("flag_request_granted",$req->flag_request_granted);
+    $request->setAttribute("urgency_level",$req->urgency_level);
     $request->setAttribute("geo_lat",$req->geo_lat);
     $request->setAttribute("geo_lng",$req->geo_lng);
     $request->setAttribute("geo_place_name",$req->geo_place_name);

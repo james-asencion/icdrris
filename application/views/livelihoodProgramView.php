@@ -18,18 +18,15 @@
                 <a data-id="<?php echo $livelihood_program->livelihood_program_id;?>" class="chooseFromExistingOrg"><i class="icon-list"></i>Choose From Existing</a>
 </div><br><br>
 <div class="well well-small span 2">
-    <table class="table table-striped">
+    <table class="table table-striped" id="externalOrganizationsTable">
         <th>Name</th><th>Actions</th>
         
-            <?php foreach($external_organizations as $organization){
+            <?php foreach($tagged_external_organizations as $organization){
              echo "<tr><td>".$organization->agency_name."</td><td><i class=\"icon-trash\"></i></td></tr>";
              }?>
         
     </table>
 </div>
-</div>
-<div id="externalOrganizationsTable">
-        
 </div>
 </div>
 <div id="resourcesPanel">
