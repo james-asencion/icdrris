@@ -364,7 +364,7 @@ $(document).ready(function(){
 			else{
 				upOrDown = "rateTrue";
 			}
-			var lastUpOrDown = localStorage.getItem(""+incident_report_id+"-"+ victim_id+"");
+			var lastUpOrDown = localStorage.getItem(""+incident_report_id+""+ victim_id+"");
 			
 			console.log("last upOrDown: "+ lastUpOrDown+ ", Recent upOrDown: "+upOrDown);
 			
@@ -424,7 +424,7 @@ $(document).ready(function(){
 										$("#iThumbsDown").css("background-color", "red");
 									}
 								//localStorage.removeItem(incident_report_id+victim_id);
-								localStorage.setItem(""+incident_report_id+"-"+ victim_id+"", upOrDown);
+								localStorage.setItem(""+incident_report_id+""+ victim_id+"", upOrDown);
 							
 								console.log(""+incident_report_id +""+victim_id+"");
 								for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
@@ -557,8 +557,6 @@ $(document).ready(function(){
 			});
 	};
 // end  RATE
-
-
 //Respond Request
 function respondRequest(request_id){
        console.log("respondRequest function clicked.");
