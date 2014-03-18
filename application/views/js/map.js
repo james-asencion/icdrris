@@ -27,7 +27,7 @@ var count = -1;
                         getAllMapElements();
                         setTimeout( function(){ 
                             playWarningSound(); 
-                        }, 1000 );
+                        }, 2000 );
                         
                         console.log("new entry detected");
                     }
@@ -293,15 +293,16 @@ function testAjax1(handleData) {
 function findMapElement(id){
     //alert("findMapElement take array with size->"+mapElements.length);
     for(var i=0;i<mapElements.length;i++){
-        console.log("element incidentLocationId: "+mapElements[i].incidentLocationId+" , current incident_location_id: "+id);
+        //console.log("element incidentLocationId: "+mapElements[i].incidentLocationId+" , current incident_location_id: "+id);
         if(mapElements[i].incidentLocationId===id){
 
             //alert("found a match at index: "+i);
             //console.log("element incidentLocationId: "+mapElements[i].incidentLocationId+" , current incident_location_id: "+id);
             incidentList();
+            mapElements[i].setVisible(true);
             displayIncidentDetails(mapElements[i].id,i, id);
             //map.setCenter(mapElements[i].center);
-            mapElements[i].setVisible(true);
+            
             //return i;
         }else{
             //console.log("not found at index"+i);
@@ -329,9 +330,9 @@ function playWarningSound(){
     $('#siren')[0].pause(); 
     }, 3000 );
 
-    setTimeout( function(){ 
-    $("#notifications").html('');
-    }, 20000 );
+    // setTimeout( function(){ 
+    // $("#notifications").html('');
+    // }, 20000 );
 
 }
 //-----------------------------------------------------------------------------------------
@@ -615,8 +616,14 @@ function getAllMapElements() {
         ResponseOrg: {
             icon: 'icons/icons1/firstaid.png'
         },
-        Needs: {
-            icon: 'icons/flag.png'
+        Needs1: {
+            icon: 'icons/flag1.png'
+        },
+        Needs2: {
+            icon: 'icons/flag2.png'
+        },
+        Needs3: {
+            icon: 'icons/flag3.png'
         },
         Flashflood: {
             icon: 'icons/naturaldisaster/flood1.png',
@@ -693,6 +700,7 @@ function getAllMapElements() {
             var incident_location_id = polygons[polygonIndex].getAttribute("incident_location_id");
             var disasterType = polygons[polygonIndex].getAttribute("disaster_type");
             var incidentDescription = polygons[polygonIndex].getAttribute("incident_description");
+            var incidentIntensity = polygons[polygonIndex].getAttribute("incident_intensity");
             var incidentDate = polygons[polygonIndex].getAttribute("incident_date");
             var location = polygons[polygonIndex].getAttribute("location_address");
             var flagConfirmed = polygons[polygonIndex].getAttribute("flag_confirmed");
@@ -734,6 +742,7 @@ function getAllMapElements() {
                 incidentLocationId: incident_location_id,
                 disasterType: disasterType,
                 incidentDescription: incidentDescription,
+                incidentIntensity: incidentIntensity,
                 incidentDate: incidentDate,
                 location: location,
                 flagConfirmed: flagConfirmed,
@@ -779,6 +788,7 @@ function getAllMapElements() {
             var incident_location_id = markers[i].getAttribute("incident_location_id");
             var disasterType = markers[i].getAttribute("disaster_type");
             var incidentDescription = markers[i].getAttribute("incident_description");
+            var incidentIntensity = markers[i].getAttribute("incident_intensity");
             var incidentDate = markers[i].getAttribute("incident_date");
             var location = markers[i].getAttribute("location_address");
             var flagConfirmed = markers[i].getAttribute("flag_confirmed");
@@ -802,6 +812,7 @@ function getAllMapElements() {
                 disasterType: disasterType,
                 incidentDescription: incidentDescription,
                 incidentDate: incidentDate,
+                incidentIntensity: incidentIntensity,
                 location: location,
                 flagConfirmed: flagConfirmed,
                 flagTrueRating: flagTrueRating,
@@ -905,6 +916,7 @@ function getAllMapElements() {
             var tweet_id = requests[r].getAttribute("tweet_id");
             var request_date = requests[r].getAttribute("request_date");
             var request_status = requests[r].getAttribute("request_status");
+            var urgency_level = requests[r].getAttribute("urgency_level");
             var request_comments = requests[r].getAttribute("request_comments");
             var flag_request_granted = requests[r].getAttribute("flag_request_granted");
             var tweet_user_id = requests[r].getAttribute("tweet_user_id");
@@ -914,7 +926,7 @@ function getAllMapElements() {
 			var request_url = requests[r].getAttribute("request_url");
             var geo_place_name = requests[r].getAttribute("geo_place_name");
 
-            var icon = customIcons['Needs'] || {};
+            var icon = customIcons['Needs'+urgency_level] || {};
             var point = new google.maps.LatLng(
                     parseFloat(requests[r].getAttribute("geo_lat")),
                     parseFloat(requests[r].getAttribute("geo_lng")));
@@ -939,6 +951,7 @@ function getAllMapElements() {
                 request_status: request_status,
                 request_comments: request_comments,
                 flag_request_granted:flag_request_granted,
+                urgency_level:urgency_level,
                 tweet_user_id:tweet_user_id,
                 request_info_source:request_info_source,
                 request_url:request_url,
@@ -1056,7 +1069,7 @@ function appendToIncidentList(mapElement) {
 
     //append to the list
     var div = document.getElementById('incidentList');
-    console.log(div);
+    //console.log(div);
 	if(listItem == ""){
 		div.innerHTML = div.innerHTML + "No results found.";
 	}
