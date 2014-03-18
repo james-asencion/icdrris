@@ -19,6 +19,33 @@ class IncidentModel extends CI_Model
             return $query->row();
 
         }
+		
+		function updateIncident($incident_report_id, $incident_description, $date_happened, $disaster_type){
+			$sql = "UPDATE incidents SET incident_description = ?, disaster_type = ?, incident_date = ? WHERE incident_report_id = ?";
+			
+			$query= $this->db->query($sql, array($incident_description, $disaster_type, $date_happened, $incident_report_id));
+			
+			if($query){
+				return true;
+			}
+			else{
+				return $query;
+			}
+		}
+		
+		function updateIncidentStatistics($incident_location_id, $death_toll, $no_of_injuries, $no_of_people_missing, $no_of_families_affected, $no_of_houses_destroyed, $estimated_damage_cost, $incident_info_source){
+			$sql = "UPDATE incident_location SET death_toll = ?, no_of_injuries = ?, no_of_people_missing = ?, no_of_families_affected= ?, no_of_houses_destroyed=?, estimated_damage_cost= ?, incident_info_source=? WHERE incident_location_id = ?";
+			
+			$query= $this->db->query($sql, array($death_toll, $no_of_injuries, $no_of_people_missing, $no_of_families_affected, $no_of_houses_destroyed, $estimated_damage_cost, $incident_info_source, $incident_location_id));
+			
+			if($query){
+				return true;
+			}
+			else{
+				return $query;
+			}
+		}
+		
         function saveIncidentPolygon($data){
             // $result = $this->db->query("  INSERT INTO incident_location(incident_report_id,location_id, incident_intensity, polygon, death_toll, no_of_injuries, no_of_people_missing, no_of_families_affected,no_of_houses_destroyed,estimated_damage_cost, incident_info_source)".
             //                     "VALUES ('$data['incident_report_id']','$data['location_id']', '$data['incident_intensity']', PolygonFromText('$data['polygon']'), '$data['death_toll']', '$data['no_of_injuries']', '$data['no_of_people_missing']', '$data['no_of_families_affected']','$data['no_of_houses_destroyed']','$data['estimated_damage_cost']', '$data['incident_info_source']';");

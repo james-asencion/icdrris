@@ -213,10 +213,10 @@
                                          </li>
                                         <?php if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){?>
                                             <li>
-                                              <a href="#modalUpdateIncident" id="editinfo-li" onclick="modifyIncident()" data-incidentid="" role="button" data-toggle="modal"><i class="icon-white icon-edit"></i> Edit Info</a>
+                                              <a href="#" class="editinfo-li" data-incidentid="" role="button" data-toggle="modal" onclick="editIncident(this)"><i class="icon-white icon-edit"></i> Edit Info</a>
                                             </li>
                                             <li>
-                                              <a href="#" id="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
+                                              <a href="#" class="delete-li" data-incidentid="" role="button" data-toggle="modal" ><i class="icon-white icon-trash"></i> Delete</a>
                                             </li>
                                         <?php }?>
                                          

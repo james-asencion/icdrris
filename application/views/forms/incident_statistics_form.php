@@ -66,6 +66,6 @@
 		<div class = "row-fluid">
 			<strong>Source</strong><br>
 			<?php 
-				$source=array('type'=>'number', 'min'=>'0', 'class'=>'span8','id'=>'source','name'=>'source', 'value'=>set_value('source'));
+				$source=array('type'=>'text', 'class'=>'span8','id'=>'source','name'=>'source', 'value'=>set_value('source'));
 				echo form_input($source);?>
 		</div>
