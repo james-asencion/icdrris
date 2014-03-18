@@ -106,6 +106,17 @@ class Incident extends  CI_Controller
                      	$(document).ready(function(){
                         	$("#span-approve-li").html('.$details->flag_true_rating.');
                         	$("#span-disapprove-li").html('.$details->flag_false_rating.');
+                        	$(".editinfo-li").attr("data-incidentdesc", "'.$details->incident_description.'");
+                        	$(".editinfo-li").attr("data-incidentdate", "'.$details->incident_date.'");
+                        	$(".editinfo-li").attr("data-disastertype", "'.$details->disaster_type.'");
+                        	
+							$("#incident-stat").attr("data-deaths", '.$details->death_toll.');
+							$("#incident-stat").attr("data-familiesaffected", '.$details->no_of_families_affected.');
+							$("#incident-stat").attr("data-peoplemissing", '.$details->no_of_people_missing.');
+							$("#incident-stat").attr("data-housesdestroyed", '.$details->no_of_houses_destroyed.');
+							$("#incident-stat").attr("data-injured", '.$details->no_of_injuries.');
+							$("#incident-stat").attr("data-damagecost", '.$details->estimated_damage_cost.');
+							$("#incident-stat").attr("data-infosource", "'.$details->incident_info_source.'");
                         });
 
                         $(document).ready(function(){
@@ -174,7 +185,7 @@ class Incident extends  CI_Controller
 								<p class="brand" href="#" style="font-size: 14px;"> <i class="icon-white icon-signal" style="margin-top:4px"> </i> STATISTICS</p>
 								';
 								if($this->session->userdata('user_type') == 'cdrrmo' || $this->session->userdata('user_type') == 'bdrrmo'){
-						echo	'<p class="brand" style="font-size: 14px;"> <a href="#modalUpdateIncidentStat" data-incident= "'.$incident_location_id.' class="btn-link" role="button" data-toggle="modal">[Update]</a> </p>';
+						echo	'<div class="incident-stat"><p class="brand" style="font-size: 14px;"> <a href="#"  id="incident-stat" data-incidentid= "'.$incident_location_id.' class="btn-link" role="button" data-toggle="modal" onclick="modifyIncidentStat(this)">[Update]</a> </p></div>';
 							}
 						echo '</div>
 						</div>
@@ -283,11 +294,40 @@ class Incident extends  CI_Controller
 						</div>';
         }
 
-        function doEdit($id){
-
-
-            $this->load->view();
-        }
+        function updateIncident(){
+			$incident_location_id = $this->input->post("incident_location_id"); 
+			$incident_report_id = $this->input->post("incident_report_id");
+			$incident_description = $this->input->post("incident_description");
+			$date_happened = $this->input->post("date_happened");
+			$disaster_type = $this->input->post("disaster_type");
+        
+            $query_results = $this->IncidentModel->updateIncident($incident_location_id, $incident_report_id, $incident_description, $date_happened, $disaster_type);
+			if($query_results){
+				echo "success";
+			}
+			else{
+				echo $query_results;
+			}
+		}
+		
+		 function updateIncidentStatistics(){
+			$incident_location_id = $this->input->post("incident_location_id"); 
+			$death_toll = $this->input->post("death_toll");
+			$no_of_injuries = $this->input->post("no_of_injuries");
+			$no_of_people_missing = $this->input->post("no_of_people_missing");
+			$no_of_families_affected = $this->input->post("no_of_families_affected");
+			$no_of_houses_destroyed = $this->input->post("no_of_houses_destroyed");
+			$estimated_damage_cost = $this->input->post("estimated_damage_cost");
+			$incident_info_source = $this->input->post("incident_info_source");
+        
+            $query_results = $this->IncidentModel->updateIncidentStatistics($incident_location_id, $death_toll, $no_of_injuries, $no_of_people_missing, $no_of_families_affected, $no_of_houses_destroyed, $estimated_damage_cost, $incident_info_source);
+			if($query_results){
+				echo "success";
+			}
+			else{
+				echo $query_results;
+			}
+		}
 
         function deleteIncident(){
             $incident_location_id = $this->input->post("incident_location_id");

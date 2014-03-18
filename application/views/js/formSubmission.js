@@ -179,21 +179,48 @@ function changepassword(){
 
 
 //UPDATE INCIDENT
-function modifyIncident(){
+function editIncident(element){
 	$('.editinfo-li').on('click', function(e){
 		e.preventDefault();
 		console.log('edit-incident clicked');
 		
 		var incidentid = $(this).data('incidentid');
-		console.log('update incident: '+ incidentid);
-		$('#modalUpdateVictim').data('incidentid',incidentid);	
-		console.log('passed the data to the modalUpdateIncident');
+		var incidentreportid = $(this).data('incidentreportid');
+		var elementid = $(this).data('elementid');
+		
+		var incidentdesc = $(this).data('incidentdesc');
+		var datedata= $(this).data('incidentdate');
+		var dateParse= Date.parse(datedata);
+		var dateFormat= new Date(dateParse);
+		var incidentdate = dateFormat.getFullYear()+ '-0' +(dateFormat.getMonth() + 1) + '-' + dateFormat.getDate();
+		var disaster_type = $(this).data('disaster_type');
+		
+		$('#modalUpdateIncident').data('incidentid',incidentid);	
+		$('#modalUpdateIncident').data('incidentreportid',incidentreportid);
+		$('#modalUpdateIncident').data('elementid',elementid);
+		
+		$('#modalUpdateIncident').data('incidentdesc',incidentdesc);
+		$('#modalUpdateIncident').data('incidentdate',incidentdate);
+		$('#modalUpdateIncident').data('disaster_type',disaster_type);
 		$('#modalUpdateIncident').modal('show');
 	});
 	
 	$('#modalUpdateIncident').on('show.bs.modal', function(){
 			var incidentid  = $(this).data('incidentid');
-			console.log("#modalUpdateincident : " + incidentid);
+			var incidentreportid  = $(this).data('incidentreportid');
+			var elementid  = $(this).data('elementid');
+			
+			var incidentdesc  = $(this).data('incidentdesc');
+			var incidentdate  = $(this).data('incidentdate');
+			var disaster_type  = $(this).data('disaster_type');
+			
+			$("#incident_description").val(incidentdesc);
+			$("#date_happened").attr("value", incidentdate);
+			var i=1;
+			while ((document.updateIncidentForm.disasterType.options[i].val != disaster_type) && (i < document.updateIncidentForm.disasterType.options.length))
+			  {i++;}
+			if (i < document.updateIncidentForm.disasterType.options.length)
+			  {document.updateIncidentForm.disasterType.selectedIndex = i;}
 	});
 	
 	    $('#updateIncidentForm').submit(function(event){
@@ -201,26 +228,28 @@ function modifyIncident(){
         event.preventDefault();
         
         // Get some values from elements on the modal:
-        var incidentid  = $('#modalUpdateVictim').data('incidentid');
+        var incidentid  = $('#modalUpdateIncident').data('incidentid');
+        var elementid  = $('#modalUpdateIncident').data('elementid');
+		var incidentreportid  = $('#modalUpdateIncident').data('incidentreportid');
+        var incident_description = $("#modalUpdateIncident #incident_description").val();
+        var date_happened = $("#modalUpdateIncident #date_happened").val();
+        var disasterType = document.updateIncidentForm.disasterType.value;
+       
+	   
         /* Send the data using post and put results to the members table */
 		request = $.ajax({
 			url: "http://localhost/icdrris/Incident/updateIncident",
 			type: "POST",
-			data: {incident_location_id:incidentid,
-					incident_report_id:incident_report_id,
-					incident_description: incident_description,
-					disaster_type: disaster_type,
-					incident_date: incident_date
-				   },
+			data: {incident_location_id:incidentid, incident_report_id: incidentreportid, incident_description: incident_description, date_happened:date_happened, disaster_type:disasterType},
 			success: function(msg){
-				console.log("success");
-				console.log(msg);
 				if(msg == 'success'){
 					console.log('naedit na bai. check the database');
 					$('#modalUpdateIncident').modal('hide');
+					displayIncidentDetails(incidentreportid, elementid, incidentid);	
+						
 				}else{
 					console.log('naay mali sa controller or model. recheck the code.')
-					$(".modal-body").innerHTML(msg);
+					$(".modal-body").html(msg);
 				}
 			},
 			error: function(){
@@ -232,6 +261,112 @@ function modifyIncident(){
 	
 }
 // -end of UPDATE INCIDENT
+
+
+//UPDATE INCIDENT STATISTICS
+function modifyIncidentStat(element){
+	$('.incident-stat').on('click', function(e){
+		e.preventDefault();
+		
+		var incidentid = $("#incident-stat").data('incidentid');
+		var incidentreportid = $(this).data('incidentreportid');
+		var elementid = $(this).data('elementid');
+		
+		var deaths = $("#incident-stat").data('deaths');
+		var families_affected = $("#incident-stat").data('familiesaffected');
+		var people_missing = $("#incident-stat").data('peoplemissing');
+		var houses_destroyed = $("#incident-stat").data('housesdestroyed');
+		var injured = $("#incident-stat").data('injured');
+		var damaged_cost = $("#incident-stat").data('damagecost');
+		var info_source = $("#incident-stat").data('infosource');
+		
+		$('#modalUpdateIncidentStat').data('incidentid',incidentid);
+		$('#modalUpdateIncidentStat').data('incidentreportid',incidentreportid);
+		$('#modalUpdateIncidentStat').data('elementid',elementid);
+		$('#modalUpdateIncidentStat').data('deaths',deaths);
+		$('#modalUpdateIncidentStat').data('familiesaffected',families_affected);
+		$('#modalUpdateIncidentStat').data('peoplemissing',people_missing);
+		$('#modalUpdateIncidentStat').data('housesdestroyed',houses_destroyed);
+		$('#modalUpdateIncidentStat').data('injured',injured);
+		$('#modalUpdateIncidentStat').data('damagecost',damaged_cost);
+		$('#modalUpdateIncidentStat').data('infosource',info_source);
+		$('#modalUpdateIncidentStat').modal('show');
+	});
+	
+	$('#modalUpdateIncidentStat').on('show.bs.modal', function(){
+	
+		// Get all data from modalUpdateIncidentStat
+			var incident_id  = $(this).data('incidentid');
+			var deaths  = $(this).data('deaths');
+			var families_affected  = $(this).data('familiesaffected');
+			var people_missing  = $(this).data('peoplemissing');
+			var houses_destroyed  = $(this).data('housesdestroyed');
+			var injured  = $(this).data('injured');
+			var damaged_cost  = $(this).data('damagecost');
+			var info_source  = $(this).data('infosource');
+			
+		// Set up all value of the textfields
+			$("#death").val(deaths);
+			$("#families_affected").val(families_affected);
+			$("#missing").val(people_missing);
+			$("#houses_destroyed").val(houses_destroyed);
+			$("#injured").val(injured);
+			$("#damage_costs").val(damaged_cost);
+			$("#source").val(info_source);
+
+			
+	});
+	
+	    $('#updateStatisticsForm').submit(function(event){
+        // Stop form from submitting normally
+        event.preventDefault();
+		console.log("Submit updatestatisticsform");
+        
+        // Get some values from elements on the modal:
+        var incidentid  = $('#modalUpdateIncidentStat').data('incidentid');
+        var elementid  = $('#modalUpdateIncidentStat').data('elementid');
+        var incidentreportid  = $('#modalUpdateIncidentStat').data('incidentreportid');
+        var death = $("#modalUpdateIncidentStat #death").val();
+        var families_affected = $("#modalUpdateIncidentStat #families_affected").val();
+        var missing = $("#modalUpdateIncidentStat #missing").val();
+        var houses_destroyed = $("#modalUpdateIncidentStat #houses_destroyed").val();
+        var injured = $("#modalUpdateIncidentStat #injured").val();
+        var damage_costs = $("#modalUpdateIncidentStat #damage_costs").val();
+        var source = $("#modalUpdateIncidentStat #source").val();
+        /* Send the data using post and put results to the members table */
+	request = $.ajax({
+			url: "http://localhost/icdrris/Incident/updateIncidentStatistics",
+			type: "POST",
+			data: {incident_location_id:incidentid,
+					death_toll:death,
+					no_of_families_affected: families_affected,
+					no_of_people_missing: missing,
+					no_of_houses_destroyed: houses_destroyed,
+					no_of_injuries: injured,
+					estimated_damage_cost: damage_costs,
+					incident_info_source: source
+				   },
+			success: function(msg){
+				if(msg == 'success'){
+					console.log('naedit na bai. check the database');
+					$('#modalUpdateIncidentStat').modal('hide');
+					displayIncidentDetails(incidentreportid, elementid, incidentid);	
+					
+				}else{
+					console.log('naay mali sa controller or model. recheck the code.')
+					$(".modal-body").html(msg);
+				}
+			},
+			error: function(){
+				console.log("fail");
+				$(".modal-body").html("Sorry, system error.");
+			}
+		});
+    });
+	
+}
+// -end of UPDATE INCIDENT STATISTICS
+
 
 // UPDATE VICTIM
 function editVictim(element){
@@ -318,7 +453,7 @@ function editVictim(element){
 		});
     });
 	
-};
+}
 
 //REPORT VICTIM
 $(document).ready(function(){
@@ -335,6 +470,11 @@ $(document).ready(function(){
 	
 	$('#modalReportVictim').on('show.bs.modal', function(){
 			var incidentid  = $(this).data('incidentid');
+			 $("#first_name").val('');
+			$("#middle_name").val('');
+			$("#last_name").val('');
+			$("#addressvictim").val('');
+			document.updateVictimForm.victim_status.selectedIndex = 0;
 			
 			removeBtn = $(this).find('.danger');
 	});

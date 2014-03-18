@@ -1,27 +1,4 @@
 
-    <?php  if((function_exists('validation_errors') && validation_errors() != '') || isset($err_message)){?>
-                <div class="alert alert-error" >  
-                    <a class="close" data-dismiss="alert">&times;</a>  
-                    <strong>Error!</strong>	<br />
-                    <?php // found in system/libraries/Form_validation.php
-                            echo validation_errors();
-                            echo $err_message;
-                            
-                    ?>
-                </div> 
-    <?php } ?>
-
-    <?php  if(isset($succ_message)){ ?>
-                <div class="alert alert-success" >  
-                    <a class="close" data-dismiss="alert">&times;</a>  
-                    <strong>Success!</strong>	<br />
-                    <?php 
-                            echo $succ_message;  
-                    ?>
-                </div> 
-    <?php } ?>
-
-    
 		<div class = "row-fluid">
 			<strong>Incident Description</strong><br>
 			<?php 

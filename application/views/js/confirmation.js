@@ -289,7 +289,7 @@ function btnYesConfirmVictim(){
 
 //DELETE INCIDENT
 $(document).ready(function(){
-	$('#delete-li').on('click', function(e){
+	$('.delete-li').on('click', function(e){
 			e.preventDefault();
 			console.log('delete-incident clicked');
 			var incidentid = $(this).data('incidentid');
@@ -319,6 +319,18 @@ $(document).ready(function(){
 					if(msg == 'success'){
 						$('#modalDeleteIncident').modal('hide');	
 						console.log('success: '+incidentid);
+						
+						//delete all localstorages here related to the incident
+						for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
+									var name = localStorage.key(i);             // Get the name of pair i
+									var val = localStorage.getItem(name);
+									if(name == "i"+incidentid +""){
+										localStorage.removeItem(name);
+										console.log("removed: in off");
+									}
+						
+						}  
+					
 						getAllMapElements();
 					    backToIncidentList();
 					}
@@ -352,7 +364,7 @@ $(document).ready(function(){
 			else{
 				upOrDown = "rateTrue";
 			}
-			var lastUpOrDown = localStorage.getItem(""+incident_report_id+""+ victim_id+"");
+			var lastUpOrDown = localStorage.getItem(""+incident_report_id+"-"+ victim_id+"");
 			
 			console.log("last upOrDown: "+ lastUpOrDown+ ", Recent upOrDown: "+upOrDown);
 			
@@ -412,7 +424,7 @@ $(document).ready(function(){
 										$("#iThumbsDown").css("background-color", "red");
 									}
 								//localStorage.removeItem(incident_report_id+victim_id);
-								localStorage.setItem(""+incident_report_id+""+ victim_id+"", upOrDown);
+								localStorage.setItem(""+incident_report_id+"-"+ victim_id+"", upOrDown);
 							
 								console.log(""+incident_report_id +""+victim_id+"");
 								for(var i = 0; i < localStorage.length; i++) {  // Length gives the # of pairs
