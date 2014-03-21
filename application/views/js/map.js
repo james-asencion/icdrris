@@ -1304,7 +1304,9 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
                 $(".approve-li").attr("onclick", "rateIncident(1,"+incident_location_id+")")
                 $(".disapprove-li").attr("onclick", "rateIncident(0,"+incident_location_id+")")
                 $("#incident-information").html(msg);
-                $("#incidentTabbable").show("slow");
+                $("#incident-stat").data("elementid", elementId)
+                $("#incident-stat").data("incidentreportid", incidentReportId)
+				$("#incidentTabbable").show("slow");
             }
         },
         error: function() {
