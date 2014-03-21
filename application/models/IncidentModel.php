@@ -20,18 +20,18 @@ class IncidentModel extends CI_Model
 
         }
 		
-		function updateIncident($incident_report_id, $incident_description, $date_happened, $disaster_type){
-			$sql = "UPDATE incidents SET incident_description = ?, disaster_type = ?, incident_date = ? WHERE incident_report_id = ?";
-			
-			$query= $this->db->query($sql, array($incident_description, $disaster_type, $date_happened, $incident_report_id));
-			
-			if($query){
-				return true;
-			}
-			else{
-				return $query;
-			}
-		}
+        function updateIncident($incident_location_id, $incident_report_id, $incident_description, $date_happened, $disaster_type){
+            $sql = "UPDATE incidents SET incident_description = ?, disaster_type = ?, incident_date = ? WHERE incident_report_id = ?";
+            
+            $query= $this->db->query($sql, array($incident_description, $disaster_type, $date_happened, $incident_report_id));
+            
+            if($query){
+                return true;
+            }
+            else{
+                return $query;
+            }
+        }
 		
 		function updateIncidentStatistics($incident_location_id, $death_toll, $no_of_injuries, $no_of_people_missing, $no_of_families_affected, $no_of_houses_destroyed, $estimated_damage_cost, $incident_info_source){
 			$sql = "UPDATE incident_location SET death_toll = ?, no_of_injuries = ?, no_of_people_missing = ?, no_of_families_affected= ?, no_of_houses_destroyed=?, estimated_damage_cost= ?, incident_info_source=? WHERE incident_location_id = ?";
@@ -112,7 +112,7 @@ class IncidentModel extends CI_Model
         }
 		
         function getIncidentDetails($id){
-            $sql= "SELECT i.incident_report_id, i.incident_description, i.disaster_type, DATE_FORMAT(i.incident_date,'%W, %M %e, %Y') as incident_date, b.location_address, b.barangay, l.flag_true_rating, l.flag_false_rating, l.death_toll, l.no_of_injuries, l.no_of_people_missing, l.no_of_families_affected, l.no_of_houses_destroyed, l.estimated_damage_cost, l.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon, l.flag_true_rating, l.flag_false_rating, l.flag_confirmed
+            $sql= "SELECT i.incident_report_id,l.incident_location_id, i.incident_description, i.disaster_type, DATE_FORMAT(i.incident_date,'%W, %M %e, %Y') as incident_date, b.location_address, b.barangay, l.flag_true_rating, l.flag_false_rating, l.death_toll, l.no_of_injuries, l.no_of_people_missing, l.no_of_families_affected, l.no_of_houses_destroyed, l.estimated_damage_cost, l.incident_info_source, l.lat, l.lng, ASTEXT( l.polygon ) as reportPolygon, l.flag_true_rating, l.flag_false_rating, l.flag_confirmed
                     FROM incidents i
                     LEFT OUTER JOIN incident_location l 
 						ON i.incident_report_id = l.incident_report_id

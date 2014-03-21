@@ -944,6 +944,20 @@ function barangayList(){
     $("#homeView").hide();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToBarangayList()" class="subBreadCrumb1" id="subBreadCrumb1">Barangay List</a><span class="divider">/</span></li>');
     $("#barangayList").show("fast");
+    var boxes = $('#elementBoxes input:checkbox');
+    $.each(boxes, function(i,b){
+            //console.log("im inside the function");
+            if(!($(b).is(':checked')) & i==10){
+                //console.log("value of barangay resources here is->"+i);
+                $(b).trigger('click');
+            }else if(($(b).is(':checked')) & i==10){
+                $(b).trigger('click');
+                $(b).trigger('click');
+            }
+            else{
+                
+            }
+    });
 }
 function backToIncidentList() {
     console.log(">>>>---backToIncidentList invoked---<<<<<");
@@ -961,10 +975,26 @@ function backToLivelihoodList() {
 }
 function backToBarangayList() {
     console.log(">>>>---backToRespondentList invoked---<<<<<");
+    //alert("back to Barangay List invoked");
     $(".subBreadCrumb2").remove();
     $(".barangayTabbable").hide();
     $("#barangayTabbable").hide("fast");
     $("#barangayList").show("fast");
+    var boxes = $('#elementBoxes input:checkbox');
+    $.each(boxes, function(i,b){
+            //console.log("im inside the function");
+            if(!($(b).is(':checked')) & i==10){
+                //console.log("value of barangay resources here is->"+i);
+                $(b).trigger('click');
+            }else if(($(b).is(':checked')) & i==10){
+                $(b).trigger('click');
+                $(b).trigger('click');
+            }
+            else{
+
+            }
+    });
+
 }
 function displayIncidentDetails(incidentReportId, elementId, incident_location_id) {
 
@@ -1294,6 +1324,19 @@ function displayBarangayDetailsFromMap(location_id)
             console.log(msg);
         }
     });    
+
+    var i, n = mapElements.length;
+    for (i = 0; i < n; ++i) {
+        if(mapElements[i].id==location_id){   
+            mapElements[i].setVisible(true);
+        }else{
+            if(!(mapElements[i].elementType==3)){
+                mapElements[i].setVisible(false);
+            }
+            
+        }
+    }
+
 }
 function displayLivelihoodDetails(livelihoodId,elementId)
 {
@@ -1468,6 +1511,17 @@ function displayBarangayResource(locationId, elementId)
     //     }
     // });
     //alert("element center ->"+mapElements.length);
+    
+    var i, n = mapElements.length;
+    for (i = 0; i < n; ++i) {
+        if(i==elementId){   
+            mapElements[i].setVisible(true);
+        }else{
+            if(!(mapElements[i].elementType==3)){
+                mapElements[i].setVisible(false);
+            }
+        }
+    }
     map.setCenter(mapElements[elementId].center);
     //mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
     //stopAnimation(mapElements[elementId]);

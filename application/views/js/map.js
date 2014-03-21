@@ -916,7 +916,7 @@ function getAllMapElements() {
             var tweet_id = requests[r].getAttribute("tweet_id");
             var request_date = requests[r].getAttribute("request_date");
             var request_status = requests[r].getAttribute("request_status");
-            var urgency_level = requests[r].getAttribute("urgency_level");
+            var urgency_level;
             var request_comments = requests[r].getAttribute("request_comments");
             var flag_request_granted = requests[r].getAttribute("flag_request_granted");
             var tweet_user_id = requests[r].getAttribute("tweet_user_id");
@@ -926,11 +926,23 @@ function getAllMapElements() {
 			var request_url = requests[r].getAttribute("request_url");
             var geo_place_name = requests[r].getAttribute("geo_place_name");
 
-            var icon = customIcons['Needs'+urgency_level] || {};
+            
             var point = new google.maps.LatLng(
                     parseFloat(requests[r].getAttribute("geo_lat")),
                     parseFloat(requests[r].getAttribute("geo_lng")));
+            if((request_comments.indexOf('#urgent') > -1)|(request_comments.indexOf('urgent') > -1)|(request_comments.indexOf('#danger') > -1)|(request_comments.indexOf('danger') > -1)){
+                urgency_level = 3;
+                //alert("inside urgent level 3");
+            }else if((request_comments.indexOf('#moderate') > -1)|(request_comments.indexOf('moderate') > -1)|(request_comments.indexOf('#warning') > -1)|(request_comments.indexOf('warning') > -1)){
+                urgency_level = 2;
+                //alert("inside urgent level 2");
+            }else{
+                //alert("inside urgent level 1");
+                urgency_level = 1;
+            }
 
+            var icon = customIcons['Needs'+urgency_level] || {};
+            //alert("ICON:  "+'Needs'+urgency_level);
 			if(geo_lat == ''){
 				geo_place_name = "<font color=\"deeppink\">Can't find location.</font>";
 			}
@@ -1345,6 +1357,111 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
 
 
 }
+//=================================================================================================================================================
+function displayUpdatedIncidentDetails(incidentReportId, incident_location_id) {
+
+    //console.log('display Incident details clicked with incident_report_id ->'+incidentReportId);
+    $("#incidentList").hide("fast");
+    $("#table-rows-victims").removeData("fast");
+    openSideBar();
+
+    $(".approve-li").attr("id", "approve-li"+incident_location_id+"");
+    $(".disapprove-li").attr("id", "disapprove-li"+incident_location_id+"");
+                
+    request = $.ajax({
+        url: "http://localhost/icdrris/Incident/incidentTitle",
+        type: "POST",
+        data: {incident_report_id:incidentReportId},
+        success: function(msg) {
+            //console.log("success -TITLE");
+            
+            if (msg == 'error') {
+                //console.log("Error getIncidentDetails - TITLE doy.\n ");
+                $("#incident-title").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
+            } else {
+                //console.log("Success getIncidentTitle");
+                $("#incident-title").html(msg);
+                
+                $(".subBreadCrumb2").empty();
+                var str = msg.substring(0,30) + "...";
+                 $("#subBreadCrumb1").after('<li><a class="subBreadCrumb2">' + str + '</a></li>');
+                
+                $("#victims-tab, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
+        
+                $("#delete-li").attr("data-incidentdesc", msg);
+                $("#incidentTabbable").show("slow");
+            }
+        },
+        error: function() {
+            //console.log("system error oy!");
+            //console.log(values);
+            $("#incident-title").html("Sorry, system error.");
+            $("#incidentTabbable").show("slow");
+        }
+    });
+
+    /* Send the data using post and put results to the members table */
+    request = $.ajax({
+        url: "http://localhost/icdrris/Incident/incidentDetails",
+        type: "POST",
+        data: {incident_location_id:incident_location_id},
+        success: function(msg) {
+            if (msg == 'error') {
+                $("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
+                $("#incidentTabbable").show("slow");
+            } else {
+                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
+                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId)
+               // $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId)
+                $(".approve-li").attr("onclick", "rateIncident(1,"+incident_location_id+")")
+                $(".disapprove-li").attr("onclick", "rateIncident(0,"+incident_location_id+")")
+                $("#incident-information").html(msg);
+                $("#incidentTabbable").show("slow");
+            }
+        },
+        error: function() {
+            //console.log("system error oy!");
+            //console.log(values);
+            $("#incident-information").html("Sorry, system error.");
+            $("#incidentTabbable").show("slow");
+        }
+    });
+    
+                         
+
+    /* Send the data using post and put results to the members table */
+    request = $.ajax({
+        url: "http://localhost/icdrris/Victim/viewAllVictims",
+        type: "POST",
+        data: {id:incidentReportId},
+        success: function(msg) {
+            //console.log("success");
+            //console.log(msg);
+            if (msg == 'error') {
+                //console.log("naay mali sa query getIncidentDetails doy.\n ");
+                $("#tabbable").show("slow");
+                $("#table-rows-victims").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
+            } else {
+                //console.log("success pa jud");
+                $("#incidentTabbable").show("slow");
+                $("#table-rows-victims").html(msg);
+            }
+        },
+        error: function() {
+            //console.log("system error oy!");
+            //console.log(values);
+            $("#tabbable").show("slow");
+            $("#table-rows-victims").html("Sorry, system error.");
+        }
+    });
+
+    //map.setCenter(mapElements[elementId].center);
+    //mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
+    //stopAnimation(mapElements[elementId]);
+
+
+}
+//=================================================================================================================================================
 function viewRequestOnMap(elementId, requestId){
     map.setCenter(mapElements[elementId].center);
     mapElements[elementId].setAnimation(google.maps.Animation.BOUNCE);
@@ -1412,6 +1529,9 @@ function displayIncidentDetailsFromMap(incidentReportId, incidentLocationId)
             //console.log(msg);
             if (msg == 'error') {
                 //console.log("naay mali sa query getIncidentDetails doy.\n ");
+                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
+                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId)
+                //$(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId)
                 $("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
                 $("#tabbable").show("slow");
             } else {

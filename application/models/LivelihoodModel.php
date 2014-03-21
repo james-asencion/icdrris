@@ -405,6 +405,18 @@ class LivelihoodModel extends CI_Model{
 
         return $query->row();
 	}
+	function getBarangayRecoveryStatus($id){
+		$this->db->where('location_id',$id);
+        $query = $this->db->get('locations');
+
+        return $query->row();
+	}
+	function getBarangayRecoveryAssessment($id){
+		$this->db->where('location_id',$id);
+        $query = $this->db->get('locations');
+
+        return $query->row();
+	}
 	function getBarangay($id){
 		$this->db->where('location_id',$id);
 		$query = $this->db->get('locations');

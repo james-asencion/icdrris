@@ -185,6 +185,7 @@ function editIncident(element){
 		console.log('edit-incident clicked');
 		
 		var incidentid = $(this).data('incidentid');
+		console.log("incident id here->"+incidentid);
 		var incidentreportid = $(this).data('incidentreportid');
 		var elementid = $(this).data('elementid');
 		
@@ -234,6 +235,9 @@ function editIncident(element){
         var incident_description = $("#modalUpdateIncident #incident_description").val();
         var date_happened = $("#modalUpdateIncident #date_happened").val();
         var disasterType = document.updateIncidentForm.disasterType.value;
+        console.log("edited description: "+incident_description);
+        console.log("edited date: "+date_happened);
+        console.log("edited disasterType: "+disasterType);
        
 	   
         /* Send the data using post and put results to the members table */
@@ -269,8 +273,7 @@ function modifyIncidentStat(element){
 		e.preventDefault();
 		
 		var incidentid = $("#incident-stat").data('incidentid');
-		var incidentreportid = $(this).data('incidentreportid');
-		var elementid = $(this).data('elementid');
+		var incidentreportid = $("#incident-stat").data('incidentreportid');
 		
 		var deaths = $("#incident-stat").data('deaths');
 		var families_affected = $("#incident-stat").data('familiesaffected');
@@ -281,8 +284,9 @@ function modifyIncidentStat(element){
 		var info_source = $("#incident-stat").data('infosource');
 		
 		$('#modalUpdateIncidentStat').data('incidentid',incidentid);
+		console.log("incident id : "+incidentid);
 		$('#modalUpdateIncidentStat').data('incidentreportid',incidentreportid);
-		$('#modalUpdateIncidentStat').data('elementid',elementid);
+		console.log("incident report id : "+incidentreportid);
 		$('#modalUpdateIncidentStat').data('deaths',deaths);
 		$('#modalUpdateIncidentStat').data('familiesaffected',families_affected);
 		$('#modalUpdateIncidentStat').data('peoplemissing',people_missing);
@@ -350,7 +354,7 @@ function modifyIncidentStat(element){
 				if(msg == 'success'){
 					console.log('naedit na bai. check the database');
 					$('#modalUpdateIncidentStat').modal('hide');
-					displayIncidentDetails(incidentreportid, elementid, incidentid);	
+					displayUpdatedIncidentDetails(incidentreportid, incidentid);	
 					
 				}else{
 					console.log('naay mali sa controller or model. recheck the code.')

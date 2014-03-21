@@ -187,6 +187,14 @@ class Livelihood extends CI_Controller
         $result = $this->LivelihoodModel->getBarangayName($this->input->post('id'));
         echo $result->location_address;
     }
+    function getBarangayRecoveryStatus(){
+        $result = $this->LivelihoodModel->getBarangayRecoveryStatus($this->input->post('id'));
+        echo $result->recovery_status;
+    }
+    function getBarangayRecoveryAssessment(){
+        $result = $this->LivelihoodModel->getBarangayRecoveryAssessment($this->input->post('id'));
+        echo $result->recovery_assessment;
+    }
     function getResourceByCategory(){
         $query = $this->LivelihoodModel->getBarangayResourceByCategory($this->input->post('location_id'), $this->input->post('resource_category'));
         $resources = $query->result();

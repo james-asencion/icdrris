@@ -6,14 +6,6 @@ class MapController extends  CI_Controller
         $this->load->model('MapModel');
     }
 
-	public function viewPolygonReports(){
-		$this->load->view('polyHome');
-	}
-
-	public function viewMarkerReports(){
-		$this->load->view('markerHome');
-	}
-
 	public function getAllMapElements(){
 		//$dateFrom = $_GET['dateFrom'];
 		$get = $this->uri->uri_to_assoc();
@@ -46,6 +38,12 @@ class MapController extends  CI_Controller
 		$data['barangayListItem'] = $this->MapModel->getAllBarangays();
 		//echo count($data['responseOrganizations']);
 		$this->load->view('getAllLivelihoodMappingElements',$data);
+	}
+	public function getRecoveryMappingElements(){
+
+		$data['barangayListItem'] = $this->MapModel->getAllBarangays();
+		//echo count($data['responseOrganizations']);
+		$this->load->view('getAllRecoveryMappingElements',$data);
 	}
 }
 
