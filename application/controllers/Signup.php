@@ -37,7 +37,7 @@ class Signup extends CI_Controller{
 		$this->form_validation->set_rules("utype", "User Type", "required");
 		$this->form_validation->set_rules('user_name','Username','trim|required|min_length[4]|is_unique[users.user_name]|xss_clean');
 		$this->form_validation->set_rules("email", "Email", "required");
-                $this->form_validation->set_rules('password','Password','trim|required|min_length[4]|max_length[32]');
+		$this->form_validation->set_rules('password','Password','trim|required|min_length[4]|max_length[32]');
 		$this->form_validation->set_rules('password2','Confirm Password','trim|required|matches[password]');
 
 		$username = $this->input->post("user_name");
@@ -49,7 +49,9 @@ class Signup extends CI_Controller{
                 
 		if(($this->form_validation->run()) == FALSE){   //validation errors occur
 			$data['err_message'] = 'Please try again.';
+			$this->load->view('includes/header');
 			$this->load->view('signup',$data);
+			$this->load->view('includes/footer');
 		}
 		else{   
 			//all data is valid: process data    
@@ -64,7 +66,9 @@ class Signup extends CI_Controller{
 			else{
 				//$this->load->view('signup');
 				$data['err_message']= 'No acct is created. Problem with signup model query.';
+				$this->load->view('includes/header');
 				$this->load->view('signup', $data);    
+				$this->load->view('includes/footer');
 			}
 		}
                     

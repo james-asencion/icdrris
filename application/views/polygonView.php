@@ -14,12 +14,11 @@
  </div>
 
 <div class = "modal hide fade" id="polygonInstructionModal">
-  	<div class = "modal-header">
-  		<a class="close" data-dismiss="modal">x</a>
-  		<h3>Click points on the map to form a polygon</h3>
+  	<div class = "modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+		<H3 style="color: gainsboro">  Report by Polygon</H3>
   	</div>
-  	<div class="modal-body">
-  		<p>This is an instruction...</p>
+  	<div class="modal-body" style="text-align:center">
+  		<h4>Click points on the map to form a polygon</h4>
   	</div>
   	<div class="modal-footer">
   		<a data-dismiss="modal" class="btn btn-primary">Okay Got it</a>

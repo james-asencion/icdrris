@@ -76,13 +76,7 @@
                                       <input type="checkbox">
                                       Mudslide
                                   </label>
-                              </li>
-                              <li>
-                                  <label class="checkbox">
-                                      <input type="checkbox">
-                                      Infrastructure Damage
-                                  </label>
-                              </li>                                                                                                                    
+                              </li>                                                                                                                  
                           </ul>
                       </div>
                     </div>
@@ -146,14 +140,14 @@
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm3">
                     <div class="center" align="center"><p>Date To:</p>   
-                        <input id="dateTo" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMapElements()"/>
+                        <input id="dateTo" type = "date" class="span2" name = "birthdate"  min="" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMapElements()"/>
                     </div>
                 </form>
             </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm4">
                     <div class="center" align="center"><p>Date From:</p>   
-                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMapElements()"/>
+                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" max="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMapElements()"/>
                     </div>
                 </form>
             </div>
@@ -234,12 +228,7 @@
 								  </li>
 								</ul>
                                   <div id="victimListID">
-                                    <center>
-                                        <form class="form-search">
-                                            <input type="text" class="input-large search-query" placeholder="Type name here...">
-                                            <button type="submit" class="btn"><i class="icon-search"> </i></button>
-                                        </form>
-                                    </center>
+                                   
 										<!-- TABLE: LIST OF VICTIMS -->
                                           <div id="table-rows-victims"></div>
 										<!-- end of the table-->

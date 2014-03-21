@@ -30,25 +30,25 @@ function initialize() {
     clearButton.innerHTML = "<button type='button' onclick='cancelReport()' class='btn btn-danger'><i class='icon-repeat'></i>Cancel</button>";
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(clearButton);
 
-    var html = "<table>" +
-            "<tr><td>Disaster Description:</td> <td><input type='text' id='description'/></td> </tr>" +
-            "<tr><td>Disaster Type:</td> <td><select id='disasterType'>" +
+    var html = "<form id='reportIncidentForm' method='POST' action='javascript:saveMarkerData()'><table>" +
+            "<tr><td>Disaster Description:</td> <td><input type='text' id='description' placeholder='Short/Long Report Description' required='required' /></td> </tr>" +
+            "<tr><td>Disaster Type:</td> <td><select id='disasterType' required ='required'>" +
             "<option value='' SELECTED></option>" +
-            "<option value=Flashflood >Flash Flood</option>" +
-            "<option value=Tsunami>Tsunami</option>" +
-            "<option value=Landslide>Landslide</option>" +
-            "<option value=Mudslide>Mudslide</option>" +
-            "<option value=Infrastructure Damage>Infrastructure Damage</option>" +
+            "<option value='Flashflood'>Flash Flood</option>" +
+            "<option value='Tsunami'>Tsunami</option>" +
+            "<option value='Landslide'>Landslide</option>" +
+            "<option value='Mudslide'>Mudslide</option>" +
             "</select> </td></tr>" +
-            "<tr><td>Date:</td> <td><input type='date' id='date'/></td> </tr>" +
-            "<tr><td>Deaths:</td> <td><input type='number' min='0' id='death'/></td> </tr>" +
+            "<tr><td>Date:</td> <td><input type='date' id='date' min='01/01/1900' required='required'/></td> </tr>" +
+			"<tr><td>Deaths:</td> <td><input type='number' min='0' id='death'/></td> </tr>" +
             "<tr><td>Injured:</td> <td><input type='number' min='0' id='injured'/></td> </tr>" +
             "<tr><td>Missing:</td> <td><input type='number' min='0' id='missing'/></td> </tr>" +
             "<tr><td>Families Affected:</td> <td><input type='number' min='0' id='familiesAffected'/></td> </tr>" +
             "<tr><td>Houses Destroyed:</td> <td><input type='number' min='0' id='housesDestroyed'/></td> </tr>" +
             "<tr><td>Damage Cost:</td> <td><input type='number' min='0' id='damageCost'/></td> </tr>" +
-            "<tr><td>Source:</td> <td><input type='text' id='source'/></td> </tr>" +
-            "<tr><td></td><td><input type='button' class='btn btn-success' value='Report Incident' onclick='saveMarkerData()'/></td></tr>";
+			"<tr><td>Source:</td> <td><input type='text' id='source' placeholder='Name of the Information Source' required='required' /></td> </tr>" +
+          //  "<tr><td></td><td><input type='submit' class='btn btn-success' value='Report Incident' onclick='saveMarkerData()'/></td></tr></form>";
+           "<tr><td></td><td><input type='submit' class='btn btn-success' value='Report Incident'/></td></tr></form>";
 /**
     shape.infowindow = new google.maps.InfoWindow(
             {
@@ -86,7 +86,7 @@ function initialize() {
 }
 
 function saveMarkerData() {
-   
+   $('#reportIncidentForm').submit(function(event){
     var description = $("#description").val();
     var  disasterType= $("#disasterType").val();
     var  date= $("#date").val();
@@ -114,7 +114,8 @@ function saveMarkerData() {
             $('#errorIncidentReport').modal('show'); 
         }
 
-    });
+		});
+	});
 }
 function cancelReport(){
     window.location.replace("http://localhost/icdrris");

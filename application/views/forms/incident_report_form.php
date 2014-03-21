@@ -10,7 +10,7 @@
 			<strong>Disaster Type</strong><br>
 				<select id="disasterType">
 					<option value="" SELECTED>-SELECT-</option>
-					<option value="Flashflood" >Flash Flood</option>
+					<option value="Flashflood">Flash Flood</option>
 					<option value="Tsunami">Tsunami</option>
 					<option value="Landslide">Landslide</option>
 					<option value="Mudslide">Mudslide</option>

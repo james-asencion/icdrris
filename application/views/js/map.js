@@ -1209,9 +1209,13 @@ function siteList(){
     $("#siteList").show("fast");
 }
 function requestList(){
+	$("#incidentTabbable").hide();
     $("#homeView").hide();
+	$("#subBreadCrumb1,.subBreadCrumb1").empty();
+	$(".subBreadCrumb2").empty();
     $("#homeBreadCrumb").after('<li id="subBreadCrumb1"><a onclick="backToRequestList()" class="subBreadCrumb1" id="subBreadCrumb1">Requests List</a><span class="divider">/</span></li>');
-    $("#requestList").show("fast");
+   openSideBar();
+   $("#requestList").show("fast");
 }
 function backToIncidentList() {
     //console.log(">>>>---backToIncidentList invoked---<<<<<");
