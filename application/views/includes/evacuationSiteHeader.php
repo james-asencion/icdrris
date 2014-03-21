@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
  
   <head>
-	<title>Iligan City Disaster Response and Recovery Information System</title>
+	<title>Project Dasig</title>
 	<link rel="icon" href="<?php echo base_url(); ?>img/Tsunami-256.png" type="image/gif">	
 		
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,12 +40,13 @@
 	<div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
 			<!-- SITE TITLE -->
-			<a class = "brand" href = "<?php echo base_url();?>">ICDRRIS</a>
+			<a class = "brand" href = "<?php echo base_url();?>">Project Dasig</a>
 			<ul class = "nav">
 				<li class = "active"><a href = "<?php echo base_url();?>"><i class = "icon-home"></i> Home</a></li>
 			</ul>
                    
 	<!-- HEADER MENUS-->
+	
     <ul class="nav">
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -54,15 +55,23 @@
                 </a>
                 <ul class="dropdown-menu" role="menu">
                     <li class="dropdown-submenu">
-                       
-                            <li> <a href="#modalReportIncident" role="button" data-toggle="modal"><i class = "icon-bell"></i> Report New Incident </a></li>
-                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Incidents</a></li>
+                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Barangays</a></li>
+                            <li><a href = "#"><i class = "icon-briefcase"></i> List of Evacuation Centers</a></li>
+                            <li><a href = "javascript:incidentList()"><i class = "icon-briefcase"></i> List of Incidents</a></li>
+                            <li><a href = "javascript:requestList()"><i class = "icon-briefcase"></i> List of Requested Needs</a></li>
 
-				</ul>
 					</li>
+				</ul>
+			</li>
     </ul>
 
-    <!-- modal Report Incident -->
+    <?php if(($this->session->userdata('user_type') === 'bdrrmo') & ($this->session->userdata('is_logged_in'))){?>
+    <ul class="nav">
+        <a class="btn btn-primary btn-small" href="http://localhost/icdrris/Evacuation/mapEvacuationSite" >Map an Evacuation Site</a>
+    </ul>
+    <?php   } ?>
+	
+  <!-- modal Report Incident -->
             <div id="modalReportIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-header">
                     <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_333_bell.png"  alt="bin" style="margin-top:-10px"> Report an Incident</h3>
@@ -191,3 +200,11 @@
 				$this->load->view('forms/login_form');
 			}				
 		?>
+
+		
+        <ul class= "nav pull-right">
+            <a href="#modalReportIncident" class="btn btn-danger" role="button" data-toggle="modal">
+                <i class = "icon-white icon-bell"></i> Report Incident 
+            </a>
+                            
+    </ul>

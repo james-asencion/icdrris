@@ -37,7 +37,7 @@
                 <div class = "row-fluid">
                     <strong>First Name</strong><br>
                     <?php 
-                            $fNameProperties=array('type'=>'text','class'=>'span8','id'=>'first_name','name'=>'first_name', 'value'=>set_value('first_name'));
+                            $fNameProperties=array('type'=>'text','class'=>'span8','id'=>'first_name','name'=>'first_name', 'value'=>set_value('first_name'), 'required'=>'required');
                             echo form_input($fNameProperties);?>
 		</div>
 
@@ -51,7 +51,7 @@
 		<div class = "row-fluid">
 		<strong>Last Name</strong><br>
 		<?php 
-			$lNameProperties=array('type'=>'text','class'=>'span8', 'id'=>'last_name', 'name'=>'last_name','value'=>set_value('last_name'));
+			$lNameProperties=array('type'=>'text','class'=>'span8', 'id'=>'last_name', 'name'=>'last_name','value'=>set_value('last_name'), 'required'=>'required');
 			echo form_input($lNameProperties);?>
 		</div>
 
@@ -71,7 +71,7 @@
                             'missing'   => 'Missing',
                             'injured' => 'Injured',
                           );
-			$vstatProperties=array('id'=>'victim_status');
+			$vstatProperties=array('id'=>'victim_status', 'required'=>'required');
 			echo form_dropdown('victim_status', $vstat_options, $vstatProperties);?>
 		</div>
 		<!--<div class = "row-fluid">

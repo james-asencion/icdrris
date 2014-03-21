@@ -41,25 +41,24 @@ function initialize() {
     clearButton.innerHTML = "<button type='button' onclick='clearPolygon()' class='btn btn-default'><i class='icon-repeat'></i>Clear Selection</button>&nbsp;&nbsp;<button type='button' onclick='cancelReport()' class='btn btn-danger'><i class='icon-repeat'></i>Cancel</button>";
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(clearButton);
 
-    var html = "<table>" +
-            "<tr><td>Disaster Description:</td> <td><input type='text' id='description'/></td> </tr>" +
-            "<tr><td>Disaster Type:</td> <td><select id='disasterType'>" +
+    var html = "<form id='reportIncidentPolygonForm' method='POST' action='javascript:savePolygonData()'><table>" +
+            "<tr><td>Disaster Description:</td> <td><input type='text' id='description' required= 'required' placeholder='Short/Long Description'/></td> </tr>" +
+            "<tr><td>Disaster Type:</td> <td><select id='disasterType' required= 'required'>" +
             "<option value='' SELECTED></option>" +
-            "<option value=Flashflood >Flash Flood</option>" +
-            "<option value=Tsunami>Tsunami</option>" +
-            "<option value=Landslide>Landslide</option>" +
-            "<option value=Mudslide>Mudslide</option>" +
-            "<option value=Infrastructure Damage>Infrastructure Damage</option>" +
+            "<option value='Flashflood' >Flash Flood</option>" +
+            "<option value='Tsunami'>Tsunami</option>" +
+            "<option value='Landslide'>Landslide</option>" +
+            "<option value='Mudslide'>Mudslide</option>" +
             "</select> </td></tr>" +
-            "<tr><td>Date:</td> <td><input type='date' id='date'/></td> </tr>" +
-            "<tr><td>Deaths:</td> <td><input type='number' min='0' id='death'/></td> </tr>" +
+            "<tr><td>Date:</td> <td><input type='date' id='date' required= 'required'/></td> </tr>" +
+			"<tr><td>Deaths:</td> <td><input type='number' min='0' id='death'/></td> </tr>" +
             "<tr><td>Injured:</td> <td><input type='number' min='0' id='injured'/></td> </tr>" +
             "<tr><td>Missing:</td> <td><input type='number' min='0' id='missing'/></td> </tr>" +
             "<tr><td>Families Affected:</td> <td><input type='number' min='0' id='familiesAffected'/></td> </tr>" +
             "<tr><td>Houses Destroyed:</td> <td><input type='number' min='0' id='housesDestroyed'/></td> </tr>" +
             "<tr><td>Damage Cost:</td> <td><input type='number' min='0' id='damageCost'/></td> </tr>" +
-            "<tr><td>Source:</td> <td><input type='text' id='source'/></td> </tr>" +
-            "<tr><td></td><td><input type='button' class='btn btn-success' value='Report Incident' onclick='savePolygonData()'/></td></tr>";
+			"<tr><td>Source:</td> <td><input type='text' id='source' required= 'required' placeholder='Source of Information'/></td> </tr>" +
+            "<tr><td></td><td><input type='submit' class='btn btn-success' value='Report Incident'/></td></tr></form>";
 
     shape.infowindow = new google.maps.InfoWindow(
             {
@@ -95,6 +94,9 @@ function showInfo(event) {
     //}
 }
 function savePolygonData(){
+
+	$('#reportIncidentPolygonForm').submit(function(event){
+
     var polyString = "";
     var start = "";
     
@@ -137,4 +139,5 @@ function savePolygonData(){
         }
 
     });
+});
 }

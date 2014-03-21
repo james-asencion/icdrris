@@ -65,12 +65,6 @@
 			</ul>
                    
 	<!-- HEADER MENUS-->
-   	<ul class= "nav">
-			<a href="#modalReportIncident" class="btn btn-danger" role="button" data-toggle="modal">
-				<i class = "icon-white icon-bell"></i> Report Incident 
-			</a>
-                            
-	</ul>
 
     <ul class="nav">
             <li class="dropdown">
@@ -198,4 +192,13 @@
 				$this->load->view('forms/login_form');
 			}				
 		?>
+		
+		
+        <ul class= "nav pull-right">
+            <a href="#modalReportIncident" class="btn btn-danger" role="button" data-toggle="modal">
+                <i class = "icon-white icon-bell"></i> Report Incident 
+            </a>
+                            
+    </ul>
+
 	</div>

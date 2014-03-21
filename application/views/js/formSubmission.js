@@ -217,7 +217,7 @@ function editIncident(element){
 			
 			$("#incident_description").val(incidentdesc);
 			$("#date_happened").attr("value", incidentdate);
-			var i=1;
+			var i=0;
 			while ((document.updateIncidentForm.disasterType.options[i].val != disaster_type) && (i < document.updateIncidentForm.disasterType.options.length))
 			  {i++;}
 			if (i < document.updateIncidentForm.disasterType.options.length)
@@ -249,7 +249,11 @@ function editIncident(element){
 				if(msg == 'success'){
 					console.log('naedit na bai. check the database');
 					$('#modalUpdateIncident').modal('hide');
+					getAllMapElements();
 					displayIncidentDetails(incidentreportid, elementid, incidentid);	
+						$("#incident_description").val('');
+						$("#date_happened").attr("value", '');
+						document.updateIncidentForm.disasterType.selectedIndex = 0;
 						
 				}else{
 					console.log('naay mali sa controller or model. recheck the code.')
@@ -269,12 +273,13 @@ function editIncident(element){
 
 //UPDATE INCIDENT STATISTICS
 function modifyIncidentStat(element){
-	$('.incident-stat').on('click', function(e){
+	$('#incident-stat').on('click', function(e){
 		e.preventDefault();
 		
 		var incidentid = $("#incident-stat").data('incidentid');
 		var incidentreportid = $("#incident-stat").data('incidentreportid');
 		
+		console.log(incidentid+" "+incidentreportid+" "+elementid);
 		var deaths = $("#incident-stat").data('deaths');
 		var families_affected = $("#incident-stat").data('familiesaffected');
 		var people_missing = $("#incident-stat").data('peoplemissing');
@@ -337,6 +342,7 @@ function modifyIncidentStat(element){
         var injured = $("#modalUpdateIncidentStat #injured").val();
         var damage_costs = $("#modalUpdateIncidentStat #damage_costs").val();
         var source = $("#modalUpdateIncidentStat #source").val();
+		console.log("submit: "+incidentid+" "+elementid+" "+incidentreportid);
         /* Send the data using post and put results to the members table */
 	request = $.ajax({
 			url: "http://localhost/icdrris/Incident/updateIncidentStatistics",
@@ -354,7 +360,8 @@ function modifyIncidentStat(element){
 				if(msg == 'success'){
 					console.log('naedit na bai. check the database');
 					$('#modalUpdateIncidentStat').modal('hide');
-					displayUpdatedIncidentDetails(incidentreportid, incidentid);	
+					//console.log("displayIncidentDetails("+incidentreportid+ " "+elementid +" " +incidentid+"");
+					displayIncidentDetails(incidentreportid, elementid, incidentid);	
 					
 				}else{
 					console.log('naay mali sa controller or model. recheck the code.')

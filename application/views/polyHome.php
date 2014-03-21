@@ -76,13 +76,7 @@
                                       <input type="checkbox">
                                       Mudslide
                                   </label>
-                              </li>
-                              <li>
-                                  <label class="checkbox">
-                                      <input type="checkbox">
-                                      Infrastructure Damage
-                                  </label>
-                              </li>                                                                                                                    
+                              </li>                                                                                                                  
                           </ul>
                       </div>
                     </div>
@@ -146,14 +140,14 @@
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm3">
                     <div class="center" align="center"><p>Date To:</p>   
-                        <input id="dateTo" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMapElements()"/>
+                        <input id="dateTo" type = "date" class="span2" name = "birthdate"  min="" value="<?php echo date('Y-m-d'); ?>" onchange="getAllMapElements()"/>
                     </div>
                 </form>
             </div>
             <div class="toppanel"> 
                 <form class = "navbar-form pull-left" name="filterForm4">
                     <div class="center" align="center"><p>Date From:</p>   
-                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMapElements()"/>
+                       <input id="dateFrom" type = "date" class="span2" name = "birthdate" max="<?php echo date('Y-m-d'); ?>" value="<?php echo date('Y-m-d', strtotime('-1 month')); ?>" onchange="getAllMapElements()"/>
                     </div>
                 </form>
             </div>
@@ -184,7 +178,11 @@
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
 					<!-- LIST OF INCIDENTS -->
-					<div class = "span12" id="incidentList" style="display:none"></div>
+					<div class = "span12" id="incidentList" style="display:none">
+					
+					
+					</div>
+		
 					<!-- end LIST OF INCIDENTS -->
 
 					
@@ -234,12 +232,7 @@
 								  </li>
 								</ul>
                                   <div id="victimListID">
-                                    <center>
-                                        <form class="form-search">
-                                            <input type="text" class="input-large search-query" placeholder="Type name here...">
-                                            <button type="submit" class="btn"><i class="icon-search"> </i></button>
-                                        </form>
-                                    </center>
+                                   
 										<!-- TABLE: LIST OF VICTIMS -->
                                           <div id="table-rows-victims"></div>
 										<!-- end of the table-->
@@ -292,9 +285,8 @@
 			
  	<!-- modalConfirmVictim -->
             <div id="modalConfirmVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_206_ok_2.png"  alt="confirm" style="margin-top:-10px"> Confirm Victim</h3>
+                 <div class="modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+                    <h3 style="color: gainsboro"> Confirm Victim</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
@@ -309,9 +301,8 @@
 			
 			<!-- modalConfirmIncident -->
 			 <div id="modalConfirmIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_206_ok_2.png"  alt="confirm" style="margin-top:-10px"> Confirm Incident</h3>
+                <div class="modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+                    <h3 style="color: gainsboro"> Confirm Incident</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
@@ -457,9 +448,8 @@
 			
 			<!-- modalDeleteIncident -->
 			 <div id="modalDeleteIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
+                 <div class="modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+                    <h3 style="color: gainsboro"> Delete Incident</h3>
                 </div>
                      <div class="modal-body">
                     <div name="message">
@@ -474,9 +464,8 @@
 			
 			<!-- modalDeleteVictim -->
 			 <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Victim</h3>
+                <div class="modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+                    <h3 style="color: gainsboro"> Delete Victim</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
