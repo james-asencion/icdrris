@@ -295,13 +295,13 @@ class Incident extends  CI_Controller
         }
 
         function updateIncident(){
-			$incident_location_id = $this->input->post("incident_location_id"); 
+			//$incident_location_id = $this->input->post("incident_location_id"); 
 			$incident_report_id = $this->input->post("incident_report_id");
 			$incident_description = $this->input->post("incident_description");
 			$date_happened = $this->input->post("date_happened");
 			$disaster_type = $this->input->post("disaster_type");
         
-            $query_results = $this->IncidentModel->updateIncident($incident_location_id, $incident_report_id, $incident_description, $date_happened, $disaster_type);
+            $query_results = $this->IncidentModel->updateIncident($incident_report_id, $incident_description, $date_happened, $disaster_type);
 			if($query_results){
 				echo "success";
 			}

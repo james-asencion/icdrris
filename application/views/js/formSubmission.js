@@ -216,7 +216,7 @@ function editIncident(element){
 			
 			$("#incident_description").val(incidentdesc);
 			$("#date_happened").attr("value", incidentdate);
-			var i=1;
+			var i=0;
 			while ((document.updateIncidentForm.disasterType.options[i].val != disaster_type) && (i < document.updateIncidentForm.disasterType.options.length))
 			  {i++;}
 			if (i < document.updateIncidentForm.disasterType.options.length)
@@ -246,6 +246,9 @@ function editIncident(element){
 					console.log('naedit na bai. check the database');
 					$('#modalUpdateIncident').modal('hide');
 					displayIncidentDetails(incidentreportid, elementid, incidentid);	
+						$("#incident_description").val('');
+						$("#date_happened").attr("value", '');
+						document.updateIncidentForm.disasterType.selectedIndex = 0;
 						
 				}else{
 					console.log('naay mali sa controller or model. recheck the code.')

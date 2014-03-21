@@ -202,7 +202,7 @@ function confirmIncident(incident_location_id, inciName){
 
 	console.log('confirm incident clicked: '+ incident_location_id + ' ' +inciName);
 	$('#modalConfirmIncident').data('incident_location_id' , incident_location_id);
-	$('#modalConfirmIncident .modal-body').html("<p> You are going to confirm the incident <b>'"+inciName+"'</b>.<br> Click 'Confirm' button to continue. Click 'Cancel' button to return to the page.")
+	$('#modalConfirmIncident .modal-body').html("<p> You are going to confirm the incident <b>'"+inciName+"'</b>.<br><br> Click <b>'Confirm'</b> button to continue. Click <b>'Cancel'</b> button to return to the page.")
 	$('#modalConfirmIncident').modal('show');
 	
 
@@ -296,7 +296,7 @@ $(document).ready(function(){
 			var incidentdesc = $(this).data('incidentdesc');
 			console.log(incidentid + ' '+ incidentdesc);
 			$('#modalDeleteIncident').data('incidentid',incidentid);
-			$('#modalDeleteIncident .modal-body').html("<p>Are you sure you want to delete this Incident? </p><br /><p>Incident: "+incidentdesc);
+			$('#modalDeleteIncident .modal-body').html("<p>Are you sure you want to delete this incident? </p><br /><h4>Incident: "+incidentdesc+"</h4>");
 			$('#modalDeleteIncident').modal('show');	
 	});
 

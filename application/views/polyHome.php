@@ -178,7 +178,11 @@
 
        <!--  <div id="mapElementsDetails" style="display:none"> -->
 					<!-- LIST OF INCIDENTS -->
-					<div class = "span12" id="incidentList" style="display:none"></div>
+					<div class = "span12" id="incidentList" style="display:none">
+					
+					
+					</div>
+		
 					<!-- end LIST OF INCIDENTS -->
 
 					
@@ -281,9 +285,8 @@
 			
  	<!-- modalConfirmVictim -->
             <div id="modalConfirmVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_206_ok_2.png"  alt="confirm" style="margin-top:-10px"> Confirm Victim</h3>
+                 <div class="modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+                    <h3 style="color: gainsboro"> Confirm Victim</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
@@ -298,9 +301,8 @@
 			
 			<!-- modalConfirmIncident -->
 			 <div id="modalConfirmIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_206_ok_2.png"  alt="confirm" style="margin-top:-10px"> Confirm Incident</h3>
+                <div class="modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+                    <h3 style="color: gainsboro"> Confirm Incident</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">
@@ -446,9 +448,8 @@
 			
 			<!-- modalDeleteIncident -->
 			 <div id="modalDeleteIncident" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Incident</h3>
+                 <div class="modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+                    <h3 style="color: gainsboro"> Delete Incident</h3>
                 </div>
                      <div class="modal-body">
                     <div name="message">
@@ -463,9 +464,8 @@
 			
 			<!-- modalDeleteVictim -->
 			 <div id="modalDeleteVictim" class="modal hide fade" tab-index="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h3><img src="<?php echo base_url();?>img/glyphicons/png/glyphicons_016_bin.png"  alt="bin" style="margin-top:-10px"> Delete Victim</h3>
+                <div class="modal-header" style="background-color:rgba(48, 85, 151, 0.89)">
+                    <h3 style="color: gainsboro"> Delete Victim</h3>
                 </div>
                  <div class="modal-body">
                     <div name="message">

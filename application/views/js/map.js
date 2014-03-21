@@ -1276,7 +1276,7 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
                 
                 $("#victims-tab, #victimslist-li, #reportvictim-li").attr("data-incidentid", incidentReportId);
 		
-                $("#delete-li").attr("data-incidentdesc", msg);
+                $(".delete-li").attr("data-incidentdesc", msg);
                 $("#incidentTabbable").show("slow");
             }
         },
@@ -1298,9 +1298,9 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
                 $("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
                 $("#incidentTabbable").show("slow");
             } else {
-                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
-                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId)
-                $(" #details-tab, #overview-li, #editinfo-li, #delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId)
+                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
+                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId)
+                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId)
                 $(".approve-li").attr("onclick", "rateIncident(1,"+incident_location_id+")")
                 $(".disapprove-li").attr("onclick", "rateIncident(0,"+incident_location_id+")")
                 $("#incident-information").html(msg);
