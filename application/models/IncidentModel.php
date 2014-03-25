@@ -8,6 +8,7 @@ class IncidentModel extends CI_Model
             $id = $this->db->insert_id();
             return $id;
         }
+        
         function countIncidents(){
             $query = $this->db->get('incident_location');
             return $query->num_rows();
@@ -20,7 +21,7 @@ class IncidentModel extends CI_Model
 
         }
 		
-        function updateIncident($incident_location_id, $incident_report_id, $incident_description, $date_happened, $disaster_type){
+        function updateIncident($incident_report_id, $incident_description, $date_happened, $disaster_type){
             $sql = "UPDATE incidents SET incident_description = ?, disaster_type = ?, incident_date = ? WHERE incident_report_id = ?";
             
             $query= $this->db->query($sql, array($incident_description, $disaster_type, $date_happened, $incident_report_id));

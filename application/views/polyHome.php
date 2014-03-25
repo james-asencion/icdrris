@@ -21,7 +21,13 @@
                 </form>
             </div> -->
             <div class="toppanel">
-                <form class = "navbar-form pull-left" name="filterForm1">
+              <form class = "navbar-form pull-left" name="filterForm1">
+                    <div class="center" align="center"><p>View Incidents by:</p> 
+                          <select class="multiselect" multiple="multiple">
+                            <option value="0">Marker</option>
+                            <option value="1">Polygon</option>
+                          </select>
+<!--                 <form class = "navbar-form pull-left" name="filterForm1">
                     <div class="center" align="center"><p>View Incidents by:</p>   
                           <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
                               Select Elements
@@ -40,14 +46,21 @@
                                       Polygon
                                   </label>
                               </li>                                                                                                                      
-                          </ul>
+                          </ul>-->
                       </div> 
-                </form>
+                </form> 
             </div>
             <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm2">
-                    <div class="center" align="center"><p>Filter Incidents:</p>   
-                      <div class="dropdown">
+                    <div class="center" align="center"><p>Filter Incidents:</p> 
+                        <select class="multiselect" multiple="multiple" buttonClass: 'btn btn-default btn-sm'>
+                            <option value="2">Flashflood</option>
+                            <option value="3">Tsunami</option>
+                            <option value="4">Landslide</option>
+                            <option value="5">Mudslide</option>
+                            <option value="6">Infrastructure Damage</option>
+                        </select>  
+<!--                       <div class="dropdown">
                           <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
                               Select Disaster Type
                               <b class="caret"></b>
@@ -76,16 +89,26 @@
                                       <input type="checkbox">
                                       Mudslide
                                   </label>
-                              </li>                                                                                                                  
+                              </li>
+                              <li>
+                                  <label class="checkbox">
+                                      <input type="checkbox">
+                                      Infrastructure Damage
+                                  </label>
+                              </li>                                                                                                                   
                           </ul>
-                      </div>
+                      </div> -->
                     </div>
                 </form>
             </div>
           <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm1">
                     <div class="center" align="center"><p>Filter Reports by:</p>   
-                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                      <select class="multiselect" multiple="multiple">
+                            <option value="7">Confirmed</option>
+                            <option value="8">Not Confirmed</option>
+                        </select>  
+<!--                           <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
                               Filter Reports
                               <b class="caret"></b>
                           </a>
@@ -102,14 +125,19 @@
                                       Not Confirmed
                                   </label>
                               </li>                                                                                                                      
-                          </ul>
+                          </ul> -->
                       </div> 
                 </form>
             </div>
           <div class="toppanel">
                 <form class = "navbar-form pull-left" name="filterForm0">
-                    <div class="center" align="center"><p>Response Operations:</p>   
-                          <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
+                    <div class="center" align="center"><p>Response Operations:</p>  
+                      <select class="multiselect" multiple="multiple">
+                            <option value="9">Respondents</option>
+                            <option value="10">Requests</option>
+                            <option value="11">Evacuation Sites</option>
+                      </select>  
+<!--                           <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
                               Response operations
                               <b class="caret"></b>
                           </a>
@@ -132,7 +160,7 @@
                                       Evacuation Sites
                                   </label>
                               </li>                                                                                                                     
-                          </ul>
+                          </ul> -->
                       </div> 
                 </form>
             </div>

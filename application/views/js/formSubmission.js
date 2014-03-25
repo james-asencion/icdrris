@@ -193,7 +193,25 @@ function editIncident(element){
 		var datedata= $(this).data('incidentdate');
 		var dateParse= Date.parse(datedata);
 		var dateFormat= new Date(dateParse);
-		var incidentdate = dateFormat.getFullYear()+ '-0' +(dateFormat.getMonth() + 1) + '-' + dateFormat.getDate();
+
+		var monthDate= dateFormat.getMonth() + 1;
+		var dayDate= dateFormat.getDate()
+		var incidentdate;
+		if((dayDate > 9) || (monthDate > 9)){
+			if(monthDate > 9){
+				var incidentdate = dateFormat.getFullYear()+ '-' +(dateFormat.getMonth() + 1)+ '-0' + dateFormat.getDate();
+			}
+			if(dayDate > 9){
+				var incidentdate = dateFormat.getFullYear()+ '-0' +(dateFormat.getMonth() + 1) + '-' + dateFormat.getDate();
+			}
+			else{
+				var incidentdate = dateFormat.getFullYear()+ '-' +(dateFormat.getMonth() + 1) + '-' + dateFormat.getDate();
+			}
+		}
+		else{
+			var incidentdate = dateFormat.getFullYear()+ '-0' +(dateFormat.getMonth() + 1) + '-0' + dateFormat.getDate();
+		}
+		
 		var disaster_type = $(this).data('disaster_type');
 		
 		$('#modalUpdateIncident').data('incidentid',incidentid);	
@@ -278,6 +296,7 @@ function modifyIncidentStat(element){
 		
 		var incidentid = $("#incident-stat").data('incidentid');
 		var incidentreportid = $("#incident-stat").data('incidentreportid');
+		var elementid = $("#incident-stat").data('elementid');
 		
 		console.log(incidentid+" "+incidentreportid+" "+elementid);
 		var deaths = $("#incident-stat").data('deaths');

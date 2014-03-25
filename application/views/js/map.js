@@ -48,16 +48,19 @@ var count = -1;
             e.stopPropagation();
         }
     });
-    var boxes = $('#elementBoxes input:checkbox');
-    boxes.change(function(e){
-    var props = 0;
-        $.each(boxes, function(i,b){
-            props += ($(b).is(':checked'))?Math.pow(2,i):0;
-        });
-        //sendProps(props);
-        //console.log("current props ->"+props);
 
-    //alert("Map Element size is now -->>> "+mapElements.length+"<<<------");
+    $('.multiselect').multiselect({
+        onChange: function(option, checked) {
+            var props=0;
+          $('option', $('#elementBoxes')).each(function() {
+            
+              //values.push($(this).val());
+              props += ($(this).prop('selected'))?Math.pow(2,$(this).val()):0;
+              //console.log("current props -> "+ props);
+
+          });
+          //=============this is the filter block============================================================
+          //======================================================================================================
     $("#incidentList").html("");
     $("#respondentList").html("");
     $("#requestList").html("");
@@ -268,8 +271,9 @@ var count = -1;
             }
         }
     }
+          //======================================================================================================
+        }
 
-//console.log("=================================================================================================================================");
     });
 //------------------------------------------------------------------------------
 
@@ -1310,15 +1314,17 @@ function displayIncidentDetails(incidentReportId, elementId, incident_location_i
                 $("#incident-information").html("Sorry, something went wrong. Please contact the administrator to fix the bug.\n ");
                 $("#incidentTabbable").show("slow");
             } else {
-                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li").attr("data-incidentid", incident_location_id)
-                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId)
-                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId)
-                $(".approve-li").attr("onclick", "rateIncident(1,"+incident_location_id+")")
-                $(".disapprove-li").attr("onclick", "rateIncident(0,"+incident_location_id+")")
+                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li, #incident-stat").attr("data-incidentid", incident_location_id);
+                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li").attr("data-incidentreportid", incidentReportId);
+                //console.log("**incident report id: "+incidentReportId);
+                $(" #details-tab, #overview-li, .editinfo-li, .delete-li, .approve-li, .disapprove-li").attr("data-elementid", elementId);
+                //console.log("**elementid : "+elementId);
+                $(".approve-li").attr("onclick", "rateIncident(1,"+incident_location_id+")");
+                $(".disapprove-li").attr("onclick", "rateIncident(0,"+incident_location_id+")");
                 $("#incident-information").html(msg);
-                $("#incident-stat").data("elementid", elementId)
-                $("#incident-stat").data("incidentreportid", incidentReportId)
-				$("#incidentTabbable").show("slow");
+                $("#incidentTabbable").show("slow");
+                $("#incident-stat").attr("data-elementid", elementId);
+                $("#incident-stat").attr("data-incidentreportid", incidentReportId);
             }
         },
         error: function() {

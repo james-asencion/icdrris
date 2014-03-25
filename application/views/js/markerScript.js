@@ -46,7 +46,7 @@ function initialize() {
             "<tr><td>Families Affected:</td> <td><input type='number' min='0' id='familiesAffected'/></td> </tr>" +
             "<tr><td>Houses Destroyed:</td> <td><input type='number' min='0' id='housesDestroyed'/></td> </tr>" +
             "<tr><td>Damage Cost:</td> <td><input type='number' min='0' id='damageCost'/></td> </tr>" +
-			"<tr><td>Source:</td> <td><input type='text' id='source' placeholder='Name of the Information Source' required='required' /></td> </tr>" +
+			"<tr><td>Source:</td> <td><input type='text' id='source' placeholder='Source of Information' required='required' /></td> </tr>" +
           //  "<tr><td></td><td><input type='submit' class='btn btn-success' value='Report Incident' onclick='saveMarkerData()'/></td></tr></form>";
            "<tr><td></td><td><input type='submit' class='btn btn-success' value='Report Incident'/></td></tr></form>";
 /**

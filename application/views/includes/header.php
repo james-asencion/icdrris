@@ -23,6 +23,8 @@
 		<script src="<?php echo base_url();?>application/views/js/map.js"></script>
 
 
+
+
          <!--
 		<script src="<?php //echo base_url();?>application/views/js/dropdown.js"></script>
 		<script src="<?php //echo base_url();?>application/views/js/polygonScript.js"></script>
@@ -40,15 +42,15 @@
     	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>  
 		<link rel="stylesheet" href="<?php echo base_url();?>css/style.css" type="text/css" media="screen">
 	
+        <!-- Include the plugin's CSS and JS: -->
+        <script type="text/javascript" src="<?php echo base_url();?>application/views/js/bootstrap-multiselect.js"></script>
+        <link rel="stylesheet" href="<?php echo base_url();?>application/views/css/bootstrap-multiselect.css" type="text/css"/>
+
 	    <!-- x-editable (bootstrap version) -->
 	    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
 	    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/js/bootstrap-editable.min.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/x-editable.js"></script>
 		<script src="<?php echo base_url();?>application/views/js/x-editable1.js"></script>
-
-
-
-
 
 
 
@@ -60,7 +62,11 @@
 		</style>
 		<script type="text/javascript">
 			$(document).ready(function(){
-			//localStorage.clear();
+
+                //for multi-select plug-in.
+                //$('.multiselect').multiselect();
+
+			     //localStorage.clear();
 				$(".trigger").click(function(){
                     $("#map_canvass").removeClass("span12");
 					$("#map_canvass").addClass("span8"); //added
