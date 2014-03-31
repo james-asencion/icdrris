@@ -4,7 +4,7 @@
  
   <head>
 	<title>Project Dasig</title>
-	<link rel="icon" href="<?php echo base_url(); ?>img/Tsunami-256.png" type="image/gif">	
+	<link rel="icon" href="<?php echo base_url(); ?>img/logo.png" type="image/gif" >	
 		
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
@@ -41,7 +41,7 @@
 	<div class = "navbar navbar-inverse">
 		<div class = "navbar-inner">
 			<!-- SITE TITLE -->
-			<a class = "brand" href = "<?php echo base_url();?>">Project Dasig</a>
+			<a class = "brand" href = "<?php echo base_url();?>" style="width:17%"><img src="<?php echo base_url(); ?>img/logo.png" width="14%"/> Project Dasig </a>
 			<ul class = "nav">
 				<li class = "active"><a href = "<?php echo base_url();?>"><i class = "icon-home"></i> Home</a></li>
 			</ul>

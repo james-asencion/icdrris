@@ -105,7 +105,7 @@
                 <form class = "navbar-form pull-left" name="filterForm1">
                     <div class="center" align="center"><p>Filter Reports by:</p>   
                       <select class="multiselect" multiple="multiple">
-                            <option value="7">Confirmed</option>
+                          <option value="7" selected>Confirmed</option>
                             <option value="8">Not Confirmed</option>
                         </select>  
 <!--                           <a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
